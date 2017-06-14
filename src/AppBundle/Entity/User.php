@@ -19,7 +19,7 @@ class User extends BaseUser
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string
@@ -66,6 +66,59 @@ class User extends BaseUser
      */
     private $type;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="relationshpStatus", type="string", length=255, nullable=true)
+     */
+    private $relationshpStatus;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="joinReason", type="string", length=255,nullable=true)
+     */
+    private $joinReason;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="confirm", type="boolean")
+     */
+    private $confirm;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isVip", type="boolean")
+     */
+    private $isVip;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=255)
+     */
+    private $gender;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="phones", type="array",nullable=true)
+     */
+    private $phones;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="profileVisibility", type="array",nullable=true)
+     */
+    private $profileVisibility;
 
     /**
      * Get id
@@ -220,5 +273,196 @@ class User extends BaseUser
     {
         return $this->type;
     }
-}
 
+    /**
+     * Set isOnline
+     *
+     * @param boolean $isOnline
+     *
+     * @return User
+     */
+    public function setIsOnline($isOnline)
+    {
+        $this->isOnline = $isOnline;
+
+        return $this;
+    }
+
+    /**
+     * Get isOnline
+     *
+     * @return boolean
+     */
+    public function getIsOnline()
+    {
+        return $this->isOnline;
+    }
+
+    /**
+     * Set relationshpStatus
+     *
+     * @param string $relationshpStatus
+     *
+     * @return User
+     */
+    public function setRelationshpStatus($relationshpStatus)
+    {
+        $this->relationshpStatus = $relationshpStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get relationshpStatus
+     *
+     * @return string
+     */
+    public function getRelationshpStatus()
+    {
+        return $this->relationshpStatus;
+    }
+
+    /**
+     * Set joinReason
+     *
+     * @param string $joinReason
+     *
+     * @return User
+     */
+    public function setJoinReason($joinReason)
+    {
+        $this->joinReason = $joinReason;
+
+        return $this;
+    }
+
+    /**
+     * Get joinReason
+     *
+     * @return string
+     */
+    public function getJoinReason()
+    {
+        return $this->joinReason;
+    }
+
+    /**
+     * Set confirm
+     *
+     * @param boolean $confirm
+     *
+     * @return User
+     */
+    public function setConfirm($confirm)
+    {
+        $this->confirm = $confirm;
+
+        return $this;
+    }
+
+    /**
+     * Get confirm
+     *
+     * @return boolean
+     */
+    public function getConfirm()
+    {
+        return $this->confirm;
+    }
+
+    /**
+     * Set isVip
+     *
+     * @param boolean $isVip
+     *
+     * @return User
+     */
+    public function setIsVip($isVip)
+    {
+        $this->isVip = $isVip;
+
+        return $this;
+    }
+
+    /**
+     * Get isVip
+     *
+     * @return boolean
+     */
+    public function getIsVip()
+    {
+        return $this->isVip;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     *
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set phones
+     *
+     * @param array $phones
+     *
+     * @return User
+     */
+    public function setPhones($phones)
+    {
+        $this->phones = $phones;
+
+        return $this;
+    }
+
+    /**
+     * Get phones
+     *
+     * @return array
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * Set profileVisibility
+     *
+     * @param array $profileVisibility
+     *
+     * @return User
+     */
+    public function setProfileVisibility($profileVisibility)
+    {
+        $this->profileVisibility = $profileVisibility;
+
+        return $this;
+    }
+
+    /**
+     * Get profileVisibility
+     *
+     * @return array
+     */
+    public function getProfileVisibility()
+    {
+        return $this->profileVisibility;
+    }
+}

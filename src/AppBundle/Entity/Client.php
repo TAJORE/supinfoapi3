@@ -24,4 +24,3 @@ class Client extends BaseClient
         parent::__construct();
     }
 }
-
