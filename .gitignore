@@ -16,5 +16,5 @@
 /vendor/
 /web/bundles/
 /.idea/
-/.idea/
+/composer.phar
 /src/App/EntityBundle/Entity/*.php~
