@@ -17,4 +17,5 @@
 /web/bundles/
 /.idea/
 /composer.phar
+/composer.lock
 /src/App/EntityBundle/Entity/*.php~
