@@ -280,4 +280,3 @@ class UserProfile
         return $this->userId;
     }
 }
-
