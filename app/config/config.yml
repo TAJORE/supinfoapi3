@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@ApiBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -32,7 +33,6 @@ framework:
     assets: ~
     php_errors:
         log: true
-
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'
@@ -69,3 +69,30 @@ swiftmailer:
     spool: { type: memory }
 
 
+sensio_framework_extra:
+    view:   { annotations: true }
+    router: { annotations: true }
+
+# FOSRestBundle
+fos_rest:
+    allowed_methods_listener: true
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+        view_response_listener: 'force'
+        formats:
+            xml: true
+            json : true
+        templating_formats:
+            html: true
+        force_redirects:
+            html: true
+        failed_validation: HTTP_BAD_REQUEST
+        default_engine: twig
+    routing_loader:
+        include_format: false
+        default_format: json
+
+nelmio_api_doc:
+  name: FunGlobe API Documentation
