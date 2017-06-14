@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="000023ae-4368-473d-9693-2b156d7594e1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="funglobeapi.iws" />
@@ -261,7 +260,13 @@
       <option name="project" value="LOCAL" />
       <updated>1497441687569</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="profiledel">
+      <created>1497443139921</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1497443139921</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
