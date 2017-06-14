@@ -102,6 +102,28 @@ fos_user:
     db_driver: orm
     firewall_name: api
     user_class: ApiBundle\Entity\User
+    service:
+        mailer: fos_user.mailer.twig_swift
+    registration:
+        form:
+            type: fos_user_register
+            validation_groups: [Register, Default, Registration]
+        confirmation:
+            enabled: true
+            template: mainBundle:Registration:email.html.twig
+    profile:
+        form:
+            type: fos_user_profile
+            #validation_groups: [Profile, Default]
+    resetting:
+        email:
+            template: mainBundle:Resetting:email.html.twig
+    group:
+        group_class: aic\entityBundle\Entity\Groupe
+    from_email:
+        address: Sdanicktakam@yahoo.fr
+        sender_name: Statege++
+
 
 fos_oauth_server:
     db_driver:           orm
