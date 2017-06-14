@@ -97,5 +97,9 @@ fos_rest:
 nelmio_api_doc:
   name: FunGlobe API Documentation
 
-
+# FOS User Bundle
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: Web\EntityBundle\Entity\User
 
