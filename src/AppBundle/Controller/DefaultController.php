@@ -18,4 +18,24 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
         ]);
     }
+
+
+    /**
+     * @Route("/oauth", name="app_oauth")
+     */
+    public function saveclientAction(Request $request)
+    {
+        $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+        $client = $clientManager->createClient();
+        $client->setRedirectUris(array('http://www.funglobe.com'));
+        $client->setAllowedGrantTypes(array('token', 'authorization_code'));
+        $clientManager->updateClient($client);
+
+        return $this->redirect($this->generateUrl('fos_oauth_server_authorize', array(
+            'client_id'     => $client->getPublicId(),
+            'redirect_uri'  => 'http://www.example.com',
+            'response_type' => 'code'
+        )));
+
+    }
 }
