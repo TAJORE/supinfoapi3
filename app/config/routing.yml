@@ -13,3 +13,6 @@ Rest_Api :
   resource: "@ApiBundle/Controller/"
   prefix : /v1
 
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /doc
