@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="000023ae-4368-473d-9693-2b156d7594e1" name="Default" comment="" />
+    <list default="true" id="000023ae-4368-473d-9693-2b156d7594e1" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/AppBundle/Entity/UserProfile.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/AppBundle/Repository/UserProfileRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="funglobeapi.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -43,6 +47,7 @@
       <command text="git pull origin master" />
       <command text="php bin/console generate:Bundle" />
       <command text="php bin/console generate:bundle" />
+      <command text="php bin/console doctrine:generate:entity" />
     </commandsHistory>
   </component>
   <component name="Git.Settings">
