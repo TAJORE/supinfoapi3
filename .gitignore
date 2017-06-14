@@ -16,3 +16,5 @@
 /vendor/
 /web/bundles/
 /.idea/
+/.idea/
+/src/App/EntityBundle/Entity/*.php~
