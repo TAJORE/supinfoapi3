@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="000023ae-4368-473d-9693-2b156d7594e1" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\wamp\www\funglobeapi\src\AppBundle\Entity\profile.php" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="funglobeapi.iws" />
@@ -193,7 +192,13 @@
       <option name="project" value="LOCAL" />
       <updated>1497430647982</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="profiledel">
+      <created>1497440934386</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1497440934386</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -227,7 +232,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="profile" />
-    <option name="LAST_COMMIT_MESSAGE" value="profile" />
+    <MESSAGE value="profiledel" />
+    <option name="LAST_COMMIT_MESSAGE" value="profiledel" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
