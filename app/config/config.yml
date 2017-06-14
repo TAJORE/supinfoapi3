@@ -127,9 +127,9 @@ fos_user:
 
 fos_oauth_server:
     db_driver:           orm
-    client_class:        ApiBundle\Entity\Client
-    access_token_class:  ApiBundle\Entity\AccessToken
-    refresh_token_class: ApiBundle\Entity\RefreshToken
-    auth_code_class:     ApiBundle\Entity\AuthCode
+    client_class:        AppBundle\Entity\Client
+    access_token_class:  AppBundle\Entity\AccessToken
+    refresh_token_class: AppBundle\Entity\RefreshToken
+    auth_code_class:     AppBundle\Entity\AuthCode
     service:
         user_provider: fos_user.user_manager
