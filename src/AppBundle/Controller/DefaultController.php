@@ -50,14 +50,14 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/save/user", name="app_oauth")
+     * @Route("/save/user", name="app_fos")
      */
     public function saveuserAction(Request $request)
     {
        $user = new User();
         $password = $this->encodePassword(new User(), "admin", $user->getSalt());
         $user->setEnabled(true)->setConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles("ROLE_ADMIN")
-            ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword();
+            ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password)->setUsername("admin");
 
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('EntityBundle:User')->findOneByemail($user->getEmail());

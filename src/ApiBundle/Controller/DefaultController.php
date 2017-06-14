@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Response;
-
+use  Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class DefaultController extends FOSRestController
 {
@@ -28,8 +28,85 @@ class DefaultController extends FOSRestController
      */
     public function indexAction()
     {
-        $array = ['id' => 1, 'name' => 'Danick  takam', 'email' => 'tericcabrel@yahoo.com'];
+        $array = ['id' => 1, 'name' => 'Contact', 'email' => 'contact@funglobe.com'];
 
         return $array;
+    }
+
+    /**
+     * @Rest\Get("/demo")
+     * @return Response
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Petit demo  de l'api",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  },
+     *  parameters={
+     *     {"name"="aatribut1", "dataType"="integer", "required"=true, "description"="description d'attribut  1"}
+     *     {"name"="aatribut2", "dataType"="string", "required"=true, "description"="description d'attribut  2"},
+     *     {"name"="aatribut3", "dataType"="array", "required"=true, "description"="description d'attribut  3"},
+     *     {"name"="aatribut4", "dataType"="boolean", "required"=true, "description"="description d'attribut  4"}
+     *  }
+     * )
+     */
+    public function getDemosAction()
+    {
+        $data = array("hello" => "world");
+        $view = $this->view($data);
+        return $this->handleView($view);
+    }
+
+
+    /**
+     * @Rest\Get("/login")
+     * @return Response
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Petit demo  de l'api",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  },
+     *  parameters={
+     *     {"name"="test", "dataType"="float", "required"=true, "description"="description d'attribut  1"}
+     *  }
+     * )
+     */
+    public function getuserconnectedction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser(); //or
+        $user = $this->getUser();
+
+        //...
+        // Do something with the fully authenticated user.
+        // ...
+    }
+
+    //Check user grants
+
+    /**
+     * @Rest\Get("/grant")
+     * @return Response
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Petit demo  de l'api",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  },
+     *  parameters={
+     *     {"name"="user1", "dataType"="array", "required"=true, "description"="description d'attribut  1"}
+     *  }
+     * )
+     */
+    public function getGrantuserAction()
+    {
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === FALSE) {
+            throw new AccessDeniedException();
+        }
+
+        // ...
     }
 }
