@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ class DefaultController extends Controller
 
 
     /**
-     * @Route("/oauth", name="app_oauth")
+     * @Route("/save/client", name="app_oauth")
      */
     public function saveclientAction(Request $request)
     {
@@ -37,5 +38,35 @@ class DefaultController extends Controller
             'response_type' => 'code'
         )));
 
+    }
+
+    public function encodePassword($object, $password, $salt)
+    {
+        $factory = $this->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($object);
+        $password = $encoder->encodePassword($password, $salt);
+
+        return $password;
+    }
+
+    /**
+     * @Route("/save/user", name="app_oauth")
+     */
+    public function saveuserAction(Request $request)
+    {
+       $user = new User();
+        $password = $this->encodePassword(new User(), "admin", $user->getSalt());
+        $user->setEnabled(true)->setConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())
+            ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword();
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('EntityBundle:User')->findOneByemail($user->getEmail());
+        if($exist==null)
+        {
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $em->detach($user);
     }
 }
