@@ -56,8 +56,23 @@ class DefaultController extends Controller
     {
        $user = new User();
         $password = $this->encodePassword(new User(), "admin", $user->getSalt());
-        $user->setEnabled(true)->setConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())
+        $user->setEnabled(true)->setConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles("ROLE_ADMIN")
             ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword();
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('EntityBundle:User')->findOneByemail($user->getEmail());
+        if($exist==null)
+        {
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $em->detach($user);
+
+        $user = new User();
+        $password = $this->encodePassword(new User(), "member", $user->getSalt());
+        $user->setEnabled(true)->setConfirm(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles("ROLE_MEMBER")
+            ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword();
 
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('EntityBundle:User')->findOneByemail($user->getEmail());
