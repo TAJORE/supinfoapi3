@@ -15,7 +15,7 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/.idea
+/.idea/
 /composer.phar
 /composer.lock
 /src/App/EntityBundle/Entity/*.php~

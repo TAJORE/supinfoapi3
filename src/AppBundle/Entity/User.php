@@ -81,6 +81,29 @@ class User extends BaseUser
      */
     private $joinReason;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="joinDate", type="datetime", length=30, nullable=true)
+     */
+    private $joinDate;
+
+    /**
+     * @return string
+     */
+    public function getJoinDate()
+    {
+        return $this->joinDate;
+    }
+
+    /**
+     * @param string $joinDate
+     */
+    public function setJoinDate($joinDate)
+    {
+        $this->joinDate = $joinDate;
+    }
+
 
     /**
      * @var boolean
