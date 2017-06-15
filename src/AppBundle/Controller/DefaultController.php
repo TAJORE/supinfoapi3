@@ -25,7 +25,7 @@ class DefaultController extends Controller
     /**
      * @Route("/save/client", name="app_oauth")
      */
-    public function saveclientAction(Request $request)
+    public function saveClientAction(Request $request)
     {
         $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
         $client = $clientManager->createClient();
@@ -53,7 +53,7 @@ class DefaultController extends Controller
     /**
      * @Route("/save/user", name="app_fos")
      */
-    public function saveuserAction(Request $request)
+    public function saveUserAction(Request $request)
     {
        $user = new User();
         $password = $this->encodePassword(new User(), "admin", $user->getSalt());
