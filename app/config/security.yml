@@ -7,7 +7,7 @@ security:
             id: fos_user.user_provider.username_email #username        # fos_user.user_provider.username_email does not seem to work (OAuth-spec related ("username + password") ?)
     firewalls:
         oauth_token:                                   # Everyone can access the access token URL.
-            pattern: ^/v1/token
+            pattern: ^/oauth/v1/token
             security: false
         api:
             pattern: ^/v1                                # All URLs are protected
