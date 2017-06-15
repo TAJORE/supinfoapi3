@@ -3,17 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
-
+use FOS\UserBundle\Model\User as BaseUser;
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User extends BaseUser
 {
     /**
      * @var int
@@ -22,99 +19,106 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="string", length=50)
+     * @ORM\Column(name="firstName", type="string", length=255)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastName", type="string", length=50)
+     * @ORM\Column(name="lastName", type="string", length=255, nullable=true)
      */
     private $lastName;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="birthDay", type="date")
-     */
-    private $birthDay;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="gender", type="string", length=20)
+     * @ORM\Column(name="isOnline", type="boolean")
      */
-    private $gender;
+    private $isOnline;
+
+
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="lastConnectionDate", type="datetime")
+     * @ORM\Column(name="birthDate", type="date")
      */
-    private $lastConnectionDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="lastActivity", type="datetime")
-     */
-    private $lastActivity;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="confirmed", type="boolean")
-     */
-    private $confirmed;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="role", type="array")
-     */
-    private $role;
+    private $birthDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=20)
-     */
-    private $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="profession", type="string", length=255)
+     * @ORM\Column(name="profession", type="string", length=255, nullable=true)
      */
     private $profession;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="phone", type="array")
+     * @ORM\Column(name="type", type="string", length=255)
      */
-    private $phone;
+    private $type;
+
 
     /**
      * @var string
      *
-     * @ORM\Column(name="joinReason", type="string", length=255)
+     * @ORM\Column(name="relationshpStatus", type="string", length=255, nullable=true)
+     */
+    private $relationshpStatus;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="joinReason", type="string", length=255,nullable=true)
      */
     private $joinReason;
 
+
     /**
-     * @var bool
+     * @var boolean
+     *
+     * @ORM\Column(name="confirm", type="boolean")
+     */
+    private $confirm;
+
+    /**
+     * @var boolean
      *
      * @ORM\Column(name="isVip", type="boolean")
      */
     private $isVip;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=255)
+     */
+    private $gender;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="phones", type="array",nullable=true)
+     */
+    private $phones;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="profileVisibility", type="array",nullable=true)
+     */
+    private $profileVisibility;
 
     /**
      * Get id
@@ -175,171 +179,51 @@ class User
     }
 
     /**
-     * Set birthDay
+     * Set email
      *
-     * @param \DateTime $birthDay
+     * @param string $email
      *
      * @return User
      */
-    public function setBirthDay($birthDay)
+    public function setEmail($email)
     {
-        $this->birthDay = $birthDay;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Get birthDay
-     *
-     * @return \DateTime
-     */
-    public function getBirthDay()
-    {
-        return $this->birthDay;
-    }
-
-    /**
-     * Set gender
-     *
-     * @param string $gender
-     *
-     * @return User
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * Get gender
+     * Get email
      *
      * @return string
      */
-    public function getGender()
+    public function getEmail()
     {
-        return $this->gender;
+        return $this->email;
     }
 
     /**
-     * Set lastConnectionDate
+     * Set birthDate
      *
-     * @param \DateTime $lastConnectionDate
+     * @param \DateTime $birthDate
      *
      * @return User
      */
-    public function setLastConnectionDate($lastConnectionDate)
+    public function setBirthDate($birthDate)
     {
-        $this->lastConnectionDate = $lastConnectionDate;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
 
     /**
-     * Get lastConnectionDate
+     * Get birthDate
      *
      * @return \DateTime
      */
-    public function getLastConnectionDate()
+    public function getBirthDate()
     {
-        return $this->lastConnectionDate;
-    }
-
-    /**
-     * Set lastActivity
-     *
-     * @param \DateTime $lastActivity
-     *
-     * @return User
-     */
-    public function setLastActivity($lastActivity)
-    {
-        $this->lastActivity = $lastActivity;
-
-        return $this;
-    }
-
-    /**
-     * Get lastActivity
-     *
-     * @return \DateTime
-     */
-    public function getLastActivity()
-    {
-        return $this->lastActivity;
-    }
-
-    /**
-     * Set confirmed
-     *
-     * @param boolean $confirmed
-     *
-     * @return User
-     */
-    public function setConfirmed($confirmed)
-    {
-        $this->confirmed = $confirmed;
-
-        return $this;
-    }
-
-    /**
-     * Get confirmed
-     *
-     * @return bool
-     */
-    public function getConfirmed()
-    {
-        return $this->confirmed;
-    }
-
-    /**
-     * Set role
-     *
-     * @param array $role
-     *
-     * @return User
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return array
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return User
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
+        return $this->birthDate;
     }
 
     /**
@@ -367,27 +251,75 @@ class User
     }
 
     /**
-     * Set phone
+     * Set type
      *
-     * @param array $phone
+     * @param string $type
      *
      * @return User
      */
-    public function setPhone($phone)
+    public function setType($type)
     {
-        $this->phone = $phone;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get phone
+     * Get type
      *
-     * @return array
+     * @return string
      */
-    public function getPhone()
+    public function getType()
     {
-        return $this->phone;
+        return $this->type;
+    }
+
+    /**
+     * Set isOnline
+     *
+     * @param boolean $isOnline
+     *
+     * @return User
+     */
+    public function setIsOnline($isOnline)
+    {
+        $this->isOnline = $isOnline;
+
+        return $this;
+    }
+
+    /**
+     * Get isOnline
+     *
+     * @return boolean
+     */
+    public function getIsOnline()
+    {
+        return $this->isOnline;
+    }
+
+    /**
+     * Set relationshpStatus
+     *
+     * @param string $relationshpStatus
+     *
+     * @return User
+     */
+    public function setRelationshpStatus($relationshpStatus)
+    {
+        $this->relationshpStatus = $relationshpStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get relationshpStatus
+     *
+     * @return string
+     */
+    public function getRelationshpStatus()
+    {
+        return $this->relationshpStatus;
     }
 
     /**
@@ -415,6 +347,30 @@ class User
     }
 
     /**
+     * Set confirm
+     *
+     * @param boolean $confirm
+     *
+     * @return User
+     */
+    public function setConfirm($confirm)
+    {
+        $this->confirm = $confirm;
+
+        return $this;
+    }
+
+    /**
+     * Get confirm
+     *
+     * @return boolean
+     */
+    public function getConfirm()
+    {
+        return $this->confirm;
+    }
+
+    /**
      * Set isVip
      *
      * @param boolean $isVip
@@ -431,11 +387,82 @@ class User
     /**
      * Get isVip
      *
-     * @return bool
+     * @return boolean
      */
     public function getIsVip()
     {
         return $this->isVip;
     }
-}
 
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     *
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set phones
+     *
+     * @param array $phones
+     *
+     * @return User
+     */
+    public function setPhones($phones)
+    {
+        $this->phones = $phones;
+
+        return $this;
+    }
+
+    /**
+     * Get phones
+     *
+     * @return array
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * Set profileVisibility
+     *
+     * @param array $profileVisibility
+     *
+     * @return User
+     */
+    public function setProfileVisibility($profileVisibility)
+    {
+        $this->profileVisibility = $profileVisibility;
+
+        return $this;
+    }
+
+    /**
+     * Get profileVisibility
+     *
+     * @return array
+     */
+    public function getProfileVisibility()
+    {
+        return $this->profileVisibility;
+    }
+}

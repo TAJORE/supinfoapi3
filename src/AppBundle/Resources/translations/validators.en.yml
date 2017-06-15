@@ -1,0 +1,4 @@
+User:
+  NotBlank:
+    email: The adresse email is required
+    password: The password is required
