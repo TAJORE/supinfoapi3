@@ -57,7 +57,7 @@ class DefaultController extends Controller
     {
        $user = new User();
         $password = $this->encodePassword(new User(), "admin", $user->getSalt());
-        $user->setEnabled(true)->setConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
+        $user->setEnabled(true)->setIsConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
             ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password)->setUsername("admin");
 
         $em = $this->getDoctrine()->getManager();
@@ -72,7 +72,7 @@ class DefaultController extends Controller
 
         $user = new User();
         $password = $this->encodePassword(new User(), "member", $user->getSalt());
-        $user->setEnabled(true)->setConfirm(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
+        $user->setEnabled(true)->setIsConfirm(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
             ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password);
 
         $em = $this->getDoctrine()->getManager();

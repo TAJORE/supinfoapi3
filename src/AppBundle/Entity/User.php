@@ -44,7 +44,6 @@ class User extends BaseUser
     private $isOnline;
 
 
-
     /**
      * @var \DateTime
      *
@@ -70,9 +69,9 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="relationshpStatus", type="string", length=255, nullable=true)
+     * @ORM\Column(name="relationshipStatus", type="string", length=255, nullable=true)
      */
-    private $relationshpStatus;
+    private $relationshipStatus;
 
 
     /**
@@ -86,9 +85,9 @@ class User extends BaseUser
     /**
      * @var boolean
      *
-     * @ORM\Column(name="confirm", type="boolean")
+     * @ORM\Column(name="isConfirm", type="boolean")
      */
-    private $confirm;
+    private $isConfirm;
 
     /**
      * @var boolean
@@ -129,6 +128,7 @@ class User extends BaseUser
     {
         return $this->id;
     }
+
 
     /**
      * Set firstName
@@ -179,27 +179,27 @@ class User extends BaseUser
     }
 
     /**
-     * Set email
+     * Set isOnline
      *
-     * @param string $email
+     * @param boolean $isOnline
      *
      * @return User
      */
-    public function setEmail($email)
+    public function setIsOnline($isOnline)
     {
-        $this->email = $email;
+        $this->isOnline = $isOnline;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get isOnline
      *
-     * @return string
+     * @return boolean
      */
-    public function getEmail()
+    public function getIsOnline()
     {
-        return $this->email;
+        return $this->isOnline;
     }
 
     /**
@@ -275,51 +275,27 @@ class User extends BaseUser
     }
 
     /**
-     * Set isOnline
+     * Set relationshipStatus
      *
-     * @param boolean $isOnline
+     * @param string $relationshipStatus
      *
      * @return User
      */
-    public function setIsOnline($isOnline)
+    public function setRelationshipStatus($relationshipStatus)
     {
-        $this->isOnline = $isOnline;
+        $this->relationshipStatus = $relationshipStatus;
 
         return $this;
     }
 
     /**
-     * Get isOnline
-     *
-     * @return boolean
-     */
-    public function getIsOnline()
-    {
-        return $this->isOnline;
-    }
-
-    /**
-     * Set relationshpStatus
-     *
-     * @param string $relationshpStatus
-     *
-     * @return User
-     */
-    public function setRelationshpStatus($relationshpStatus)
-    {
-        $this->relationshpStatus = $relationshpStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get relationshpStatus
+     * Get relationshipStatus
      *
      * @return string
      */
-    public function getRelationshpStatus()
+    public function getRelationshipStatus()
     {
-        return $this->relationshpStatus;
+        return $this->relationshipStatus;
     }
 
     /**
@@ -347,27 +323,27 @@ class User extends BaseUser
     }
 
     /**
-     * Set confirm
+     * Set isConfirm
      *
-     * @param boolean $confirm
+     * @param boolean $isConfirm
      *
      * @return User
      */
-    public function setConfirm($confirm)
+    public function setIsConfirm($isConfirm)
     {
-        $this->confirm = $confirm;
+        $this->isConfirm = $isConfirm;
 
         return $this;
     }
 
     /**
-     * Get confirm
+     * Get isConfirm
      *
      * @return boolean
      */
-    public function getConfirm()
+    public function getIsConfirm()
     {
-        return $this->confirm;
+        return $this->isConfirm;
     }
 
     /**
