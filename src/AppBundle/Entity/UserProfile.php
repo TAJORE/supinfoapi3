@@ -37,15 +37,12 @@ class UserProfile
      */
     private $lastUpdateDate;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=50)
      */
     private $city;
-
-
 
     /**
      * @var string
