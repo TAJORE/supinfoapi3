@@ -57,8 +57,9 @@ class DefaultController extends Controller
     {
        $user = new User();
         $password = $this->encodePassword(new User(), "admin", $user->getSalt());
-        $user->setEnabled(true)->setIsConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
-            ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password)->setUsername("admin");
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
+            ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")
+            ->setPassword($password)->setUsername("admin")->setJoinDate(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
@@ -72,7 +73,7 @@ class DefaultController extends Controller
 
         $user = new User();
         $password = $this->encodePassword(new User(), "member", $user->getSalt());
-        $user->setEnabled(true)->setIsConfirm(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
             ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password);
 
         $em = $this->getDoctrine()->getManager();
