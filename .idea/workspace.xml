@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="000023ae-4368-473d-9693-2b156d7594e1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="funglobeapi.iws" />
@@ -295,7 +294,13 @@
       <option name="project" value="LOCAL" />
       <updated>1497529434016</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="updateUserEntity">
+      <created>1497529596353</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1497529596353</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -338,7 +343,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="profile" />
     <MESSAGE value="update_UserEntity" />
-    <option name="LAST_COMMIT_MESSAGE" value="update_UserEntity" />
+    <MESSAGE value="updateUserEntity" />
+    <option name="LAST_COMMIT_MESSAGE" value="updateUserEntity" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
