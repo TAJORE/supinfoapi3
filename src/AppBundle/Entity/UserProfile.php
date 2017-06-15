@@ -26,7 +26,7 @@ class UserProfile
      *
      * @ORM\Column(name="creationDate", type="date")
      */
-    private $creationDate;
+    private $CreationDate;
 
     /**
      * @var \DateTime
@@ -280,4 +280,3 @@ class UserProfile
         return $this->userId;
     }
 }
-

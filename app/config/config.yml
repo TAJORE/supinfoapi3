@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@ApiBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -10,7 +11,7 @@ parameters:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -18,7 +19,7 @@ framework:
     form: ~
     csrf_protection: ~
     validation: { enable_annotations: true }
-    #serializer: { enable_annotations: true }
+    serializer: { enable_annotations: true }
     templating:
         engines: ['twig']
     default_locale: '%locale%'
@@ -32,7 +33,6 @@ framework:
     assets: ~
     php_errors:
         log: true
-
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'
@@ -67,3 +67,69 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+
+sensio_framework_extra:
+    view:   { annotations: true }
+    router: { annotations: true }
+
+# FOSRestBundle
+fos_rest:
+    allowed_methods_listener: true
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+        view_response_listener: 'force'
+        formats:
+            xml: true
+            json : true
+        templating_formats:
+            html: true
+        force_redirects:
+            html: true
+        failed_validation: HTTP_BAD_REQUEST
+        default_engine: twig
+    routing_loader:
+        include_format: false
+        default_format: json
+
+nelmio_api_doc:
+  name: FunGlobe API Documentation
+
+# FOS User Bundle
+fos_user:
+    db_driver: orm
+    firewall_name: api
+    user_class: ApiBundle\Entity\User
+    service:
+        mailer: fos_user.mailer.twig_swift
+    registration:
+        form:
+            type: fos_user_register
+            validation_groups: [Register, Default, Registration]
+        confirmation:
+            enabled: true
+            template: ApiBundle:Registration:email.html.twig
+    profile:
+        form:
+            type: fos_user_profile
+            #validation_groups: [Profile, Default]
+    resetting:
+        email:
+            template: ApiBundle:Resetting:email.html.twig
+    group:
+        group_class: AppBundle\Entity\Groupe
+    from_email:
+        address: contact@funglobe.com
+        sender_name: Statege++
+
+
+fos_oauth_server:
+    db_driver:           orm
+    client_class:        AppBundle\Entity\Client
+    access_token_class:  AppBundle\Entity\AccessToken
+    refresh_token_class: AppBundle\Entity\RefreshToken
+    auth_code_class:     AppBundle\Entity\AuthCode
+    service:
+        user_provider: fos_user.username_email #user_manager

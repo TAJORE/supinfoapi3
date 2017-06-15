@@ -15,4 +15,12 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+<<<<<<< HEAD
 /.idea
+=======
+/.idea/
+/composer.phar
+/composer.lock
+/src/App/EntityBundle/Entity/*.php~
+/bin/symfony_requirements
+>>>>>>> master
