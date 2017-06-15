@@ -84,10 +84,7 @@ class UserPhoto
      */
     private $createDate;
 
-
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -96,94 +93,62 @@ class UserPhoto
     }
 
     /**
-     * Set userId
-     *
-     * @param string $userId
-     *
-     * @return UserPhoto
+     * @param int $id
      */
-    public function setuserId($userId)
+    public function setId($id)
     {
-        $this->userId = $userId;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get userId
-     *
      * @return string
      */
-    public function getuserId()
+    public function getUserId()
     {
         return $this->userId;
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return UserPhoto
+     * @param string $userId
      */
-    public function setname($name)
+    public function setUserId($userId)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->userId = $userId;
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @return int
      */
-    public function getname()
+    public function getName()
     {
         return $this->name;
     }
 
     /**
-     * Set hashname
-     *
-     * @param string $hashname
-     *
-     * @return UserPhoto
+     * @param int $name
      */
-    public function sethashname($hashname)
+    public function setName($name)
     {
-        $this->hashname = $hashname;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get hashname
-     *
      * @return string
      */
-    public function gethashname()
+    public function getHashname()
     {
         return $this->hashname;
     }
 
     /**
-     * Set size
-     *
-     * @param float $size
-     *
-     * @return UserPhoto
+     * @param string $hashname
      */
-    public function setSize($size)
+    public function setHashname($hashname)
     {
-        $this->size = $size;
-
-        return $this;
+        $this->hashname = $hashname;
     }
 
     /**
-     * Get size
-     *
      * @return float
      */
     public function getSize()
@@ -192,122 +157,91 @@ class UserPhoto
     }
 
     /**
-     * Set mimeType
-     *
-     * @param string $mimeType
-     *
-     * @return UserPhoto
+     * @param float $size
      */
-    public function setmimeType($mimeType)
+    public function setSize($size)
     {
-        $this->mimeType = $mimeType;
-
-        return $this;
+        $this->size = $size;
     }
 
     /**
-     * Get mimeType
-     *
      * @return string
      */
-    public function getmimeType()
+    public function getMimeType()
     {
         return $this->mimeType;
     }
 
     /**
-     * Set isValid
-     *
-     * @param boolean $isValid
-     *
-     * @return UserPhoto
+     * @param string $mimeType
      */
-    public function setisValid($isValid)
+    public function setMimeType($mimeType)
     {
-        $this->isValid = $isValid;
-
-        return $this;
+        $this->mimeType = $mimeType;
     }
 
     /**
-     * Get isValid
-     *
-     * @return bool
+     * @return boolean
      */
-    public function getisValid()
+    public function isIsValid()
     {
         return $this->isValid;
     }
 
     /**
-     * Set visibility
-     *
-     * @param string $visibility
-     *
-     * @return UserPhoto
+     * @param boolean $isValid
      */
-    public function setvisibility($visibility)
+    public function setIsValid($isValid)
     {
-        $this->visibility = $visibility;
-
-        return $this;
+        $this->isValid = $isValid;
     }
 
     /**
-     * Get visibility
-     *
      * @return string
      */
-    public function getvisibility()
+    public function getVisibility()
     {
         return $this->visibility;
     }
 
     /**
-     * Set updateDate
-     *
-     * @param \DateTime $updateDate
-     *
-     * @return UserPhoto
+     * @param string $visibility
      */
-    public function setupdateDate($updateDate)
+    public function setVisibility($visibility)
     {
-        $this->updateDate = $updateDate;
-
-        return $this;
+        $this->visibility = $visibility;
     }
 
     /**
-     * Get updateDate
-     *
      * @return \DateTime
      */
-    public function getupdateDate()
+    public function getUpdateDate()
     {
         return $this->updateDate;
     }
 
     /**
-     * Set createDate
-     *
-     * @param \DateTime $createDate
-     *
-     * @return UserPhoto
+     * @param \DateTime $updateDate
      */
-    public function setcreateDate($createDate)
+    public function setUpdateDate($updateDate)
     {
-        $this->createDate = $createDate;
-
-        return $this;
+        $this->updateDate = $updateDate;
     }
 
     /**
-     * Get createDate
-     *
      * @return \DateTime
      */
-    public function getcreateDate()
+    public function getCreateDate()
     {
         return $this->createDate;
     }
+
+    /**
+     * @param \DateTime $createDate
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+    }
+
 }
