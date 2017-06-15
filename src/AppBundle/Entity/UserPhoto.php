@@ -24,63 +24,63 @@ class UserPhoto
     /**
      * @var string
      *
-     * @ORM\Column(name="UserId", type="string", length=50)
+     * @ORM\Column(name="userId", type="string", length=50)
      */
     private $userId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="Name", type="integer", length=50)
+     * @ORM\Column(name="name", type="integer", length=50)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Hashname", type="string", length=255)
+     * @ORM\Column(name="hashname", type="string", length=255)
      */
     private $hashname;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="Size", type="float")
+     * @ORM\Column(name="size", type="float")
      */
     private $size;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="MimeType", type="string", length=25)
+     * @ORM\Column(name="mimeType", type="string", length=25)
      */
     private $mimeType;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="IsValid", type="boolean")
+     * @ORM\Column(name="isValid", type="boolean")
      */
     private $isValid;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Visibility", type="string", length=25)
+     * @ORM\Column(name="visibility", type="string", length=25)
      */
     private $visibility;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="UpdateDate", type="datetime")
+     * @ORM\Column(name="updateDate", type="datetime")
      */
     private $updateDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="CreateDate", type="datetime")
+     * @ORM\Column(name="createDate", type="datetime")
      */
     private $createDate;
 
@@ -102,7 +102,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setUserId($userId)
+    public function setuserId($userId)
     {
         $this->userId = $userId;
 
@@ -114,7 +114,7 @@ class UserPhoto
      *
      * @return string
      */
-    public function getUserId()
+    public function getuserId()
     {
         return $this->userId;
     }
@@ -126,7 +126,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setName($name)
+    public function setname($name)
     {
         $this->name = $name;
 
@@ -138,7 +138,7 @@ class UserPhoto
      *
      * @return string
      */
-    public function getName()
+    public function getname()
     {
         return $this->name;
     }
@@ -150,7 +150,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setHashname($hashname)
+    public function sethashname($hashname)
     {
         $this->hashname = $hashname;
 
@@ -162,7 +162,7 @@ class UserPhoto
      *
      * @return string
      */
-    public function getHashname()
+    public function gethashname()
     {
         return $this->hashname;
     }
@@ -198,7 +198,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setMimeType($mimeType)
+    public function setmimeType($mimeType)
     {
         $this->mimeType = $mimeType;
 
@@ -210,7 +210,7 @@ class UserPhoto
      *
      * @return string
      */
-    public function getMimeType()
+    public function getmimeType()
     {
         return $this->mimeType;
     }
@@ -222,7 +222,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setIsValid($isValid)
+    public function setisValid($isValid)
     {
         $this->isValid = $isValid;
 
@@ -234,7 +234,7 @@ class UserPhoto
      *
      * @return bool
      */
-    public function getIsValid()
+    public function getisValid()
     {
         return $this->isValid;
     }
@@ -246,7 +246,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setVisibility($visibility)
+    public function setvisibility($visibility)
     {
         $this->visibility = $visibility;
 
@@ -258,7 +258,7 @@ class UserPhoto
      *
      * @return string
      */
-    public function getVisibility()
+    public function getvisibility()
     {
         return $this->visibility;
     }
@@ -270,7 +270,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setUpdateDate($updateDate)
+    public function setupdateDate($updateDate)
     {
         $this->updateDate = $updateDate;
 
@@ -282,7 +282,7 @@ class UserPhoto
      *
      * @return \DateTime
      */
-    public function getUpdateDate()
+    public function getupdateDate()
     {
         return $this->updateDate;
     }
@@ -294,7 +294,7 @@ class UserPhoto
      *
      * @return UserPhoto
      */
-    public function setCreateDate($createDate)
+    public function setcreateDate($createDate)
     {
         $this->createDate = $createDate;
 
@@ -306,7 +306,7 @@ class UserPhoto
      *
      * @return \DateTime
      */
-    public function getCreateDate()
+    public function getcreateDate()
     {
         return $this->createDate;
     }

@@ -31,49 +31,49 @@ class UserProfile
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="LastUpdateDate", type="date")
+     * @ORM\Column(name="lastUpdateDate", type="date")
      */
     private $lastUpdateDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="City", type="string", length=50)
+     * @ORM\Column(name="city", type="string", length=50)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Company", type="string", length=50)
+     * @ORM\Column(name="company", type="string", length=50)
      */
     private $company;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Country", type="string", length=50)
+     * @ORM\Column(name="country", type="string", length=50)
      */
     private $country;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="GpsPosition", type="array")
+     * @ORM\Column(name="gpsPosition", type="array")
      */
     private $gpsPosition;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="PhotoProfile", type="string", length=255)
+     * @ORM\Column(name="photoProfile", type="string", length=255)
      */
     private $photoProfile;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="UserId", type="integer")
+     * @ORM\Column(name="userId", type="integer")
      */
     private $userId;
 
@@ -107,7 +107,7 @@ class UserProfile
      *
      * @return \DateTime
      */
-    public function getCreationDate()
+    public function getcreationDate()
     {
         return $this->creationDate;
     }
@@ -119,7 +119,7 @@ class UserProfile
      *
      * @return UserProfile
      */
-    public function setLastUpdateDate($lastUpdateDate)
+    public function setLastupdateDate($lastUpdateDate)
     {
         $this->lastUpdateDate = $lastUpdateDate;
 
@@ -131,7 +131,7 @@ class UserProfile
      *
      * @return \DateTime
      */
-    public function getLastUpdateDate()
+    public function getlastUpdateDate()
     {
         return $this->lastUpdateDate;
     }
@@ -143,7 +143,7 @@ class UserProfile
      *
      * @return UserProfile
      */
-    public function setCity($city)
+    public function setcity($city)
     {
         $this->city = $city;
 
@@ -155,7 +155,7 @@ class UserProfile
      *
      * @return string
      */
-    public function getCity()
+    public function getcity()
     {
         return $this->city;
     }
@@ -167,7 +167,7 @@ class UserProfile
      *
      * @return UserProfile
      */
-    public function setCompany($company)
+    public function setcompany($company)
     {
         $this->company = $company;
 
@@ -179,7 +179,7 @@ class UserProfile
      *
      * @return string
      */
-    public function getCompany()
+    public function getcompany()
     {
         return $this->company;
     }
@@ -191,7 +191,7 @@ class UserProfile
      *
      * @return UserProfile
      */
-    public function setCountry($country)
+    public function setcountry($country)
     {
         $this->country = $country;
 
@@ -215,7 +215,7 @@ class UserProfile
      *
      * @return UserProfile
      */
-    public function setGpsPosition($gpsPosition)
+    public function setgpsPosition($gpsPosition)
     {
         $this->gpsPosition = $gpsPosition;
 
@@ -227,7 +227,7 @@ class UserProfile
      *
      * @return array
      */
-    public function getGpsPosition()
+    public function getgpsPosition()
     {
         return $this->gpsPosition;
     }
@@ -239,7 +239,7 @@ class UserProfile
      *
      * @return UserProfile
      */
-    public function setPhotoProfile($photoProfile)
+    public function setphotoProfile($photoProfile)
     {
         $this->photoProfile = $photoProfile;
 
@@ -251,7 +251,7 @@ class UserProfile
      *
      * @return string
      */
-    public function getPhotoProfile()
+    public function getphotoProfile()
     {
         return $this->photoProfile;
     }
@@ -263,7 +263,7 @@ class UserProfile
      *
      * @return UserProfile
      */
-    public function setUserId($userId)
+    public function setuserId($userId)
     {
         $this->userId = $userId;
 
@@ -275,7 +275,7 @@ class UserProfile
      *
      * @return int
      */
-    public function getUserId()
+    public function getuserId()
     {
         return $this->userId;
     }
