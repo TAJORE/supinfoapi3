@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Message
@@ -42,6 +43,28 @@ class Message
      */
     private $isValid;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Message", mappedBy="messageParent", cascade={"persist", "remove"})
+     */
+    private $sousMessages;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="sousMessages")
+     * @ORM\JoinColumn(name="message_parent_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $messageParent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $user;
+
+    /**
+     *@ORM\OneToMany(targetEntity="AppBundle\Entity\File", mappedBy="message", cascade={"persist", "remove"})
+     *@ORM\JoinColumn(nullable=false)
+     */
+    private $files;
 
     /**
      * Get id
@@ -124,5 +147,128 @@ class Message
     {
         return $this->isValid;
     }
-}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->sousMessages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
+    /**
+     * Add sousMessage
+     *
+     * @param \AppBundle\Entity\Message $sousMessage
+     *
+     * @return Message
+     */
+    public function addSousMessage(\AppBundle\Entity\Message $sousMessage)
+    {
+        $this->sousMessages[] = $sousMessage;
+
+        return $this;
+    }
+
+    /**
+     * Remove sousMessage
+     *
+     * @param \AppBundle\Entity\Message $sousMessage
+     */
+    public function removeSousMessage(\AppBundle\Entity\Message $sousMessage)
+    {
+        $this->sousMessages->removeElement($sousMessage);
+    }
+
+    /**
+     * Get sousMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSousMessages()
+    {
+        return $this->sousMessages;
+    }
+
+    /**
+     * Set messageParent
+     *
+     * @param \AppBundle\Entity\Message $messageParent
+     *
+     * @return Message
+     */
+    public function setMessageParent(\AppBundle\Entity\Message $messageParent = null)
+    {
+        $this->messageParent = $messageParent;
+
+        return $this;
+    }
+
+    /**
+     * Get messageParent
+     *
+     * @return \AppBundle\Entity\Message
+     */
+    public function getMessageParent()
+    {
+        return $this->messageParent;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Message
+     */
+    public function setUser(\AppBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add file
+     *
+     * @param \AppBundle\Entity\File $file
+     *
+     * @return Message
+     */
+    public function addFile(\AppBundle\Entity\File $file)
+    {
+        $this->files[] = $file;
+
+        return $this;
+    }
+
+    /**
+     * Remove file
+     *
+     * @param \AppBundle\Entity\File $file
+     */
+    public function removeFile(\AppBundle\Entity\File $file)
+    {
+        $this->files->removeElement($file);
+    }
+
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+}

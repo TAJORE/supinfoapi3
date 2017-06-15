@@ -3,10 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * File
  *
+ * @UniqueEntity(fields="hashname", message="File.Unique.hashname")
  * @ORM\Table(name="file")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FileRepository")
  */
@@ -24,6 +27,7 @@ class File
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="File.NotBlank.name")
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -31,6 +35,7 @@ class File
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="File.NotBlank.hashname")
      * @ORM\Column(name="hashname", type="string", length=255, unique=true)
      */
     private $hashname;
@@ -38,6 +43,7 @@ class File
     /**
      * @var int
      *
+     * @Assert\GreaterThan(message="File.Gt.size", value=0)
      * @ORM\Column(name="size", type="integer")
      */
     private $size;
@@ -45,7 +51,7 @@ class File
     /**
      * @var string
      *
-     * @ORM\Column(name="mimeType", type="string", length=255)
+     * @ORM\Column(name="mimeType", type="string", length=255, nullable=true)
      */
     private $mimeType;
 
@@ -62,6 +68,12 @@ class File
      * @ORM\Column(name="createDate", type="datetimetz")
      */
     private $createDate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="files", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $message;
 
 
     /**
@@ -217,5 +229,28 @@ class File
     {
         return $this->createDate;
     }
-}
 
+    /**
+     * Set message
+     *
+     * @param \AppBundle\Entity\Message $message
+     *
+     * @return File
+     */
+    public function setMessage(\AppBundle\Entity\Message $message = null)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message
+     *
+     * @return \AppBundle\Entity\Message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+}
