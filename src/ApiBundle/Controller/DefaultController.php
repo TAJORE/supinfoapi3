@@ -30,7 +30,7 @@ class DefaultController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
         $array = $em->getRepository("AppBundle:User")->findAll();
-        return json_encode($array);
+        return $this->json($array);
     }
 
     /**
