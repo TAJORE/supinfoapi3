@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
@@ -56,11 +57,11 @@ class DefaultController extends Controller
     {
        $user = new User();
         $password = $this->encodePassword(new User(), "admin", $user->getSalt());
-        $user->setEnabled(true)->setConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles("ROLE_ADMIN")
+        $user->setEnabled(true)->setConfirm(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
             ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password)->setUsername("admin");
 
         $em = $this->getDoctrine()->getManager();
-        $exist = $em->getRepository('EntityBundle:User')->findOneByemail($user->getEmail());
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
         if($exist==null)
         {
             $em->persist($user);
@@ -71,11 +72,11 @@ class DefaultController extends Controller
 
         $user = new User();
         $password = $this->encodePassword(new User(), "member", $user->getSalt());
-        $user->setEnabled(true)->setConfirm(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles("ROLE_MEMBER")
-            ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword();
+        $user->setEnabled(true)->setConfirm(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
+            ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password);
 
         $em = $this->getDoctrine()->getManager();
-        $exist = $em->getRepository('EntityBundle:User')->findOneByemail($user->getEmail());
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
         if($exist==null)
         {
             $em->persist($user);
@@ -83,5 +84,6 @@ class DefaultController extends Controller
 
         $em->flush();
         $em->detach($user);
+        return $this->json($user);
     }
 }
