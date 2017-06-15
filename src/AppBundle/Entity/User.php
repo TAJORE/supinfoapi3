@@ -85,9 +85,9 @@ class User extends BaseUser
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isConfirm", type="boolean")
+     * @ORM\Column(name="isEmailVerified", type="boolean")
      */
-    private $isConfirm;
+    private $isEmailVerified;
 
     /**
      * @var boolean
@@ -325,25 +325,25 @@ class User extends BaseUser
     /**
      * Set isConfirm
      *
-     * @param boolean $isConfirm
+     * @param boolean $isEmailVerified
      *
      * @return User
      */
-    public function setIsConfirm($isConfirm)
+    public function setIsEmailVerified($isEmailVerified)
     {
-        $this->isConfirm = $isConfirm;
+        $this->isEmailVerified = $isEmailVerified;
 
         return $this;
     }
 
     /**
-     * Get isConfirm
+     * Get isEmailVerified
      *
      * @return boolean
      */
-    public function getIsConfirm()
+    public function getIsEmailVerified()
     {
-        return $this->isConfirm;
+        return $this->isEmailVerified;
     }
 
     /**
