@@ -28,9 +28,9 @@ class DefaultController extends FOSRestController
      */
     public function indexAction()
     {
-        $array = ['id' => 1, 'name' => 'Contact', 'email' => 'contact@funglobe.com'];
-
-        return $array;
+        $em = $this->getDoctrine()->getManager();
+        $array = $em->getRepository("AppBundle:User")->findAll();
+        return json_encode($array);
     }
 
     /**
