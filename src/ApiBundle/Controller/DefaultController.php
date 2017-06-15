@@ -44,7 +44,7 @@ class DefaultController extends FOSRestController
      *     200="Retourné quand tout est OK !"
      *  },
      *  parameters={
-     *     {"name"="aatribut1", "dataType"="integer", "required"=true, "description"="description d'attribut  1"}
+     *     {"name"="aatribut1", "dataType"="integer", "required"=true, "description"="description d'attribut  1"},
      *     {"name"="aatribut2", "dataType"="string", "required"=true, "description"="description d'attribut  2"},
      *     {"name"="aatribut3", "dataType"="array", "required"=true, "description"="description d'attribut  3"},
      *     {"name"="aatribut4", "dataType"="boolean", "required"=true, "description"="description d'attribut  4"}
