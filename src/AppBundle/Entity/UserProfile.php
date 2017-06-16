@@ -70,6 +70,7 @@ class UserProfile
      */
     private $photoProfile;
 
+
     /**
      * @var int
      *
@@ -79,8 +80,6 @@ class UserProfile
 
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -89,118 +88,78 @@ class UserProfile
     }
 
     /**
-     * Set creationDate
-     *
-     * @param \DateTime $creationDate
-     *
-     * @return UserProfile
+     * @param int $id
      */
-    public function setCreationDate($creationDate)
+    public function setId($id)
     {
-        $this->creationDate = $creationDate;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get creationDate
-     *
      * @return \DateTime
      */
-    public function getcreationDate()
+    public function getCreationDate()
     {
-        return $this->creationDate;
+        return $this->CreationDate;
     }
 
     /**
-     * Set lastUpdateDate
-     *
-     * @param \DateTime $lastUpdateDate
-     *
-     * @return UserProfile
+     * @param \DateTime $CreationDate
      */
-    public function setLastupdateDate($lastUpdateDate)
+    public function setCreationDate($CreationDate)
     {
-        $this->lastUpdateDate = $lastUpdateDate;
-
-        return $this;
+        $this->CreationDate = $CreationDate;
     }
 
     /**
-     * Get lastUpdateDate
-     *
      * @return \DateTime
      */
-    public function getlastUpdateDate()
+    public function getLastUpdateDate()
     {
         return $this->lastUpdateDate;
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
-     *
-     * @return UserProfile
+     * @param \DateTime $lastUpdateDate
      */
-    public function setcity($city)
+    public function setLastUpdateDate($lastUpdateDate)
     {
-        $this->city = $city;
-
-        return $this;
+        $this->lastUpdateDate = $lastUpdateDate;
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
-    public function getcity()
+    public function getCity()
     {
         return $this->city;
     }
 
     /**
-     * Set company
-     *
-     * @param string $company
-     *
-     * @return UserProfile
+     * @param string $city
      */
-    public function setcompany($company)
+    public function setCity($city)
     {
-        $this->company = $company;
-
-        return $this;
+        $this->city = $city;
     }
 
     /**
-     * Get company
-     *
      * @return string
      */
-    public function getcompany()
+    public function getCompany()
     {
         return $this->company;
     }
 
     /**
-     * Set country
-     *
-     * @param string $country
-     *
-     * @return UserProfile
+     * @param string $company
      */
-    public function setcountry($country)
+    public function setCompany($company)
     {
-        $this->country = $country;
-
-        return $this;
+        $this->company = $company;
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -209,74 +168,59 @@ class UserProfile
     }
 
     /**
-     * Set gpsPosition
-     *
-     * @param array $gpsPosition
-     *
-     * @return UserProfile
+     * @param string $country
      */
-    public function setgpsPosition($gpsPosition)
+    public function setCountry($country)
     {
-        $this->gpsPosition = $gpsPosition;
-
-        return $this;
+        $this->country = $country;
     }
 
     /**
-     * Get gpsPosition
-     *
      * @return array
      */
-    public function getgpsPosition()
+    public function getGpsPosition()
     {
         return $this->gpsPosition;
     }
 
     /**
-     * Set photoProfile
-     *
-     * @param string $photoProfile
-     *
-     * @return UserProfile
+     * @param array $gpsPosition
      */
-    public function setphotoProfile($photoProfile)
+    public function setGpsPosition($gpsPosition)
     {
-        $this->photoProfile = $photoProfile;
-
-        return $this;
+        $this->gpsPosition = $gpsPosition;
     }
 
     /**
-     * Get photoProfile
-     *
      * @return string
      */
-    public function getphotoProfile()
+    public function getPhotoProfile()
     {
         return $this->photoProfile;
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return UserProfile
+     * @param string $photoProfile
      */
-    public function setuserId($userId)
+    public function setPhotoProfile($photoProfile)
     {
-        $this->userId = $userId;
-
-        return $this;
+        $this->photoProfile = $photoProfile;
     }
 
     /**
-     * Get userId
-     *
      * @return int
      */
-    public function getuserId()
+    public function getUserId()
     {
         return $this->userId;
     }
+
+    /**
+     * @param int $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
 }
