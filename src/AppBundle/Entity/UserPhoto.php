@@ -183,7 +183,7 @@ class UserPhoto
     /**
      * @return boolean
      */
-    public function isIsValid()
+    public function getIsValid()
     {
         return $this->isValid;
     }
