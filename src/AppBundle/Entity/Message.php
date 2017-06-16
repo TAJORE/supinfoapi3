@@ -46,10 +46,10 @@ class Message
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Message", mappedBy="messageParent", cascade={"persist", "remove"})
      */
-    private $sousMessages;
+    private $subMessages;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="sousMessages")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="subMessages")
      * @ORM\JoinColumn(name="message_parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $messageParent;
@@ -58,7 +58,7 @@ class Message
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $user;
+    private $sender;
 
     /**
      *@ORM\OneToMany(targetEntity="AppBundle\Entity\File", mappedBy="message", cascade={"persist", "remove"})
@@ -152,42 +152,42 @@ class Message
      */
     public function __construct()
     {
-        $this->sousMessages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subMessages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add sousMessage
+     * Add subMessage
      *
-     * @param \AppBundle\Entity\Message $sousMessage
+     * @param \AppBundle\Entity\Message $subMessage
      *
      * @return Message
      */
-    public function addSousMessage(\AppBundle\Entity\Message $sousMessage)
+    public function addSubMessage(\AppBundle\Entity\Message $subMessage)
     {
-        $this->sousMessages[] = $sousMessage;
+        $this->subMessages[] = $subMessage;
 
         return $this;
     }
 
     /**
-     * Remove sousMessage
+     * Remove subMessage
      *
-     * @param \AppBundle\Entity\Message $sousMessage
+     * @param \AppBundle\Entity\Message $subMessage
      */
-    public function removeSousMessage(\AppBundle\Entity\Message $sousMessage)
+    public function removeSubMessage(\AppBundle\Entity\Message $subMessage)
     {
-        $this->sousMessages->removeElement($sousMessage);
+        $this->subMessages->removeElement($subMessage);
     }
 
     /**
-     * Get sousMessages
+     * Get subMessages
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSousMessages()
+    public function getSubMessages()
     {
-        return $this->sousMessages;
+        return $this->subMessages;
     }
 
     /**
@@ -215,27 +215,27 @@ class Message
     }
 
     /**
-     * Set user
+     * Set sender
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\User $sender
      *
      * @return Message
      */
-    public function setUser(\AppBundle\Entity\User $user)
+    public function setUser(\AppBundle\Entity\User $sender)
     {
-        $this->user = $user;
+        $this->sender = $sender;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get sender
      *
      * @return \AppBundle\Entity\User
      */
-    public function getUser()
+    public function getSender()
     {
-        return $this->user;
+        return $this->sender;
     }
 
     /**
