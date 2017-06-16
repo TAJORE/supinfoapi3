@@ -21,14 +21,12 @@ class UserProfile
      */
     private $id;
 
-
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="creationDate", type="date")
      */
     private $CreationDate;
-
 
     /**
      * @var \DateTime
