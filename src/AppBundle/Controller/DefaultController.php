@@ -71,10 +71,97 @@ class DefaultController extends Controller
         $em->flush();
         $em->detach($user);
 
+        //test user 2
+        $user = new User();
+        $password = $this->encodePassword(new User(), "Paul", $user->getSalt());
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact2@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
+            ->setFirstName("Paul")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")
+            ->setPassword($password)->setUsername("paul")->setJoinDate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        if($exist==null)
+        {
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $em->detach($user);
+
+        //test user 3
+        $user = new User();
+        $password = $this->encodePassword(new User(), "Melanie", $user->getSalt());
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact3@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
+            ->setFirstName("Melanie")->setGender("Female")->setIsOnline(false)->setIsVip(false)->setType("Normal")
+            ->setPassword($password)->setUsername("melanie")->setJoinDate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        if($exist==null)
+        {
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $em->detach($user);
+
+        //test user 4
+        $user = new User();
+        $password = $this->encodePassword(new User(), "Adeline", $user->getSalt());
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact4@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
+            ->setFirstName("Adeline")->setGender("Female")->setIsOnline(false)->setIsVip(false)->setType("Normal")
+            ->setPassword($password)->setUsername("adeline")->setJoinDate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        if($exist==null)
+        {
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $em->detach($user);
+
+        //test user 5
+        $user = new User();
+        $password = $this->encodePassword(new User(), "Lawrence", $user->getSalt());
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact5@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
+            ->setFirstName("Lawrence")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")
+            ->setPassword($password)->setUsername("lawrence")->setJoinDate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        if($exist==null)
+        {
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $em->detach($user);
+
+        //test user 6
+        $user = new User();
+        $password = $this->encodePassword(new User(), "Galadima", $user->getSalt());
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact6@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
+            ->setFirstName("Galadima")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("System")
+            ->setPassword($password)->setUsername("galadima")->setJoinDate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        if($exist==null)
+        {
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $em->detach($user);
+
+
+        //Test user6
         $user = new User();
         $password = $this->encodePassword(new User(), "member", $user->getSalt());
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
-            ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password);
+            ->setFirstName("Member")->setGender("Female")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password);
 
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
