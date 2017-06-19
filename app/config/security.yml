@@ -1,16 +1,42 @@
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: sha512
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
+    role_hierarchy:
+        ROLE_MEMBER:           [ROLE_MEMBER]
+        ROLE_MODERRATOR:       [ROLE_MEMBER,ROLE_MODERRATOR]
+        ROLE_ADMIN:            [ROLE_MODERRATOR, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username_email #username        # fos_user.user_provider.username_email does not seem to work (OAuth-spec related ("username + password") ?)
+        auth_token_user_provider:
+           id: auth_token_user_provider
     firewalls:
-        oauth_token:                                   # Everyone can access the access token URL.
-            pattern: ^/oauth/v1/token
-            security: false
-        api:
-            pattern: ^/v1                                # All URLs are protected
-            fos_oauth: true                            # OAuth2 protected resource
-            stateless: true                            # Do no set session cookies
-            anonymous: false                           # Anonymous access is not allowed
+       dev:
+           pattern:  ^/(_(profiler|wdt)|css|images|js)/
+           security: false
+
+       main:
+           pattern: ^/v1/api
+           stateless: true
+           simple_preauth:
+               authenticator: auth_token_authenticator
+           provider: auth_token_user_provider
+           anonymous: ~
+
+
+    access_control:
+            #api
+            - { path: ^/v1,       roles: IS_AUTHENTICATED_FULLY }
+            - { path: ^/v1/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/v1/auth-tokens, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/v1/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/[^/]+/resetpassword, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/lagout$, role: IS_AUTHENTICATED_FULLY }
+            # back-office
+            - { path: ^/[^/]+/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/[^/]+/private, roles: ROLE_MEMBER }
+            - { path: ^/[^/]+/admin, roles: ROLE_MODERATOR }
+            - { path: ^/[^/]+/sadmin, roles: ROLE_ADMIN }
+            # front-office
+            - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

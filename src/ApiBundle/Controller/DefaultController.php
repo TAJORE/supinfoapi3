@@ -109,4 +109,26 @@ class DefaultController extends FOSRestController
 
         // ...
     }
+
+
+
+    /**
+     * @Rest\Get("/register")
+     * @return Response
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Petit demo  de l'api",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  },
+     *  parameters={
+     *     {"name"="user1", "dataType"="array", "required"=true, "description"="description d'attribut  1"}
+     *  }
+     * )
+     */
+    public function registerAction()
+    {
+       return ['user'=>"test du  code"];
+    }
 }
