@@ -14,9 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use  Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class UserController extends FOSRestController
 {
     /**
@@ -53,31 +55,23 @@ class UserController extends FOSRestController
      */
     public function registerAction(Request $request)
     {
-        try{
             $user =new User();
             $val = $request->request;
             $user = $this->fillUser($request, $user);
-           // $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
-            $encoder = $this->get('security.password_encoder');
-            // le mot de passe en claire est encodé avant la sauvegarde
-            $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($encoded);
+            $user->setPassword($val->get("password"));
+           $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
+
+            $user->setPassword($password);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
             $em->detach($user);
-            $credential = new Credentials();
-            $credential->setLogin($user->getEmail());
-            $credential->setPassword($user->getPlainPassword());
-            $token = $this->authentification($credential);
-            return $this->json($user);
-        }
-        catch(Exception $ex)
-        {
-            $this->json($ex);
-        }
 
+            /* @var $user User */
+            $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+            $token = $this->authenticateUser($user);
+            return $this->json($user);
     }
 
 
@@ -159,18 +153,15 @@ class UserController extends FOSRestController
 
         // Si l'utilisateur veut changer son mot de passe
         if (!empty($user->getPlainPassword())) {
-            $encoder = $this->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($encoded);
+            $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
+            $user->setPassword($password);
         }
         $user = $this->fillUser($request,$user);
         $em->merge($user);
         $em->flush();
         $em->detach($user);
-        $credential = new Credentials();
-        $credential->setLogin($user->getEmail());
-        $credential->setPassword($user->getPlainPassword());
-        $token = $this->authentification($credential);
+
+        $token = $this->authenticateUser($user);
 
         return $this->json($user);
     }
@@ -205,56 +196,57 @@ class UserController extends FOSRestController
     public function postAuthTokensAction(Request $request)
     {
         $val  =$request->request;
-        $credentials = new Credentials();
-        $credentials->setLogin($val->get('_username'));
-        $credentials->setPassword($val->get('_password'));
-        return $this->authentification($credentials);
-    }
-
-
-    // authentifcation function
-    public function authentification(Credentials $credentials)
-    {
-
+        $user = new User();
         $em = $this->getDoctrine()->getManager();
-
-        $user = $em->getRepository('AppBundle:User')
-            ->findOneByEmail($credentials->getLogin());
-
-        if (!$user) { // L'utilisateur n'existe pas
-            $user = $em->getRepository('AppBundle:User')
-                ->findOneByUsername($credentials->getLogin());
-            if (!$user) {
-                return $this->invalidCredentials();
-               //return $user;
-            }
+        $user = $em->getRepository("AppBundle:User")->findOneByusername($val->get('_username'));
+        if(!$user)
+        {
+            $user = $em->getRepository("AppBundle:User")->findOneByemail($val->get('_username'));
         }
 
-        $encoder = $this->get('security.password_encoder');
-        $isPasswordValid = $encoder->isPasswordValid($user, $credentials->getPassword());
-
-        if (!$isPasswordValid) { // Le mot de passe n'est pas correct
+        if(!$user){
             return $this->invalidCredentials();
-            //return $credentials->getPassword();
         }
 
-        $authToken = new AuthToken();
-        $authToken->setValue(base64_encode(random_bytes(50)));
-        $authToken->setCreatedAt(new \DateTime('now'));
-        $authToken->setUser($user);
-
-        $em->persist($authToken);
-        $em->flush();
-        $em->detach($authToken);
-
-        return $authToken;
+        return $this->loginAction($request);
     }
 
-    private function invalidCredentials()
+
+    public function authenticateUser(UserInterface $user)
     {
-        return \FOS\RestBundle\View\View::create(['message' => 'Invalid credentials'], Response::HTTP_BAD_REQUEST);
+        try {
+
+            $tocken = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($tocken);
+            $this->get('session')->set('_security_main',serialize($tocken));
+
+            $authToken = new AuthToken();
+            $authToken->setValue(base64_encode(random_bytes(50)));
+            $authToken->setCreatedAt(new \DateTime('now'));
+            $authToken->setUser($user);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($authToken);
+            $em->flush();
+            $em->detach($authToken);
+
+            return $authToken;
+
+        } catch (AccountStatusException $ex) {
+            return $this->json($ex->getMessage());
+        }
     }
 
+
+
+    public function encodePassword($object, $password, $salt)
+    {
+        $factory = $this->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($object);
+        $password = $encoder->encodePassword($password, $salt);
+
+        return $password;
+    }
 
 
     /**
@@ -278,5 +270,47 @@ class UserController extends FOSRestController
         }
     }
 
+
+    private function invalidCredentials()
+    {
+        return \FOS\RestBundle\View\View::create(['message' => 'Password or Login is bad'], Response::HTTP_BAD_REQUEST);
+    }
+
+
+    public function loginAction(Request $request)
+    {
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $request->getSession();
+
+        $authErrorKey = Security::AUTHENTICATION_ERROR;
+        $lastUsernameKey = Security::LAST_USERNAME;
+
+        // get the error if any (works with forward and redirect -- see below)
+        if ($request->attributes->has($authErrorKey)) {
+            $error = $request->attributes->get($authErrorKey);
+        } elseif (null !== $session && $session->has($authErrorKey)) {
+            $error = $session->get($authErrorKey);
+            $session->remove($authErrorKey);
+        } else {
+            $error = null;
+        }
+
+        if (!$error instanceof AuthenticationException) {
+            $error = null; // The value does not come from the security component.
+        }
+
+        // last username entered by the user
+        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
+
+        $csrfToken = $this->has('security.csrf.token_manager')
+            ? $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue()
+            : null;
+
+        return $this->json(array(
+            'last_username' => $lastUsername,
+            'error' => $error,
+            'csrf_token' => $csrfToken,
+        ));
+    }
 
 }

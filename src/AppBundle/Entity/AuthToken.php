@@ -10,11 +10,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
     /**
-     * @ORM\Entity()
-     * @ORM\Table(name="auth_tokens",
-     *      uniqueConstraints={@ORM\UniqueConstraint(name="auth_tokens_value_unique", columns={"value"})}
-     * )
+     * User
+     *
+     * @ORM\Table(name="auth_tokens")
+     * @ORM\Entity(repositoryClass="AppBundle\Repository\AuthTokenRepository")
      */
     class AuthToken
     {
@@ -26,23 +27,29 @@ use Doctrine\ORM\Mapping as ORM;
         protected $id;
 
         /**
-         * @ORM\Column(type="string")
+         * @var string
+         *
+         * @ORM\Column(name="value", type="string", length=255)
          */
         protected $value;
 
+
         /**
-         * @ORM\Column(type="datetime")
          * @var \DateTime
+         *
+         * @ORM\Column(name="createdAt", type="datetime")
          */
         protected $createdAt;
 
         /**
-         * @ORM\ManyToOne(targetEntity="User")
          * @var User
+         * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"all"})
+         * @ORM\JoinColumn(nullable=true)
          */
         protected $user;
 
-    
+
+
     /**
      * Get id
      *

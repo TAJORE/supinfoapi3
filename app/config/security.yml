@@ -9,7 +9,7 @@ security:
         ROLE_ADMIN:            [ROLE_MODERRATOR, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        auth_token_user_provider:
+       auth_token_user_provider:
            id: auth_token_user_provider
     firewalls:
        dev:

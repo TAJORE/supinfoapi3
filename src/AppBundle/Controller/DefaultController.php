@@ -78,10 +78,8 @@ class DefaultController extends Controller
     {
        $user = new User();
         $user->setPlainPassword("admin");
-        $encoder = $this->get('security.password_encoder');
-        // le mot de passe en claire est encodé avant la sauvegarde
-        $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
-        $user->setPassword($encoded);
+        $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
+        $user->setPassword($password);
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
             ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setUsername("admin")->setJoinDate(new \DateTime());
 
@@ -97,11 +95,14 @@ class DefaultController extends Controller
 
         $user = new User();
         //$password = $this->encodePassword(new User(), "member", $user->getSalt());
-        $user->setPlainPassword("member");
-        $encoder = $this->get('security.password_encoder');
+        //$user->setPlainPassword("member");
+        //$encoder = $this->get('security.password_encoder');
         // le mot de passe en claire est encodé avant la sauvegarde
-        $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
-        $user->setPassword($encoded);
+        //$encoded = $encoder->encodePassword($user, $user->getPlainPassword());
+        //$user->setPassword($encoded);
+        $user->setPlainPassword("member");
+        $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
+        $user->setPassword($password);
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
             ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setJoinDate(new \DateTime());
 

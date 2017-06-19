@@ -59,6 +59,7 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         if (!$userProvider instanceof AuthTokenUserProvider) {
+
             throw new \InvalidArgumentException(
                 sprintf(
                     'The user provider must be an instance of AuthTokenUserProvider (%s was given).',
