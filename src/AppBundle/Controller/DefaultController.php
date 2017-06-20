@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use ApiBundle\Tools\SecurityController;
 use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\User;
 use FOS\OAuthServerBundle\Entity\Client;
@@ -26,20 +27,11 @@ class DefaultController extends Controller
     }
 
 
-    public function encodePassword($object, $password, $salt)
-    {
-        $factory = $this->get('security.encoder_factory');
-        $encoder = $factory->getEncoder($object);
-        $password = $encoder->encodePassword($password, $salt);
-
-        return $password;
-    }
-
-
 
     //fonction pour inialiser quelques utilisateurs
     public function saveUser()
     {
+
        $user = new User();
         $user->setPlainPassword("admin");
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
@@ -89,6 +81,18 @@ class DefaultController extends Controller
      */
     public function initAction(Request $request)
     {
+        $authtoken = $this->init();
+        $this->saveUser();
+        return $this->json($authtoken);
+    }
+
+
+
+
+
+    // Initialise deux utilisateurs systèmes
+    public function  init()
+    {
         $user = new User();
         $user->setPlainPassword("app");
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
@@ -101,25 +105,30 @@ class DefaultController extends Controller
         $authToken = new AuthToken();
         $authToken->setValue(base64_encode(random_bytes(50)));
         $authToken->setCreatedAt(new \DateTime('now'));
-        $authToken->setUser($user);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($authToken);
-        $em->flush();
-        $em->detach($authToken);
 
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
-        if($exist==null)
+        if($exist !=null)
         {
-            $em->persist($authToken);
+            $user =$exist;
         }
+        $authToken->setUser($user);
 
+        $em->persist($authToken);
         $em->flush();
         $em->detach($authToken);
-
-        $this->saveUser();
-        return $this->json($authToken);
+        return $authToken;
     }
 
+
+
+    // encode le mot  de passe
+    public function encodePassword($object, $password, $salt)
+    {
+        $factory = $this->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($object);
+        $password = $encoder->encodePassword($password, $salt);
+
+        return $password;
+    }
 }

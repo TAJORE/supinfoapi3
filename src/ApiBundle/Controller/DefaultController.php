@@ -5,6 +5,8 @@ namespace ApiBundle\Controller;
 use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\Credentials;
 use AppBundle\Entity\User;
+use AppBundle\Tools\HelpersController;
+use AppBundle\Tools\SecurityController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -16,6 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use  Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -31,19 +34,25 @@ class DefaultController extends FOSRestController
      *  resource=true,
      *  description="Récupérer la liste des utilisateurs",
      *  statusCodes={
-     *     200="Retourné quand tout est OK !"
+     *     200="the query is ok",
+     *     401= "The connection is required",
+     *     403= "Access Denied"
+     *
      *  },
      *  parameters={
      *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
      *  }
      * )
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $service = $this->get('security.authorization_checker');
-        if ($service->isGranted('ROLE_MEMBER') === FALSE) {
-            throw new AccessDeniedException();
-        }
+        $security = new SecurityController();
+
+        //you  can continious if you have a good privileges
+       $this->isgrantUser("ROLE_MODERATOR");
+
+        //$request->headers->set("X-Auth-token",$security->getAppAuth()->setValue());
+
         $em = $this->getDoctrine()->getManager();
         $array = $em->getRepository("AppBundle:User")->findAll();
         return $this->json($array);
@@ -51,35 +60,27 @@ class DefaultController extends FOSRestController
 
 
 
-
-
-    //Check user grants
-
     /**
-     * @Rest\Get("/grant")
+     * @Rest\Get("/admin/test")
      * @return Response
      *
      * @ApiDoc(
      *  resource=true,
-     *  description="Petit demo  de l'api",
+     *  description="Récupérer la liste des utilisateurs",
      *  statusCodes={
      *     200="Retourné quand tout est OK !"
      *  },
      *  parameters={
-     *     {"name"="user1", "dataType"="array", "required"=true, "description"="description d'attribut  1"}
+     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
      *  }
      * )
      */
-    public function getGrantuserAction()
+    public function testAction()
     {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') === FALSE) {
-            throw new AccessDeniedException();
-        }
-
-        // ...
+        $em = $this->getDoctrine()->getManager();
+        $array = $em->getRepository("AppBundle:User")->findAll();
+        return $this->json($array);
     }
-
-
 
 
 
@@ -120,6 +121,7 @@ class DefaultController extends FOSRestController
      */
     public function registerAction(Request $request)
     {
+
         $user =new User();
         $val = $request->request;
         $user = $this->fillUser($request, $user);
@@ -134,7 +136,7 @@ class DefaultController extends FOSRestController
 
         /* @var $user User */
         $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
-        $token = $this->authenticateUser($user);
+        $this->authenticateUser($user);
         return $this->json($this->getUser());
     }
 
@@ -164,6 +166,8 @@ class DefaultController extends FOSRestController
      */
     public function postAuthTokensAction(Request $request)
     {
+
+
         $val  =$request->request;
         $user = new User();
         $em = $this->getDoctrine()->getManager();
@@ -184,6 +188,17 @@ class DefaultController extends FOSRestController
     }
 
 
+    // Recuper le auth correspondant au  user app
+    private function isgrantUser($role){
+        if(!$this->getUser())
+        {
+            throw new  AuthenticationException();
+        }
+        $service = $this->get('security.authorization_checker');
+        if ($service->isGranted($role) === FALSE) {
+            throw new AccessDeniedException();
+        }
+    }
 
 
 
@@ -202,6 +217,18 @@ class DefaultController extends FOSRestController
             $authToken->setUser($user);
 
             $em = $this->getDoctrine()->getManager();
+
+            $auths = $em->getRepository("AppBundle:AuthToken")->findBy(["user"=>$this->getUser()],["id"=>"DESC"]);
+            if($auths!=null)
+            {
+                /** @var AuthToken $auth */
+                foreach($auths as $auth)
+                {
+                    $em->remove($auth);
+                    $em->flush();
+                }
+            }
+
             $em->persist($authToken);
             $em->flush();
             $em->detach($authToken);
@@ -218,7 +245,6 @@ class DefaultController extends FOSRestController
     }
 
 
-
     // encode le mot  de passe
     public function encodePassword($object, $password, $salt)
     {
@@ -231,7 +257,7 @@ class DefaultController extends FOSRestController
 
 
     // charge un utilisateur avec les informations envoyes dans l'application (a completer pour une modfification)
-    public  function  fillUser(Request $request, User $user)
+    private  function  fillUser(Request $request, User $user)
     {
         $val = $request->request;
         $tab = explode("@",$val->get("email"));
@@ -255,11 +281,11 @@ class DefaultController extends FOSRestController
     }
 
 
+
+
     private function invalidCredentials()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'Password or Login is bad'], Response::HTTP_BAD_REQUEST);
     }
-
-
 
 }
