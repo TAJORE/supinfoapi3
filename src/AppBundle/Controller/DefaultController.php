@@ -131,4 +131,23 @@ class DefaultController extends Controller
 
         return $password;
     }
+
+
+    // Recuper le auth correspondant au  user app
+    /**
+     * @Route("/init/app", name="app_init")
+     */
+    private function  getAppAuth(){
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $app */
+        $app = $em->getRepository("AppBundle:User")->findOneByemail("app@funglobe.com");
+        if(!$app)
+        {
+            $app =  $this->init()->getUser();
+        }
+        /** @var AuthToken $authtoken */
+        $authtoken = $em->getRepository("AppBundle:AuthToken")->findOneBy(["user"=>$app],["id"=>"DESC"]);
+
+        return $authtoken;
+    }
 }

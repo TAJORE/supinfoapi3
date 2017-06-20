@@ -288,4 +288,7 @@ class DefaultController extends FOSRestController
         return \FOS\RestBundle\View\View::create(['message' => 'Password or Login is bad'], Response::HTTP_BAD_REQUEST);
     }
 
+
+
+
 }
