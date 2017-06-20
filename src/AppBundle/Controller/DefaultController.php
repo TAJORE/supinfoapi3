@@ -86,4 +86,43 @@ class DefaultController extends Controller
         $em->detach($user);
         return $this->json($user);
     }
+
+    /**
+     * @Route("/reset-password", name="app_reset_password")
+     *
+     * @param string $email
+     * @param string $token
+     *
+     * @return object
+     */
+    public function resetPasswordAction($email, $token)
+    {
+        $url = $this->get('request')->getSchemeAndHttpHost().$this->generateUrl('app_confirm_reset_password', ['token' => $token]);
+        $translator = $this->get('translator');
+        $subject = $translator->trans('resetting.email.subject', []);
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom(['support@funglobe.com' => "FunGlobe support"])
+            ->setTo($email)
+            ->setBody($this->renderView('email:reset-password.html.twig', array('resetUrl'=> $url)), 'text/html');
+
+        $mailer = $this->get('mailer');
+
+        $sent = $mailer->send($message);
+
+        return $this->json(['message' => $sent], $sent ? 200 : 400);
+    }
+
+    /**
+     * @Route("/confirm-reset-password", name="app_confirm_reset_password")
+     *
+     * @return object
+     */
+    public function confirmResetPasswordAction(Request $request)
+    {
+        $token = $request->get('token');
+
+        return $this->json([], 200);
+    }
 }
