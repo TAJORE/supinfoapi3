@@ -55,23 +55,22 @@ class UserController extends FOSRestController
      */
     public function registerAction(Request $request)
     {
-            $user =new User();
-            $val = $request->request;
-            $user = $this->fillUser($request, $user);
-            $user->setPassword($val->get("password"));
-           $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
+        $user =new User();
+        $val = $request->request;
+        $user = $this->fillUser($request, $user);
+        $user->setPassword($val->get("password"));
+        $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
+        $user->setConfirmPassword(md5($user->getPassword()));
+        $user->setPassword($password);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        $em->detach($user);
 
-            $user->setPassword($password);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-            $em->detach($user);
-
-            /* @var $user User */
-            $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
-            $token = $this->authenticateUser($user);
-            return $this->json($user);
+        /* @var $user User */
+        $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        $token = $this->authenticateUser($user);
+        return $this->json($this->getUser());
     }
 
 
@@ -113,13 +112,13 @@ class UserController extends FOSRestController
     public function testAction(Request $request)
     {
 
-       try{
-           return ['admin'=>"me"];
-       }
-       catch(Exception $ex)
-       {
-           return $this->json($ex);
-       }
+        try{
+            return ['admin'=>"me"];
+        }
+        catch(Exception $ex)
+        {
+            return $this->json($ex);
+        }
     }
 
 
@@ -198,17 +197,20 @@ class UserController extends FOSRestController
         $val  =$request->request;
         $user = new User();
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository("AppBundle:User")->findOneByusername($val->get('_username'));
+        /** @var User $user */
+        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
         if(!$user)
         {
-            $user = $em->getRepository("AppBundle:User")->findOneByemail($val->get('_username'));
+            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
         }
 
         if(!$user){
             return $this->invalidCredentials();
         }
 
-        return $this->loginAction($request);
+
+        $this->authenticateUser($user);
+        return $this->json($this->getUser());
     }
 
 

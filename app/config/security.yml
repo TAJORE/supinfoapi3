@@ -1,8 +1,6 @@
 security:
     encoders:
-        AppBundle\Entity\User:
-            algorithm: bcrypt
-            cost: 12
+        FOS\UserBundle\Model\UserInterface: md5
     role_hierarchy:
         ROLE_MEMBER:           [ROLE_MEMBER]
         ROLE_MODERRATOR:       [ROLE_MEMBER,ROLE_MODERRATOR]
@@ -17,7 +15,7 @@ security:
            security: false
 
        main:
-           pattern: ^/v1/api
+           pattern: ^/v1
            stateless: true
            simple_preauth:
                authenticator: auth_token_authenticator

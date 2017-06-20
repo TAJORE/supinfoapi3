@@ -80,6 +80,7 @@ class DefaultController extends Controller
         $user->setPlainPassword("admin");
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setPassword($password);
+        $user->setConfirmPassword(md5($user->getPlainPassword()));
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
             ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setUsername("admin")->setJoinDate(new \DateTime());
 
@@ -103,6 +104,7 @@ class DefaultController extends Controller
         $user->setPlainPassword("member");
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setPassword($password);
+        $user->setConfirmPassword(md5($user->getPlainPassword()));
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
             ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setJoinDate(new \DateTime());
 
@@ -126,9 +128,10 @@ class DefaultController extends Controller
         $user = new User();
         $originpassword = "app";
         $password = $this->encodePassword(new User(), $originpassword, $user->getSalt());
+
         $user->setEnabled(true)->setIsEmailVerified(true)->setEmail("app@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
             ->setFirstName("App")->setGender("Male")->setIsOnline(false)->setIsVip(true)->setType("Normal")->setPassword($password)->setUsername("app")->setJoinDate(new \DateTime());
-
+        $user->setConfirmPassword(md5($originpassword));
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
         if($exist==null)

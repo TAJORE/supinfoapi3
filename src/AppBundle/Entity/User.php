@@ -129,7 +129,14 @@ class User extends  BaseUser
     private $profileVisibility;
 
 
-    //fosuser attribute
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="confirmPassword", type="array",nullable=true)
+     */
+    private $confirmPassword;
+
 
 
     /**
@@ -469,5 +476,29 @@ class User extends  BaseUser
     public function setJoinDate($joinDate)
     {
         $this->joinDate = $joinDate;
+    }
+
+    /**
+     * Set confirmPassword
+     *
+     * @param array $confirmPassword
+     *
+     * @return User
+     */
+    public function setConfirmPassword($confirmPassword)
+    {
+        $this->confirmPassword = $confirmPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmPassword
+     *
+     * @return array
+     */
+    public function getConfirmPassword()
+    {
+        return $this->confirmPassword;
     }
 }
