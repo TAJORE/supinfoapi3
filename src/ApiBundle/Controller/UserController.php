@@ -21,59 +21,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class UserController extends FOSRestController
 {
-    /**
-     * @Rest\Post("/register")
-     * @Rest\View
-     * @ApiDoc(
-     *  resource=true,
-     *  description="Save a user ",
-     *  statusCodes = {
-     *      200 = "Updated (seems to be OK)",
-     *      400 = "Bad request (see messages)",
-     *      401 = "Unauthorized, you must login first",
-     *      404 = "Not found",
-     *  },
-     *  parameters={
-     *     {"name"="firtsname", "dataType"="string", "required"=true, "description"="user firstname "},
-     *     {"name"="email", "dataType"="string", "required"=true, "description"="User email adresse"},
-     *     {"name"="password", "dataType"="string", "required"=true, "description"="User password"},
-     *     {"name"="lastName", "dataType"="string", "required"=false, "description"="User  last name"},
-     *     {"name"="isOnline", "dataType"="boolean", "required"=true, "description"="user current  statut"},
-     *     {"name"="birthDate", "dataType"="date", "required"=true, "description"="User  current  prosession"},
-     *     {"name"="profession", "dataType"="string", "required"=false, "description"="Nom d'un utilisateur"},
-     *     {"name"="type", "dataType"="string", "required"=true, "description"="User  type"},
-     *     {"name"="relationshipStatus", "dataType"="string", "required"=false, "description"="User  relationship Status"},
-     *     {"name"="joinReason", "dataType"="string", "required"=false, "description"="User  join reason"},
-     *     {"name"="joinDate", "dataType"="datetime", "required"=false, "description"="Date where user signUp"},
-     *     {"name"="isEmailVerified", "dataType"="boolean", "required"=true, "description"="Verify  email  adresse "},
-     *     {"name"="isVip", "dataType"="boolean", "required"=true, "description"="privilege for user"},
-     *     {"name"="gender", "dataType"="string", "required"=true, "description"="User gender"},
-     *     {"name"="phones", "dataType"="array", "required"=false, "description"="User phones number"},
-     *     {"name"="profileVisibility", "dataType"="array", "required"=false, "description"="List  autorisation options"}
-     *  }
-     * )
-     */
-    public function registerAction(Request $request)
-    {
-        $user =new User();
-        $val = $request->request;
-        $user = $this->fillUser($request, $user);
-        $user->setPassword($val->get("password"));
-        $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
-        $user->setConfirmPassword(md5($user->getPassword()));
-        $user->setPassword($password);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
-        $em->detach($user);
-
-        /* @var $user User */
-        $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
-        $token = $this->authenticateUser($user);
-        return $this->json($this->getUser());
-    }
 
 
+
+    // charge un utilisateur avec les informations envoyes dans l'application (a completer pour une modfification)
     public  function  fillUser(Request $request, User $user)
     {
         $val = $request->request;
@@ -92,34 +43,6 @@ class UserController extends FOSRestController
 
 
 
-
-    /**
-     * @Rest\Get("/test")
-     *  resource=true,
-     *  description="test route ",
-     *  statusCodes = {
-     *      200 = "Updated (seems to be OK)",
-     *      400 = "Bad request (see messages)",
-     *      401 = "Unauthorized, you must login first",
-     *      404 = "Not found",
-     *  },
-     *  parameters={
-     *     {"name"="username", "dataType"="string", "required"=true, "description"="User  name  or email  adress"},
-     *     {"name"="password", "dataType"="string", "required"=true, "description"="the password"}
-     *  }
-     * )
-     */
-    public function testAction(Request $request)
-    {
-
-        try{
-            return ['admin'=>"me"];
-        }
-        catch(Exception $ex)
-        {
-            return $this->json($ex);
-        }
-    }
 
 
     /**
@@ -175,45 +98,8 @@ class UserController extends FOSRestController
 
 
 
-    /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
-     * @Rest\Post("/auth-tokens")
-     *  resource=true,
-     *  description="authentificate use. the login can be : email adresse or username ",
-     *  statusCodes = {
-     *      200 = "Updated (seems to be OK)",
-     *      400 = "Bad request (see messages)",
-     *      401 = "Unauthorized, you must login first",
-     *      404 = "Not found",
-     *  },
-     *  parameters={
-     *     {"name"="_username", "dataType"="string", "required"=true, "description"="User  name  or email  adress"},
-     *     {"name"="_password", "dataType"="string", "required"=true, "description"="the password"}
-     *  }
-     * )
-     */
-    public function postAuthTokensAction(Request $request)
-    {
-        $val  =$request->request;
-        $user = new User();
-        $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
-        if(!$user)
-        {
-            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
-        }
 
-        if(!$user){
-            return $this->invalidCredentials();
-        }
-
-
-        $this->authenticateUser($user);
-        return $this->json($this->getUser());
-    }
-
-
+    // authentifie un utilisateur et  cree une cle pour lui
     public function authenticateUser(UserInterface $user)
     {
         try {
@@ -241,6 +127,7 @@ class UserController extends FOSRestController
 
 
 
+    // encode le mot  de passe
     public function encodePassword($object, $password, $salt)
     {
         $factory = $this->get('security.encoder_factory');
@@ -276,43 +163,6 @@ class UserController extends FOSRestController
     private function invalidCredentials()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'Password or Login is bad'], Response::HTTP_BAD_REQUEST);
-    }
-
-
-    public function loginAction(Request $request)
-    {
-        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
-        $session = $request->getSession();
-
-        $authErrorKey = Security::AUTHENTICATION_ERROR;
-        $lastUsernameKey = Security::LAST_USERNAME;
-
-        // get the error if any (works with forward and redirect -- see below)
-        if ($request->attributes->has($authErrorKey)) {
-            $error = $request->attributes->get($authErrorKey);
-        } elseif (null !== $session && $session->has($authErrorKey)) {
-            $error = $session->get($authErrorKey);
-            $session->remove($authErrorKey);
-        } else {
-            $error = null;
-        }
-
-        if (!$error instanceof AuthenticationException) {
-            $error = null; // The value does not come from the security component.
-        }
-
-        // last username entered by the user
-        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
-
-        $csrfToken = $this->has('security.csrf.token_manager')
-            ? $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue()
-            : null;
-
-        return $this->json(array(
-            'last_username' => $lastUsername,
-            'error' => $error,
-            'csrf_token' => $csrfToken,
-        ));
     }
 
 }
