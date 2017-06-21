@@ -31,56 +31,55 @@ class UserProfile
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="LastUpdateDate", type="date")
+     * @ORM\Column(name="lastUpdateDate", type="date")
      */
     private $lastUpdateDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="City", type="string", length=50)
+     * @ORM\Column(name="city", type="string", length=50)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Company", type="string", length=50)
+     * @ORM\Column(name="company", type="string", length=50)
      */
     private $company;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Country", type="string", length=50)
+     * @ORM\Column(name="country", type="string", length=50)
      */
     private $country;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="GpsPosition", type="array")
+     * @ORM\Column(name="gpsPosition", type="array")
      */
     private $gpsPosition;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="PhotoProfile", type="string", length=255)
+     * @ORM\Column(name="photoProfile", type="string", length=255)
      */
     private $photoProfile;
+
 
     /**
      * @var int
      *
-     * @ORM\Column(name="UserId", type="integer")
+     * @ORM\Column(name="userId", type="integer")
      */
     private $userId;
 
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -89,46 +88,30 @@ class UserProfile
     }
 
     /**
-     * Set creationDate
-     *
-     * @param \DateTime $creationDate
-     *
-     * @return UserProfile
+     * @param int $id
      */
-    public function setCreationDate($creationDate)
+    public function setId($id)
     {
-        $this->creationDate = $creationDate;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get creationDate
-     *
      * @return \DateTime
      */
     public function getCreationDate()
     {
-        return $this->creationDate;
+        return $this->CreationDate;
     }
 
     /**
-     * Set lastUpdateDate
-     *
-     * @param \DateTime $lastUpdateDate
-     *
-     * @return UserProfile
+     * @param \DateTime $CreationDate
      */
-    public function setLastUpdateDate($lastUpdateDate)
+    public function setCreationDate($CreationDate)
     {
-        $this->lastUpdateDate = $lastUpdateDate;
-
-        return $this;
+        $this->CreationDate = $CreationDate;
     }
 
     /**
-     * Get lastUpdateDate
-     *
      * @return \DateTime
      */
     public function getLastUpdateDate()
@@ -137,22 +120,14 @@ class UserProfile
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
-     *
-     * @return UserProfile
+     * @param \DateTime $lastUpdateDate
      */
-    public function setCity($city)
+    public function setLastUpdateDate($lastUpdateDate)
     {
-        $this->city = $city;
-
-        return $this;
+        $this->lastUpdateDate = $lastUpdateDate;
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -161,22 +136,14 @@ class UserProfile
     }
 
     /**
-     * Set company
-     *
-     * @param string $company
-     *
-     * @return UserProfile
+     * @param string $city
      */
-    public function setCompany($company)
+    public function setCity($city)
     {
-        $this->company = $company;
-
-        return $this;
+        $this->city = $city;
     }
 
     /**
-     * Get company
-     *
      * @return string
      */
     public function getCompany()
@@ -185,22 +152,14 @@ class UserProfile
     }
 
     /**
-     * Set country
-     *
-     * @param string $country
-     *
-     * @return UserProfile
+     * @param string $company
      */
-    public function setCountry($country)
+    public function setCompany($company)
     {
-        $this->country = $country;
-
-        return $this;
+        $this->company = $company;
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -209,22 +168,14 @@ class UserProfile
     }
 
     /**
-     * Set gpsPosition
-     *
-     * @param array $gpsPosition
-     *
-     * @return UserProfile
+     * @param string $country
      */
-    public function setGpsPosition($gpsPosition)
+    public function setCountry($country)
     {
-        $this->gpsPosition = $gpsPosition;
-
-        return $this;
+        $this->country = $country;
     }
 
     /**
-     * Get gpsPosition
-     *
      * @return array
      */
     public function getGpsPosition()
@@ -233,22 +184,14 @@ class UserProfile
     }
 
     /**
-     * Set photoProfile
-     *
-     * @param string $photoProfile
-     *
-     * @return UserProfile
+     * @param array $gpsPosition
      */
-    public function setPhotoProfile($photoProfile)
+    public function setGpsPosition($gpsPosition)
     {
-        $this->photoProfile = $photoProfile;
-
-        return $this;
+        $this->gpsPosition = $gpsPosition;
     }
 
     /**
-     * Get photoProfile
-     *
      * @return string
      */
     public function getPhotoProfile()
@@ -257,26 +200,27 @@ class UserProfile
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return UserProfile
+     * @param string $photoProfile
      */
-    public function setUserId($userId)
+    public function setPhotoProfile($photoProfile)
     {
-        $this->userId = $userId;
-
-        return $this;
+        $this->photoProfile = $photoProfile;
     }
 
     /**
-     * Get userId
-     *
      * @return int
      */
     public function getUserId()
     {
         return $this->userId;
     }
+
+    /**
+     * @param int $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
 }

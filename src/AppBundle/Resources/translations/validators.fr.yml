@@ -10,6 +10,6 @@ File:
     name: Le nom est requis
     hahsname: le hasname est requis
   Unique:
-    hashname: le hashname spécifié existe déjà
+    hashname: le hashname spÃ©cifiÃ© existe dÃ©jÃ 
   Gt:
-    size: La taille du fichier doit être supérieur à 0
+    size: La taille du fichier doit Ãªtre supÃ©rieur Ã  0
