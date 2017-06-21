@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Monolog\Logger;
 class UserController extends FOSRestController
 {
 
@@ -163,11 +164,13 @@ class UserController extends FOSRestController
 
 
     // charge un utilisateur avec les informations envoyes dans l'application (a completer pour une modfification)
-    private  function  fillUser(Request $request, User $user)
-    {
+    private  function  fillUser(Request $request, User $user)    {
+
         $val = $request->request;
         $tab = explode("@",$val->get("email"));
         $username = $tab==null?null:$tab[0];
+
+
 
         // set  user with  application values
         $user->setEmail($val->get('email'))->setType($val->get('type'))->setGender($val->get('gender'))
