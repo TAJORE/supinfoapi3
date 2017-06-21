@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class DefaultController extends FOSRestController
 {
     /**
-     * @Rest\Get("/users")
+     * @Rest\Get("/auth/users")
      * @return Response
      *
      * @ApiDoc(
@@ -46,7 +46,6 @@ class DefaultController extends FOSRestController
      */
     public function indexAction(Request $request)
     {
-        $security = new SecurityController();
 
         //you  can continious if you have a good privileges
        $this->isgrantUser("ROLE_MODERATOR");
@@ -56,6 +55,40 @@ class DefaultController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $array = $em->getRepository("AppBundle:User")->findAll();
         return $this->json($array);
+    }
+
+
+
+
+
+    // Fonction pour initialiser le user systeme et le token de base
+
+    /**
+     * @Rest\Get("/app")
+     * @return Response
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Récupérer le token de base pour l'aplication ",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  }
+     * )
+     */
+    public function getAppAuthAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $app */
+        $app = $em->getRepository("AppBundle:User")->findOneByemail("app@funglobe.com");
+        if(!$app)
+        {
+            $app =  $this->init()->getUser();
+        }
+        /** @var AuthToken $authtoken */
+        $authtoken = $em->getRepository("AppBundle:AuthToken")->findOneBy(["user"=>$app],["id"=>"DESC"]);
+
+        return $this->json($authtoken);
     }
 
 
@@ -88,7 +121,7 @@ class DefaultController extends FOSRestController
     // fonction pour enregister un utilisateur
 
     /**
-     * @Rest\Post("/register")
+     * @Rest\Post("/auth/register")
      * @Rest\View
      * @ApiDoc(
      *  resource=true,
@@ -149,7 +182,7 @@ class DefaultController extends FOSRestController
     //action  pour authentifier un utilisateur
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
-     * @Rest\Post("/auth-tokens")
+     * @Rest\Post("/auth/auth-tokens")
      *  resource=true,
      *  description="authentificate use. the login can be : email adresse or username ",
      *  statusCodes = {
@@ -190,10 +223,7 @@ class DefaultController extends FOSRestController
 
     // Recuper le auth correspondant au  user app
     private function isgrantUser($role){
-        if(!$this->getUser())
-        {
-            throw new  AuthenticationException();
-        }
+
         $service = $this->get('security.authorization_checker');
         if ($service->isGranted($role) === FALSE) {
             throw new AccessDeniedException();
@@ -264,8 +294,8 @@ class DefaultController extends FOSRestController
         $username = $tab==null?null:$tab[0];
 
         // set  user with  application values
-        $user->setEmail($val->get('email'))->setType($val->get('type'))
-            ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))
+        $user->setEmail($val->get('email'))->setType($val->get('type'))->setGender($val->get('gender'))
+            ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
             ->setGender($val->get('profession'))->setUsernameCanonical($username)->setEmailCanonical($val->get('email'));
 
         $user->setEnabled(true)->setIsEmailVerified(false)->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])
@@ -289,6 +319,36 @@ class DefaultController extends FOSRestController
     }
 
 
+
+    // Initialise  l'utilisateur  système
+    public function  init()
+    {
+        $user = new User();
+        $user->setPlainPassword("app");
+        $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
+        $user->setConfirmPassword(md5($user->getPassword()));
+        $user->setPassword($password);
+        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Belgique");
+        $user->setEnabled(true)->setIsEmailVerified(true)->setEmail("app@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_APP"])
+            ->setFirstName("App")->setGender("M")->setIsOnline(false)->setIsVip(true)->setType("System")->setUsername("app")->setJoinDate(new \DateTime());
+
+        $authToken = new AuthToken();
+        $authToken->setValue(base64_encode(random_bytes(50)));
+        $authToken->setCreatedAt(new \DateTime('now'));
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        if($exist !=null)
+        {
+            $user =$exist;
+        }
+        $authToken->setUser($user);
+
+        $em->persist($authToken);
+        $em->flush();
+        $em->detach($authToken);
+        return $authToken;
+    }
 
 
 }

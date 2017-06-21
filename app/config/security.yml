@@ -15,7 +15,7 @@ security:
            security: false
 
        main:
-           pattern: ^/v1
+           pattern: ^/v1/auth
            stateless: true
            simple_preauth:
                authenticator: auth_token_authenticator
@@ -25,10 +25,6 @@ security:
 
     access_control:
             #api
-            - { path: ^/v1,       roles: IS_AUTHENTICATED_FULLY }
-            - { path: ^/v1/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/v1/auth-tokens, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-            - { path: ^/v1/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/[^/]+/resetpassword, roles: IS_AUTHENTICATED_ANONYMOUSLY }
             - { path: ^/lagout$, role: IS_AUTHENTICATED_FULLY }
             # back-office

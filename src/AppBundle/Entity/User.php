@@ -108,9 +108,26 @@ class User extends  BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255)
+     * @ORM\Column(name="gender", type="string", length=255, nullable=true)
      */
     private $gender;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     */
+    private $city;
+
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=255, nullable=true)
+     */
+    private $country;
 
 
     /**
@@ -500,5 +517,53 @@ class User extends  BaseUser
     public function getConfirmPassword()
     {
         return $this->confirmPassword;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return User
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return User
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

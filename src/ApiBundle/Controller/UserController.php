@@ -28,7 +28,7 @@ class UserController extends FOSRestController
 
 
     /**
-     * @Rest\Put("/user/{id}")
+     * @Rest\Put("/auth/user/{id}")
      *  resource=true,
      *  description="User Update action ",
      *  statusCodes = {
@@ -79,7 +79,7 @@ class UserController extends FOSRestController
     // action for lagout
     /**
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
-     * @Rest\Delete("/auth-tokens/{id}")
+     * @Rest\Delete("/auth/auth-tokens/{id}")
      */
     public function removeAuthTokenAction(Request $request)
     {
@@ -137,8 +137,8 @@ class UserController extends FOSRestController
         $username = $tab==null?null:$tab[0];
 
         // set  user with  application values
-        $user->setEmail($val->get('email'))->setType($val->get('type'))
-            ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))
+        $user->setEmail($val->get('email'))->setType($val->get('type'))->setGender($val->get('gender'))
+            ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
             ->setGender($val->get('profession'))->setUsernameCanonical($username)->setEmailCanonical($val->get('email'));
 
         $user->setEnabled(true)->setIsEmailVerified(false)->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])

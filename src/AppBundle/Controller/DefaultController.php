@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use ApiBundle\Tools\SecurityController;
 use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\User;
 use FOS\OAuthServerBundle\Entity\Client;
@@ -37,7 +36,7 @@ class DefaultController extends Controller
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setConfirmPassword(md5($user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(md5($user->getPlainPassword()));
+        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Tchad");
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
             ->setFirstName("Admin")->setGender("M")->setIsOnline(false)->setIsVip(false)->setType("System")->setUsername("admin")->setJoinDate(new \DateTime());
 
@@ -56,7 +55,7 @@ class DefaultController extends Controller
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setConfirmPassword(md5($user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(md5($user->getPlainPassword()));
+        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Togo");
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MODERATOR"])->setUsername("moderator")
             ->setFirstName("Moderator")->setGender("F")->setIsOnline(false)->setIsVip(false)->setType("System")->setJoinDate(new \DateTime());
 
@@ -90,7 +89,7 @@ class DefaultController extends Controller
 
 
 
-    // Initialise deux utilisateurs systèmes
+    // Initialise l'utilisateur systèmes
     public function  init()
     {
         $user = new User();
@@ -98,7 +97,7 @@ class DefaultController extends Controller
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setConfirmPassword(md5($user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(md5($user->getPlainPassword()));
+        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Cameroun");
         $user->setEnabled(true)->setIsEmailVerified(true)->setEmail("app@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_APP"])
             ->setFirstName("App")->setGender("M")->setIsOnline(false)->setIsVip(true)->setType("System")->setUsername("app")->setJoinDate(new \DateTime());
 
@@ -132,22 +131,4 @@ class DefaultController extends Controller
         return $password;
     }
 
-
-    // Recuper le auth correspondant au  user app
-    /**
-     * @Route("/init/app", name="app_init")
-     */
-    private function  getAppAuth(){
-        $em = $this->getDoctrine()->getManager();
-        /** @var User $app */
-        $app = $em->getRepository("AppBundle:User")->findOneByemail("app@funglobe.com");
-        if(!$app)
-        {
-            $app =  $this->init()->getUser();
-        }
-        /** @var AuthToken $authtoken */
-        $authtoken = $em->getRepository("AppBundle:AuthToken")->findOneBy(["user"=>$app],["id"=>"DESC"]);
-
-        return $authtoken;
-    }
 }
