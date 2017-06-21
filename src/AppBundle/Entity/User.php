@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
+use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 /**
  * User
@@ -10,7 +12,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User extends BaseUser
+class User extends  BaseUser
 {
     /**
      * @var int
@@ -88,22 +90,6 @@ class User extends BaseUser
      */
     private $joinDate;
 
-    /**
-     * @return string
-     */
-    public function getJoinDate()
-    {
-        return $this->joinDate;
-    }
-
-    /**
-     * @param string $joinDate
-     */
-    public function setJoinDate($joinDate)
-    {
-        $this->joinDate = $joinDate;
-    }
-
 
     /**
      * @var boolean
@@ -122,9 +108,26 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255)
+     * @ORM\Column(name="gender", type="string", length=255, nullable=true)
      */
     private $gender;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     */
+    private $city;
+
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=255, nullable=true)
+     */
+    private $country;
 
 
     /**
@@ -141,6 +144,17 @@ class User extends BaseUser
      * @ORM\Column(name="profileVisibility", type="array",nullable=true)
      */
     private $profileVisibility;
+
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="confirmPassword", type="array",nullable=true)
+     */
+    private $confirmPassword;
+
+
 
     /**
      * Get id
@@ -463,5 +477,93 @@ class User extends BaseUser
     public function getProfileVisibility()
     {
         return $this->profileVisibility;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJoinDate()
+    {
+        return $this->joinDate;
+    }
+
+    /**
+     * @param string $joinDate
+     */
+    public function setJoinDate($joinDate)
+    {
+        $this->joinDate = $joinDate;
+    }
+
+    /**
+     * Set confirmPassword
+     *
+     * @param array $confirmPassword
+     *
+     * @return User
+     */
+    public function setConfirmPassword($confirmPassword)
+    {
+        $this->confirmPassword = $confirmPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmPassword
+     *
+     * @return array
+     */
+    public function getConfirmPassword()
+    {
+        return $this->confirmPassword;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return User
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return User
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }
