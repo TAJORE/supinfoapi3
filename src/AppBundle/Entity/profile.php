@@ -32,4 +32,3 @@ class profile
         return $this->id;
     }
 }
-

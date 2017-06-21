@@ -2,11 +2,15 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\User;
+use FOS\OAuthServerBundle\Entity\Client;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class DefaultController extends Controller
 {
@@ -22,44 +26,19 @@ class DefaultController extends Controller
     }
 
 
-    /**
-     * @Route("/save/client", name="app_oauth")
-     */
-    public function saveclientAction(Request $request)
+
+    //fonction pour inialiser quelques utilisateurs
+    public function saveUser()
     {
-        $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
-        $client = $clientManager->createClient();
-        $client->setRedirectUris(array('http://www.funglobe.com'));
-        $client->setAllowedGrantTypes(array('token', 'authorization_code'));
-        $clientManager->updateClient($client);
 
-        return $this->redirect($this->generateUrl('fos_oauth_server_authorize', array(
-            'client_id'     => $client->getPublicId(),
-            'redirect_uri'  => 'http://www.example.com',
-            'response_type' => 'code'
-        )));
-
-    }
-
-    public function encodePassword($object, $password, $salt)
-    {
-        $factory = $this->get('security.encoder_factory');
-        $encoder = $factory->getEncoder($object);
-        $password = $encoder->encodePassword($password, $salt);
-
-        return $password;
-    }
-
-    /**
-     * @Route("/save/user", name="app_fos")
-     */
-    public function saveuserAction(Request $request)
-    {
        $user = new User();
-        $password = $this->encodePassword(new User(), "admin", $user->getSalt());
+        $user->setPlainPassword("admin");
+        $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
+        $user->setConfirmPassword(md5($user->getPassword()));
+        $user->setPassword($password);
+        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Tchad");
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
-            ->setFirstName("Admin")->setGender("Male")->setIsOnline(false)->setIsVip(false)->setType("Normal")
-            ->setPassword($password)->setUsername("admin")->setJoinDate(new \DateTime());
+            ->setFirstName("Admin")->setGender("M")->setIsOnline(false)->setIsVip(false)->setType("System")->setUsername("admin")->setJoinDate(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
@@ -72,9 +51,13 @@ class DefaultController extends Controller
         $em->detach($user);
 
         $user = new User();
-        $password = $this->encodePassword(new User(), "member", $user->getSalt());
-        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])->setUsername("member")
-            ->setFirstName("Member")->setGender("Femele")->setIsOnline(false)->setIsVip(false)->setType("Normal")->setPassword($password);
+        $user->setPlainPassword("moderator");
+        $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
+        $user->setConfirmPassword(md5($user->getPassword()));
+        $user->setPassword($password);
+        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Togo");
+        $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MODERATOR"])->setUsername("moderator")
+            ->setFirstName("Moderator")->setGender("F")->setIsOnline(false)->setIsVip(false)->setType("System")->setJoinDate(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
         $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
@@ -85,6 +68,67 @@ class DefaultController extends Controller
 
         $em->flush();
         $em->detach($user);
-        return $this->json($user);
     }
+
+
+
+
+
+    // fonction  pour creer l'application et le token de base ET Creer quelques user
+    /**
+     * @Route("/init", name="app_init")
+     */
+    public function initAction(Request $request)
+    {
+        $authtoken = $this->init();
+        $this->saveUser();
+        return $this->json($authtoken);
+    }
+
+
+
+
+
+    // Initialise l'utilisateur systèmes
+    public function  init()
+    {
+        $user = new User();
+        $user->setPlainPassword("app");
+        $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
+        $user->setConfirmPassword(md5($user->getPassword()));
+        $user->setPassword($password);
+        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Cameroun");
+        $user->setEnabled(true)->setIsEmailVerified(true)->setEmail("app@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_APP"])
+            ->setFirstName("App")->setGender("M")->setIsOnline(false)->setIsVip(true)->setType("System")->setUsername("app")->setJoinDate(new \DateTime());
+
+        $authToken = new AuthToken();
+        $authToken->setValue(base64_encode(random_bytes(50)));
+        $authToken->setCreatedAt(new \DateTime('now'));
+
+        $em = $this->getDoctrine()->getManager();
+        $exist = $em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+        if($exist !=null)
+        {
+            $user =$exist;
+        }
+        $authToken->setUser($user);
+
+        $em->persist($authToken);
+        $em->flush();
+        $em->detach($authToken);
+        return $authToken;
+    }
+
+
+
+    // encode le mot  de passe
+    public function encodePassword($object, $password, $salt)
+    {
+        $factory = $this->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($object);
+        $password = $encoder->encodePassword($password, $salt);
+
+        return $password;
+    }
+
 }
