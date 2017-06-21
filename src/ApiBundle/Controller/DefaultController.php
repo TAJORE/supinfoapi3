@@ -125,7 +125,6 @@ class DefaultController extends FOSRestController
      */
     public function registerAction(Request $request)
     {
-
         $user =new User();
         $val = $request->request;
         $user = $this->fillUser($request, $user);
@@ -260,17 +259,26 @@ class DefaultController extends FOSRestController
     // charge un utilisateur avec les informations envoyes dans l'application (a completer pour une modfification)
     private  function  fillUser(Request $request, User $user)
     {
+        $log = $logger = $this->get('logger');
+
         $val = $request->request;
         $tab = explode("@",$val->get("email"));
         $username = $tab==null?null:$tab[0];
-
         // set  user with  application values
-        $user->setEmail($val->get('email'))->setType($val->get('type'))->setGender($val->get('gender'))
+        $user->setEmail($val->get('email'))->setType($val->get('type'))
             ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
             ->setGender($val->get('profession'))->setUsernameCanonical($username)->setEmailCanonical($val->get('email'));
 
         $user->setEnabled(true)->setIsEmailVerified(false)->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])
-            ->setUsername($username)->setIsOnline(false)->setIsVip(false)->setJoinDate(new \DateTime());
+            ->setUsername($username)->setIsOnline(true)->setIsVip(false)->setJoinDate(new \DateTime());
+
+        $user->setGender($val->get('gender'));
+
+        //quelques logs pour verifier les valeurs des parametres
+        $log->debug("The user gender is ".$val->get('gender'));
+        $log->debug("The user email is ".$val->get('email'));
+        $log->debug("The user himself is is ".$user);
+
         return $user;
     }
 
