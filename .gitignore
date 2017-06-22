@@ -20,3 +20,4 @@
 /composer.lock
 /src/App/EntityBundle/Entity/*.php~
 /bin/symfony_requirements
+

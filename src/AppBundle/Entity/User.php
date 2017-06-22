@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
+use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 /**
  * User
@@ -10,7 +12,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User extends BaseUser
+class User extends  BaseUser
 {
     /**
      * @var int
@@ -44,7 +46,6 @@ class User extends BaseUser
     private $isOnline;
 
 
-
     /**
      * @var \DateTime
      *
@@ -70,9 +71,9 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="relationshpStatus", type="string", length=255, nullable=true)
+     * @ORM\Column(name="relationshipStatus", type="string", length=255, nullable=true)
      */
-    private $relationshpStatus;
+    private $relationshipStatus;
 
 
     /**
@@ -82,13 +83,20 @@ class User extends BaseUser
      */
     private $joinReason;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="joinDate", type="datetime", length=30, nullable=true)
+     */
+    private $joinDate;
+
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="confirm", type="boolean")
+     * @ORM\Column(name="isEmailVerified", type="boolean")
      */
-    private $confirm;
+    private $isEmailVerified;
 
     /**
      * @var boolean
@@ -100,9 +108,26 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255)
+     * @ORM\Column(name="gender", type="string", length=255, nullable=true)
      */
     private $gender;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     */
+    private $city;
+
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=255, nullable=true)
+     */
+    private $country;
 
 
     /**
@@ -120,6 +145,17 @@ class User extends BaseUser
      */
     private $profileVisibility;
 
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="confirmPassword", type="array",nullable=true)
+     */
+    private $confirmPassword;
+
+
+
     /**
      * Get id
      *
@@ -129,6 +165,7 @@ class User extends BaseUser
     {
         return $this->id;
     }
+
 
     /**
      * Set firstName
@@ -179,27 +216,27 @@ class User extends BaseUser
     }
 
     /**
-     * Set email
+     * Set isOnline
      *
-     * @param string $email
+     * @param boolean $isOnline
      *
      * @return User
      */
-    public function setEmail($email)
+    public function setIsOnline($isOnline)
     {
-        $this->email = $email;
+        $this->isOnline = $isOnline;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get isOnline
      *
-     * @return string
+     * @return boolean
      */
-    public function getEmail()
+    public function getIsOnline()
     {
-        return $this->email;
+        return $this->isOnline;
     }
 
     /**
@@ -275,51 +312,27 @@ class User extends BaseUser
     }
 
     /**
-     * Set isOnline
+     * Set relationshipStatus
      *
-     * @param boolean $isOnline
+     * @param string $relationshipStatus
      *
      * @return User
      */
-    public function setIsOnline($isOnline)
+    public function setRelationshipStatus($relationshipStatus)
     {
-        $this->isOnline = $isOnline;
+        $this->relationshipStatus = $relationshipStatus;
 
         return $this;
     }
 
     /**
-     * Get isOnline
-     *
-     * @return boolean
-     */
-    public function getIsOnline()
-    {
-        return $this->isOnline;
-    }
-
-    /**
-     * Set relationshpStatus
-     *
-     * @param string $relationshpStatus
-     *
-     * @return User
-     */
-    public function setRelationshpStatus($relationshpStatus)
-    {
-        $this->relationshpStatus = $relationshpStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get relationshpStatus
+     * Get relationshipStatus
      *
      * @return string
      */
-    public function getRelationshpStatus()
+    public function getRelationshipStatus()
     {
-        return $this->relationshpStatus;
+        return $this->relationshipStatus;
     }
 
     /**
@@ -347,27 +360,27 @@ class User extends BaseUser
     }
 
     /**
-     * Set confirm
+     * Set isConfirm
      *
-     * @param boolean $confirm
+     * @param boolean $isEmailVerified
      *
      * @return User
      */
-    public function setConfirm($confirm)
+    public function setIsEmailVerified($isEmailVerified)
     {
-        $this->confirm = $confirm;
+        $this->isEmailVerified = $isEmailVerified;
 
         return $this;
     }
 
     /**
-     * Get confirm
+     * Get isEmailVerified
      *
      * @return boolean
      */
-    public function getConfirm()
+    public function getIsEmailVerified()
     {
-        return $this->confirm;
+        return $this->isEmailVerified;
     }
 
     /**
@@ -464,5 +477,93 @@ class User extends BaseUser
     public function getProfileVisibility()
     {
         return $this->profileVisibility;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJoinDate()
+    {
+        return $this->joinDate;
+    }
+
+    /**
+     * @param string $joinDate
+     */
+    public function setJoinDate($joinDate)
+    {
+        $this->joinDate = $joinDate;
+    }
+
+    /**
+     * Set confirmPassword
+     *
+     * @param array $confirmPassword
+     *
+     * @return User
+     */
+    public function setConfirmPassword($confirmPassword)
+    {
+        $this->confirmPassword = $confirmPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmPassword
+     *
+     * @return array
+     */
+    public function getConfirmPassword()
+    {
+        return $this->confirmPassword;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return User
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return User
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }
