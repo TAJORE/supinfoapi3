@@ -2,17 +2,18 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\AuthToken;
+use AppBundle\Entity\PasswordReset;
 use AppBundle\Entity\User;
-use FOS\OAuthServerBundle\Entity\Client;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class DefaultController extends Controller
+class DefaultController extends FOSRestController
 {
     /**
      * @Route("/", name="homepage")
@@ -70,10 +71,6 @@ class DefaultController extends Controller
         $em->detach($user);
     }
 
-
-
-
-
     // fonction  pour creer l'application et le token de base ET Creer quelques user
     /**
      * @Route("/init", name="app_init")
@@ -84,9 +81,6 @@ class DefaultController extends Controller
         $this->saveUser();
         return $this->json($authtoken);
     }
-
-
-
 
 
     // Initialise l'utilisateur systèmes
@@ -130,5 +124,4 @@ class DefaultController extends Controller
 
         return $password;
     }
-
 }
