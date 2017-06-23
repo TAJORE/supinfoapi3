@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\PasswordReset;
 use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -110,7 +111,7 @@ class DefaultController extends FOSRestController
     }
 
 
-    // Initialise l'utilisateur systèmes
+    // Initialise l'utilisateur systÃ¨mes
     public function  init()
     {
         $user = new User();
