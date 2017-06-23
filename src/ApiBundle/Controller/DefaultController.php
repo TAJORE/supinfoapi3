@@ -185,9 +185,8 @@ class DefaultController extends FOSRestController
             return $this->invalidCredentials();
         }
 
-
-        $this->authenticateUser($user);
-        return $this->json($this->getUser());
+        $auth = $this->authenticateUser($user);
+        return $this->json($auth);
     }
 
 
