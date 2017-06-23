@@ -45,7 +45,7 @@ class UserMessage
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
      */
-    private $receive;
+    private $receivers;
 
 
 
@@ -110,18 +110,20 @@ class UserMessage
     /**
      * @return User
      */
-    public function getReceive()
+    public function getReceivers()
     {
-        return $this->receive;
+        return $this->receivers;
     }
 
     /**
-     * @param User $receive
+     * @param User $receivers
      */
-    public function setReceive($receive)
+    public function setReceivers($receivers)
     {
-        $this->receive = $receive;
+        $this->receivers = $receivers;
     }
+
+
 
     /**
      * @return User
