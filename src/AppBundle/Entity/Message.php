@@ -22,6 +22,13 @@ class Message
      */
     private $id;
 
+
+    /**
+     *@ORM\OneToMany(targetEntity="AppBundle\Entity\UserPhoto", mappedBy="message", cascade={"persist"})
+     *@ORM\JoinColumn(nullable=true)
+     */
+    private $photos;
+
     /**
      * @var string
      *

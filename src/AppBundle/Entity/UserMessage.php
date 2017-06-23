@@ -42,17 +42,17 @@ class UserMessage
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $receivers;
+    private $receiver;
 
 
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message",cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $message;
 
@@ -105,22 +105,6 @@ class UserMessage
     public function setIsLocked($isLocked)
     {
         $this->isLocked = $isLocked;
-    }
-
-    /**
-     * @return User
-     */
-    public function getReceivers()
-    {
-        return $this->receivers;
-    }
-
-    /**
-     * @param User $receivers
-     */
-    public function setReceivers($receivers)
-    {
-        $this->receivers = $receivers;
     }
 
 
