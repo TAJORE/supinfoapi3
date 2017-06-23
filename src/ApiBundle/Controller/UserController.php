@@ -34,7 +34,7 @@ class UserController extends FOSRestController
      *
      * @ApiDoc(
      *  resource=true,
-     *  description="Récupérer la liste des utilisateurs",
+     *  description="RÃ©cupÃ©rer la liste des utilisateurs",
      *  statusCodes={
      *     200="the query is ok",
      *     401= "The connection is required",
@@ -42,7 +42,7 @@ class UserController extends FOSRestController
      *
      *  },
      *  parameters={
-     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
+     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="ReprÃ©sente l'identifiant de l'administrateur Ã  ajouter pour la classe"}
      *  }
      * )
      */
@@ -52,7 +52,6 @@ class UserController extends FOSRestController
         //you  can continious if you have a good privileges
         //$this->isgrantUser("ROLE_MODERATOR");
 
-        //$request->headers->set("X-Auth-token",$security->getAppAuth()->setValue());
 
         $em = $this->getDoctrine()->getManager();
         $array = $em->getRepository("AppBundle:User")->findAll();
@@ -87,7 +86,7 @@ class UserController extends FOSRestController
         $em =$this->getDoctrine()->getManager();
         /* @var $user User */
         $user =$em->getRepository('AppBundle:User')
-            ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
+            ->find($request->get('id')); // L'identifiant en tant que paramÃ¨tre n'est plus nÃ©cessaire
 
 
         if (empty($user)) {
