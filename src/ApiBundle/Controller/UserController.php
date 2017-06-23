@@ -112,9 +112,9 @@ class UserController extends FOSRestController
     // action for lagout
     /**
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
-     * @Rest\Delete("/auth/login/{id}")
+     * @Rest\Delete("/auth/lagout/{id}")
      */
-    public function removeAuthTokenAction(Request $request)
+    public function lagoutAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         /* @var $authToken AuthToken */
