@@ -20,6 +20,7 @@ class DefaultController extends FOSRestController
      */
     public function indexAction(Request $request)
     {
+
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
@@ -27,7 +28,33 @@ class DefaultController extends FOSRestController
     }
 
 
+    /**
+     * @Route("/test/{email}", name="testpage")
+     */
+    public function testAction(Request $request, $email)
+    {
 
+        $code = $this->sendMail($email, $this->getParameter('mailer_user'), "I am  just  a test", "good work");
+        // replace this example code with whatever you need
+        return $this->json("Veillez consulter la boite mail <a href=''>". $email."<a>");
+    }
+
+
+
+    public  function sendMail($to, $from, $body,$subjet)
+    {
+        // ->setReplyTo('xxx@xxx.xxx')
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subjet)
+            ->setFrom($from) // 'info@achgroupe.com' => 'Achgroupe : Course en ligne '
+            ->setTo($to)
+            ->setBody($body)
+            //'MyBundle:Default:mail.html.twig'
+            ->setContentType('text/html');
+        return $this->get('mailer')->send($message);
+
+    }
     //fonction pour inialiser quelques utilisateurs
     public function saveUser()
     {
