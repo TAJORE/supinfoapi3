@@ -261,8 +261,7 @@ class DefaultController extends FOSRestController
         $log = $logger = $this->get('logger');
 
         $val = $request->request;
-        $tab = explode("@",$val->get("email"));
-        $username = $tab==null?null:$tab[0];
+        $username = $val->get("email");
         // set  user with  application values
         $user->setEmail($val->get('email'))->setType($val->get('type'))
             ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
