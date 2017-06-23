@@ -34,7 +34,7 @@ class UserController extends FOSRestController
      *
      * @ApiDoc(
      *  resource=true,
-     *  description="Récupérer la liste des utilisateurs",
+     *  description="RÃ©cupÃ©rer la liste des utilisateurs",
      *  statusCodes={
      *     200="the query is ok",
      *     401= "The connection is required",
@@ -42,7 +42,7 @@ class UserController extends FOSRestController
      *
      *  },
      *  parameters={
-     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
+     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="ReprÃ©sente l'identifiant de l'administrateur Ã  ajouter pour la classe"}
      *  }
      * )
      */
@@ -52,7 +52,6 @@ class UserController extends FOSRestController
         //you  can continious if you have a good privileges
         //$this->isgrantUser("ROLE_MODERATOR");
 
-        //$request->headers->set("X-Auth-token",$security->getAppAuth()->setValue());
 
         $em = $this->getDoctrine()->getManager();
         $array = $em->getRepository("AppBundle:User")->findAll();
@@ -87,7 +86,7 @@ class UserController extends FOSRestController
         $em =$this->getDoctrine()->getManager();
         /* @var $user User */
         $user =$em->getRepository('AppBundle:User')
-            ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
+            ->find($request->get('id')); // L'identifiant en tant que paramÃ¨tre n'est plus nÃ©cessaire
 
 
         if (empty($user)) {
@@ -113,18 +112,21 @@ class UserController extends FOSRestController
     // action for lagout
     /**
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
-     * @Rest\Delete("/auth/auth-tokens/{id}")
+     * @Rest\Delete("/auth/lagout/{id}")
      */
-    public function removeAuthTokenAction(Request $request)
+    public function lagoutAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        /* @var $authToken AuthToken */
         $authToken = $em->getRepository('AppBundle:AuthToken')
             ->find($request->get('id'));
-        /* @var $authToken AuthToken */
 
-        $connectedUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($authToken && $authToken->getUser()->getId() === $connectedUser->getId()) {
+        /** @var User $connectedUser */
+        $connectedUser = $this->getUser();
+
+        if ($authToken && $connectedUser && $authToken->getUser()->getId() == $connectedUser->getId()) {
+
             $em->remove($authToken);
             $em->flush();
 
@@ -132,8 +134,10 @@ class UserController extends FOSRestController
             $session = $this->get('session');
             $session->set("auth-current",null);
 
+            return $this->json(["delete token for username  is ". $connectedUser->getUsername()]);
+
         } else {
-            throw new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException();
+            return $this->tokenOruserNotFound();
         }
     }
 
@@ -187,6 +191,13 @@ class UserController extends FOSRestController
     private function userNotFound()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+    }
+
+
+    // exeception for user  or token not  found
+    private function tokenOruserNotFound()
+    {
+        return \FOS\RestBundle\View\View::create(['message' => 'User or token not found'], Response::HTTP_NOT_FOUND);
     }
 
 

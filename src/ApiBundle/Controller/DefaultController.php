@@ -152,7 +152,7 @@ class DefaultController extends FOSRestController
     //action  pour authentifier un utilisateur
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
-     * @Rest\Post("/auth/auth-tokens")
+     * @Rest\Post("/auth/login")
      *  resource=true,
      *  description="authentificate use. the login can be : email adresse or username ",
      *  statusCodes = {
@@ -167,7 +167,7 @@ class DefaultController extends FOSRestController
      *  }
      * )
      */
-    public function postAuthTokensAction(Request $request)
+    public function loginAction(Request $request)
     {
 
 
@@ -185,9 +185,8 @@ class DefaultController extends FOSRestController
             return $this->invalidCredentials();
         }
 
-
-        $this->authenticateUser($user);
-        return $this->json($this->getUser());
+        $auth = $this->authenticateUser($user);
+        return $this->json($auth);
     }
 
 
