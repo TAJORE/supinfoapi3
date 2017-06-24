@@ -28,7 +28,7 @@ class UserController extends FOSRestController
 {
 
     /**
-     * @Rest\Get("/auth/users")
+     * @Rest\Get("/auth/user")
      * @return Response
      * @ApiDoc(
      *  resource=true,
@@ -103,6 +103,29 @@ class UserController extends FOSRestController
         return $this->json($user);
     }
 
+
+
+
+
+
+    /**
+     * @Rest\Get("/auth/member")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Récupérer la liste des membres ",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  }
+     * )
+     */
+    public function membersAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $array = $em->getRepository("AppBundle:User")->findAll();
+        return $this->json($array);
+    }
 
 
 
