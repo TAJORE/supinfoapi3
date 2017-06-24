@@ -22,7 +22,7 @@ class pascalUserController extends FOSRestController
 {
 
     /**
-     * @Rest\Get("/auth/users")
+     * @Rest\Get("/auth/usersj")
      * @return Response
      *
      * @ApiDoc(
