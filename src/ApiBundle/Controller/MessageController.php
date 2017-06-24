@@ -33,7 +33,7 @@ class MessageController extends FOSRestController
      *
      * @ApiDoc(
      *  resource=true,
-     *  description="Récupérer la liste des utilisateurs",
+     *  description="RÃ©cupÃ©rer la liste des utilisateurs",
      *  statusCodes={
      *     200="the query is ok",
      *     401= "The connection is required",
@@ -41,7 +41,7 @@ class MessageController extends FOSRestController
      *
      *  },
      *  parameters={
-     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
+     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="ReprÃ©sente l'identifiant de l'administrateur Ã  ajouter pour la classe"}
      *  }
      * )
      */

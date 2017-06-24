@@ -1,32 +1,31 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: tene
+ * Date: 21/06/2017
+ * Time: 12:47
+ */
 
 namespace ApiBundle\Controller;
 
-
 use AppBundle\Entity\AuthToken;
-use AppBundle\Entity\Credentials;
 use AppBundle\Entity\User;
-use AppBundle\Tools\HelpersController;
-use AppBundle\Tools\SecurityController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use  Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Monolog\Logger;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+
 class UserController extends FOSRestController
 {
-
 
     /**
      * @Rest\Get("/auth/users")
@@ -60,8 +59,13 @@ class UserController extends FOSRestController
 
 
 
+
+
+
     /**
      * @Rest\Put("/auth/user/{id}")
+     * @return Response
+     * @ApiDoc(
      *  resource=true,
      *  description="User Update action ",
      *  statusCodes = {
@@ -82,9 +86,9 @@ class UserController extends FOSRestController
         //you  can continious if you have a good privileges
         $this->isgrantUser("ROLE_MEMBER");
 
-        $helper = new HelpersController();
         $em =$this->getDoctrine()->getManager();
-        /* @var $user User */
+
+        /** @var User $user */
         $user =$em->getRepository('AppBundle:User')
             ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
 
@@ -98,7 +102,7 @@ class UserController extends FOSRestController
             $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
             $user->setPassword($password);
         }
-        $user = $helper->fillUser($request,$user);
+        $user = $this->fillUser($request,$user);
         $em->merge($user);
         $em->flush();
         $em->detach($user);
@@ -109,10 +113,27 @@ class UserController extends FOSRestController
     }
 
 
+
+
     // action for lagout
     /**
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
      * @Rest\Delete("/auth/lagout/{id}")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="User Update action ",
+     *  statusCodes = {
+     *      200 = "Updated (seems to be OK)",
+     *      400 = "Bad request (see messages)",
+     *      401 = "Unauthorized, you must login first",
+     *      404 = "Not found",
+     *  },
+     *  parameters={
+     *     {"name"="username", "dataType"="string", "required"=true, "description"="User  name  or email  adress"},
+     *     {"name"="password", "dataType"="string", "required"=true, "description"="the password"}
+     *  }
+     * )
      */
     public function lagoutAction(Request $request)
     {
