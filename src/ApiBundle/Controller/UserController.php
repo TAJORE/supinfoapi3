@@ -30,7 +30,6 @@ class UserController extends FOSRestController
     /**
      * @Rest\Get("/auth/users")
      * @return Response
-     *
      * @ApiDoc(
      *  resource=true,
      *  description="Récupérer la liste des utilisateurs",
@@ -38,10 +37,6 @@ class UserController extends FOSRestController
      *     200="the query is ok",
      *     401= "The connection is required",
      *     403= "Access Denied"
-     *
-     *  },
-     *  parameters={
-     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
      *  }
      * )
      */
