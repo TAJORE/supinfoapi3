@@ -28,12 +28,14 @@ class DefaultController extends FOSRestController
 {
 
 
+
+
+
     // Fonction pour initialiser le user systeme et le token de base
 
     /**
      * @Rest\Get("/app")
      * @return Response
-     *
      * @ApiDoc(
      *  resource=true,
      *  description="Récupérer le token de base pour l'aplication ",
@@ -63,28 +65,6 @@ class DefaultController extends FOSRestController
     }
 
 
-
-    /**
-     * @Rest\Get("/admin/test")
-     * @return Response
-     *
-     * @ApiDoc(
-     *  resource=true,
-     *  description="Récupérer la liste des utilisateurs",
-     *  statusCodes={
-     *     200="Retourné quand tout est OK !"
-     *  },
-     *  parameters={
-     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
-     *  }
-     * )
-     */
-    public function testAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $array = $em->getRepository("AppBundle:User")->findAll();
-        return $this->json($array);
-    }
 
 
 
@@ -151,8 +131,9 @@ class DefaultController extends FOSRestController
 
     //action  pour authentifier un utilisateur
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
      * @Rest\Post("/auth/login")
+     * @return Response
+     * @ApiDoc(
      *  resource=true,
      *  description="authentificate use. the login can be : email adresse or username ",
      *  statusCodes = {
@@ -170,15 +151,15 @@ class DefaultController extends FOSRestController
     public function loginAction(Request $request)
     {
 
-
-        $val  =$request->request;
+        //$val= json_decode($request->getContent());
+        $val= $request->request;
         $user = new User();
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
-        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
+        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=> $val->get("_username"),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
         if(!$user)
         {
-            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
+            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=> $val->get("_username"),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
         }
 
         if(!$user){
@@ -188,7 +169,6 @@ class DefaultController extends FOSRestController
         $auth = $this->authenticateUser($user);
         return $this->json($auth);
     }
-
 
     // Recuper le auth correspondant au  user app
     private function isgrantUser($role){

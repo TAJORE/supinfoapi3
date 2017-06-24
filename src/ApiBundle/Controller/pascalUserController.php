@@ -22,31 +22,8 @@ class pascalUserController extends FOSRestController
 {
 
     /**
-     * @Rest\Get("/users")
-     * @return Response
-     *
-     * @ApiDoc(
-     *  resource=true,
-     *  description="Récupérer la liste des utilisateurs",
-     *  statusCodes={
-     *     200="Retourné quand tout est OK !"
-     *  },
-     *  parameters={
-     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
-     *  }
-     * )
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $array = $em->getRepository("AppBundle:User")->findAll();
-        return $this->json($array);
-    }
-
-    /**
      * @Rest\Get("/auth/usersj")
      * @return Response
-     *
      * @ApiDoc(
      *  resource=true,
      *  description="Récupérer la liste des utilisateurs",
@@ -61,17 +38,15 @@ class pascalUserController extends FOSRestController
      *  }
      * )
      */
-    public function userAuthAction(Request $request)
+    public function indexAction(Request $request)
     {
 
         //you  can continious if you have a good privileges
-        $this->isgrantUser("ROLE_MODERATOR");
+        //$this->isgrantUser("ROLE_MODERATOR");
 
-        //$request->headers->set("X-Auth-token",$security->getAppAuth()->setValue());
 
         $em = $this->getDoctrine()->getManager();
         $array = $em->getRepository("AppBundle:User")->findAll();
         return $this->json($array);
     }
-
 }
