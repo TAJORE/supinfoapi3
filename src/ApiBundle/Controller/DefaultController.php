@@ -152,15 +152,14 @@ class DefaultController extends FOSRestController
     public function loginAction(Request $request)
     {
 
-
-        $val  =$request->request;
+        $val= json_decode($request->getContent());
         $user = new User();
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
-        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
+        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=>$val->_username,"confirmPassword"=>md5($val->_password)],["id"=>"DESC"]);
         if(!$user)
         {
-            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$val->get('_username'),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
+            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$val->_username,"confirmPassword"=>md5($val->_password)],["id"=>"DESC"]);
         }
 
         if(!$user){
@@ -170,7 +169,6 @@ class DefaultController extends FOSRestController
         $auth = $this->authenticateUser($user);
         return $this->json($auth);
     }
-
 
     // Recuper le auth correspondant au  user app
     private function isgrantUser($role){
