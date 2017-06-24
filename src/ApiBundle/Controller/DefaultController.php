@@ -131,7 +131,6 @@ class DefaultController extends FOSRestController
 
     //action  pour authentifier un utilisateur
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
      * @Rest\Post("/auth/login")
      * @return Response
      * @ApiDoc(
@@ -152,18 +151,19 @@ class DefaultController extends FOSRestController
     public function loginAction(Request $request)
     {
 
-        $val= json_decode($request->getContent());
+        //$val= json_decode($request->getContent());
+        $val= $request->request;
         $user = new User();
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
-        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=>$val->_username,"confirmPassword"=>md5($val->_password)],["id"=>"DESC"]);
+        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=> $val->get("_username"),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
         if(!$user)
         {
-            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$val->_username,"confirmPassword"=>md5($val->_password)],["id"=>"DESC"]);
+            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=> $val->get("_username"),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
         }
 
         if(!$user){
-            return $this->invalidCredentials();
+            return $this->json($this->invalidCredentials());
         }
 
         $auth = $this->authenticateUser($user);
