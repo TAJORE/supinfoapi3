@@ -42,17 +42,17 @@ class UserMessage
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $receive;
+    private $receiver;
 
 
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message",cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $message;
 
@@ -107,21 +107,7 @@ class UserMessage
         $this->isLocked = $isLocked;
     }
 
-    /**
-     * @return User
-     */
-    public function getReceive()
-    {
-        return $this->receive;
-    }
 
-    /**
-     * @param User $receive
-     */
-    public function setReceive($receive)
-    {
-        $this->receive = $receive;
-    }
 
     /**
      * @return User

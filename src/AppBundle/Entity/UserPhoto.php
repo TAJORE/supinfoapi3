@@ -21,12 +21,21 @@ class UserPhoto
      */
     private $id;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="photos", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $message;
+
+
     /**
      * @var string
      *
      * @ORM\Column(name="userId", type="string", length=50)
      */
     private $userId;
+
 
     /**
      * @var integer

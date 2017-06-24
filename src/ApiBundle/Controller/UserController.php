@@ -171,8 +171,8 @@ class UserController extends FOSRestController
     private  function  fillUser(Request $request, User $user)    {
 
         $val = $request->request;
-        $tab = explode("@",$val->get("email"));
-        $username = $tab==null?null:$tab[0];
+
+        $username = $val->get('email');
 
 
 

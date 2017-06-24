@@ -6,6 +6,8 @@ use AppBundle\Entity\PasswordReset;
 use AppBundle\Entity\User;
 use AppBundle\Tools\FunglobeUtils;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -36,18 +38,20 @@ class PasswordResetController extends FOSRestController
 
         $token = md5(uniqid());
 
-        $appurl = $this->container->getParameter('web_app_url');
+        $appurl = $this->getParameter('web_app_url');
 
-        $url = $appurl.'?email='.$datas->email.'&confirmationtoken='.$token;
+        $url = $appurl.$request->getLocale().'/reset-password?email='.$datas->email.'&confirmationtoken='.$token;
 
         $translator = $this->get('translator');
-        $subject = $translator->trans('resetting.email.subject', []);
+        $subject = $translator->trans('resetting.email.subject', [], 'Email');
+
+        ////->setFrom(['support@funglobe.com' => "FunGlobe support"])
 
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
-            ->setFrom(['support@funglobe.com' => "FunGlobe support"])
+            ->setFrom($this->getParameter('mailer_user'))
             ->setTo($datas->email)
-            ->setBody($this->renderView('email:reset-password.html.twig', array('resetUrl'=> $url)), 'text/html');
+            ->setBody($this->renderView('reset-password.html.twig', array('resetUrl'=> $url)), 'text/html');
 
         $mailer = $this->get('mailer');
 
