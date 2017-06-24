@@ -22,6 +22,32 @@ class Message
      */
     private $id;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Message", mappedBy="messageParent", cascade={"persist", "remove"})
+     */
+    private $subMessages;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="subMessages")
+     * @ORM\JoinColumn(name="message_parent_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $messageParent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $sender;
+
+    /**
+     *@ORM\OneToMany(targetEntity="AppBundle\Entity\UserPhoto", mappedBy="message", cascade={"persist"})
+     *@ORM\JoinColumn(nullable=true)
+     */
+    private $photos;
+
+
+
     /**
      * @var string
      *
@@ -43,28 +69,6 @@ class Message
      */
     private $isValid;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Message", mappedBy="messageParent", cascade={"persist", "remove"})
-     */
-    private $subMessages;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="subMessages")
-     * @ORM\JoinColumn(name="message_parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $messageParent;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
-    private $sender;
-
-    /**
-     *@ORM\OneToMany(targetEntity="AppBundle\Entity\File", mappedBy="message", cascade={"persist", "remove"})
-     *@ORM\JoinColumn(nullable=false)
-     */
-    private $files;
 
     /**
      * Get id

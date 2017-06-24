@@ -43,8 +43,8 @@ use Doctrine\ORM\Mapping as ORM;
 
         /**
          * @var User
-         * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"all"})
-         * @ORM\JoinColumn(nullable=true)
+         * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"persist"})
+         * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
          */
         protected $user;
 

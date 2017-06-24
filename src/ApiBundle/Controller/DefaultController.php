@@ -26,39 +26,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class DefaultController extends FOSRestController
 {
-    /**
-     * @Rest\Get("/auth/users")
-     * @return Response
-     *
-     * @ApiDoc(
-     *  resource=true,
-     *  description="Récupérer la liste des utilisateurs",
-     *  statusCodes={
-     *     200="the query is ok",
-     *     401= "The connection is required",
-     *     403= "Access Denied"
-     *
-     *  },
-     *  parameters={
-     *     {"name"="utilisateur_id", "dataType"="integer", "required"=true, "description"="Représente l'identifiant de l'administrateur à ajouter pour la classe"}
-     *  }
-     * )
-     */
-    public function indexAction(Request $request)
-    {
-
-        //you  can continious if you have a good privileges
-       $this->isgrantUser("ROLE_MODERATOR");
-
-        //$request->headers->set("X-Auth-token",$security->getAppAuth()->setValue());
-
-        $em = $this->getDoctrine()->getManager();
-        $array = $em->getRepository("AppBundle:User")->findAll();
-        return $this->json($array);
-    }
-
-
-
 
 
     // Fonction pour initialiser le user systeme et le token de base
@@ -87,6 +54,10 @@ class DefaultController extends FOSRestController
         }
         /** @var AuthToken $authtoken */
         $authtoken = $em->getRepository("AppBundle:AuthToken")->findOneBy(["user"=>$app],["id"=>"DESC"]);
+
+        $authtoken->setCreatedAt(new \DateTime());
+
+        $em->flush();
 
         return $this->json($authtoken);
     }
@@ -154,7 +125,6 @@ class DefaultController extends FOSRestController
      */
     public function registerAction(Request $request)
     {
-
         $user =new User();
         $val = $request->request;
         $user = $this->fillUser($request, $user);
@@ -182,7 +152,7 @@ class DefaultController extends FOSRestController
     //action  pour authentifier un utilisateur
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
-     * @Rest\Post("/auth/auth-tokens")
+     * @Rest\Post("/auth/login")
      *  resource=true,
      *  description="authentificate use. the login can be : email adresse or username ",
      *  statusCodes = {
@@ -197,7 +167,7 @@ class DefaultController extends FOSRestController
      *  }
      * )
      */
-    public function postAuthTokensAction(Request $request)
+    public function loginAction(Request $request)
     {
 
 
@@ -215,9 +185,8 @@ class DefaultController extends FOSRestController
             return $this->invalidCredentials();
         }
 
-
-        $this->authenticateUser($user);
-        return $this->json($this->getUser());
+        $auth = $this->authenticateUser($user);
+        return $this->json($auth);
     }
 
 
@@ -289,17 +258,25 @@ class DefaultController extends FOSRestController
     // charge un utilisateur avec les informations envoyes dans l'application (a completer pour une modfification)
     private  function  fillUser(Request $request, User $user)
     {
-        $val = $request->request;
-        $tab = explode("@",$val->get("email"));
-        $username = $tab==null?null:$tab[0];
+        $log = $logger = $this->get('logger');
 
+        $val = $request->request;
+        $username = $val->get("email");
         // set  user with  application values
-        $user->setEmail($val->get('email'))->setType($val->get('type'))->setGender($val->get('gender'))
+        $user->setEmail($val->get('email'))->setType($val->get('type'))
             ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
             ->setGender($val->get('profession'))->setUsernameCanonical($username)->setEmailCanonical($val->get('email'));
 
         $user->setEnabled(true)->setIsEmailVerified(false)->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])
-            ->setUsername($username)->setIsOnline(false)->setIsVip(false)->setJoinDate(new \DateTime());
+            ->setUsername($username)->setIsOnline(true)->setIsVip(false)->setJoinDate(new \DateTime());
+
+        $user->setGender($val->get('gender'));
+
+        //quelques logs pour verifier les valeurs des parametres
+        $log->debug("The user gender is ".$val->get('gender'));
+        $log->debug("The user email is ".$val->get('email'));
+        $log->debug("The user himself is is ".$user);
+
         return $user;
     }
 

@@ -3,22 +3,25 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\AuthToken;
+use AppBundle\Entity\PasswordReset;
 use AppBundle\Entity\User;
-use FOS\OAuthServerBundle\Entity\Client;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class DefaultController extends Controller
+class DefaultController extends FOSRestController
 {
     /**
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)
     {
+
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
@@ -26,7 +29,33 @@ class DefaultController extends Controller
     }
 
 
+    /**
+     * @Route("/test/{email}", name="testpage")
+     */
+    public function testAction(Request $request, $email)
+    {
 
+        $code = $this->sendMail($email, $this->getParameter('mailer_user'), "I am  just  a test", "good work");
+        // replace this example code with whatever you need
+        return $this->json("Veillez consulter la boite mail <a href=''>". $email."<a>");
+    }
+
+
+
+    public  function sendMail($to, $from, $body,$subjet)
+    {
+        // ->setReplyTo('xxx@xxx.xxx')
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subjet)
+            ->setFrom($from) // 'info@achgroupe.com' => 'Achgroupe : Course en ligne '
+            ->setTo($to)
+            ->setBody($body)
+            //'MyBundle:Default:mail.html.twig'
+            ->setContentType('text/html');
+        return $this->get('mailer')->send($message);
+
+    }
     //fonction pour inialiser quelques utilisateurs
     public function saveUser()
     {
@@ -70,10 +99,6 @@ class DefaultController extends Controller
         $em->detach($user);
     }
 
-
-
-
-
     // fonction  pour creer l'application et le token de base ET Creer quelques user
     /**
      * @Route("/init", name="app_init")
@@ -86,10 +111,7 @@ class DefaultController extends Controller
     }
 
 
-
-
-
-    // Initialise l'utilisateur systèmes
+    // Initialise l'utilisateur systÃ¨mes
     public function  init()
     {
         $user = new User();
@@ -130,5 +152,4 @@ class DefaultController extends Controller
 
         return $password;
     }
-
 }
