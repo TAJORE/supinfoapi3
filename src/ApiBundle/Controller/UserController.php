@@ -109,7 +109,7 @@ class UserController extends FOSRestController
 
 
     /**
-     * @Rest\Get("/auth/member")
+     * @Rest\Get("/auth/members")
      * @return Response
      * @ApiDoc(
      *  resource=true,
