@@ -24,7 +24,6 @@ class pascalUserController extends FOSRestController
     /**
      * @Rest\Get("/auth/usersj")
      * @return Response
-     *
      * @ApiDoc(
      *  resource=true,
      *  description="Récupérer la liste des utilisateurs",

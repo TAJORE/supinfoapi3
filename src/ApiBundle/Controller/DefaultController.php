@@ -36,7 +36,6 @@ class DefaultController extends FOSRestController
     /**
      * @Rest\Get("/app")
      * @return Response
-     *
      * @ApiDoc(
      *  resource=true,
      *  description="Récupérer le token de base pour l'aplication ",
