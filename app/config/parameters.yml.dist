@@ -8,6 +8,8 @@ parameters:
     database_password: jtppppas
     mailer_transport: smtp
     mailer_host: 127.0.0.1
+    mailer_auth_mode: login    
+    mailer_port: 587
     mailer_user: null
     mailer_password: null
     secret: ThisTokenIsNotSoSecretChangeIt
