@@ -38,9 +38,9 @@ class PasswordResetController extends FOSRestController
 
         $token = md5(uniqid());
 
-        $appurl = $this->getParameter('web_app_url');
+        $appurl = $datas->url;
 
-        $url = $appurl.$request->getLocale().'/reset-password?email='.$datas->email.'&confirmationtoken='.$token;
+        $url = $appurl.'reset-password?email='.$datas->email.'&confirmationtoken='.$token;
 
         $translator = $this->get('translator');
         $subject = $translator->trans('resetting.email.subject', [], 'Email');
