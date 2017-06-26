@@ -3,8 +3,8 @@ security:
         FOS\UserBundle\Model\UserInterface: md5
     role_hierarchy:
         ROLE_MEMBER:           [ROLE_MEMBER]
-        ROLE_MODERRATOR:       [ROLE_MEMBER,ROLE_MODERRATOR]
-        ROLE_ADMIN:            [ROLE_MODERRATOR, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_MODERATOR:        [ROLE_MEMBER,ROLE_MODERATOR]
+        ROLE_ADMIN:            [ROLE_MODERATOR, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
        auth_token_user_provider:
