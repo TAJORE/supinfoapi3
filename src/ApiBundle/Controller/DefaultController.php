@@ -251,6 +251,7 @@ class DefaultController extends FOSRestController
             ->setUsername($username)->setIsOnline(true)->setIsVip(false)->setJoinDate(new \DateTime());
 
         $user->setGender($val->get('gender'));
+        $user->setLastName($val->get('lastname'));
 
         //quelques logs pour verifier les valeurs des parametres
         $log->debug("The user gender is ".$val->get('gender'));
