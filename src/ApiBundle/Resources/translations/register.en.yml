@@ -1,0 +1,5 @@
+form:
+  help:
+    lastname: The poeples like your last name
+    emailConfirm:
+      objet: confirm your email  address

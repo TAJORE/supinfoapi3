@@ -117,10 +117,39 @@ class DefaultController extends FOSRestController
         $em->flush();
         $em->detach($user);
 
+
+        ///email
+        $params =json_decode($val->get("params")) ;
+        $to  = $user->getEmail();
+        $objet  = $message_body = $this->get('translator')->trans('form.help.emailConfirm.objet',[],'register');;
+        $url  = $params->url;
+        $urlPassword = $params->urlPassword;
+        $name  = $params->name;
+        $password  = $params->password;
+        $logo  = $params->logo;
+        return $this->json($this->getAppAuthAction($request));
+        $from = $this->getParameter('mailer_user');
+        $array = ["email"=>$email, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$email)];
+        $view = "ApiBundle:Mail:emailConfirm.html.twig";
+        $code = $this->sendMail($to,$from,$view,$array,$objet);
+
         /* @var $user User */
         $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
         $this->authenticateUser($user);
         return $this->json($this->getUser());
+    }
+
+
+    public  function sendMail($to, $from, $routeview, $parm,$subjet)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subjet)
+            ->setFrom($from)
+            ->setTo($to)
+            ->setBody($this->renderView($routeview, $parm))
+            ->setContentType('text/html');
+        return $this->get('mailer')->send($message);
+
     }
 
 
