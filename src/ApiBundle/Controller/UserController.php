@@ -52,6 +52,33 @@ class UserController extends FOSRestController
         return $this->json($array);
     }
 
+    /**
+     * @Rest\Get("/delete/{email}")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Route temporaire pour effacer une utilisateur via son email, sans etre authentifie",
+     *  statusCodes={
+     *     200="the query is ok",
+     *     401= "The connection is required",
+     *     403= "Access Denied"
+     *  }
+     * )
+     */
+    public function deleteUserAction($email)
+    {
+
+        //you  can continue if you have a good privileges
+        //$this->isgrantUser("ROLE_MODERATOR");
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')
+            ->findOneBy(['email'=>$email]);
+        $em->remove($user);
+        $em->flush();
+
+        return $this->json($user);
+    }
+
 
     /**
      * @Rest\Put("/auth/user/{id}")
@@ -73,7 +100,6 @@ class UserController extends FOSRestController
      */
     public function updateUserAction(Request $request)
     {
-
         //you  can continious if you have a good privileges
         $this->isgrantUser("ROLE_MEMBER");
 
@@ -208,8 +234,6 @@ class UserController extends FOSRestController
         $val = $request->request;
 
         $username = $val->get('email');
-
-
 
         // set  user with  application values
         $user->setEmail($val->get('email'))->setType($val->get('type'))->setGender($val->get('gender'))
