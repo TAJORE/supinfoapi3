@@ -27,30 +27,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class UserController extends FOSRestController
 {
 
-    /**
-     * @Rest\Get("/auth/user")
-     * @return Response
-     * @ApiDoc(
-     *  resource=true,
-     *  description="Récupérer la liste des utilisateurs",
-     *  statusCodes={
-     *     200="the query is ok",
-     *     401= "The connection is required",
-     *     403= "Access Denied"
-     *  }
-     * )
-     */
-    public function indexAction(Request $request)
-    {
-
-        //you  can continious if you have a good privileges
-        //$this->isgrantUser("ROLE_MODERATOR");
-
-
-        $em = $this->getDoctrine()->getManager();
-        $array = $em->getRepository("AppBundle:User")->findAll();
-        return $this->json($array);
-    }
 
     /**
      * @Rest\Get("/delete/{email}")

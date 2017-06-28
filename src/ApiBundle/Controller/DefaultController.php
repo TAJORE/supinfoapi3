@@ -127,16 +127,20 @@ class DefaultController extends FOSRestController
         $name  = $params->name;
         $password  = $params->password;
         $logo  = $params->logo;
-        return $this->json($this->getAppAuthAction($request));
+        $confirm  = $params->confirm;
+        $locale  = $params->locale;
+
         $from = $this->getParameter('mailer_user');
-        $array = ["email"=>$email, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$email)];
+        $array = ["confirm"=>$confirm,"_locale"=>$locale,"email"=>$to, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$to)];
         $view = "ApiBundle:Mail:emailConfirm.html.twig";
         $code = $this->sendMail($to,$from,$view,$array,$objet);
 
         /* @var $user User */
-        $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
+       /* $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
         $this->authenticateUser($user);
-        return $this->json($this->getUser());
+        */
+        return $this->json($user);
+
     }
 
 
