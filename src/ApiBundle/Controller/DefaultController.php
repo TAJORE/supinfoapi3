@@ -66,6 +66,37 @@ class DefaultController extends FOSRestController
 
 
 
+    // Fonction pour confirme l'adresse email
+
+    /**
+     * @Rest\Get("/confirm-email")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Confirmation du  mail  d'un utilisateur ",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  }
+     * )
+     */
+    public function ConfirmEmailAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $em->getRepository("AppBundle:User")->findOneByemail($request->get("email"));
+        if(!$user)
+        {
+            $user->setIsEmailVerified(true);
+            $em->flush();
+        }
+        else{
+            return $this->userNotFound();
+        }
+
+        return $this->json($user);
+    }
+
 
 
 
