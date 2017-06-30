@@ -22,6 +22,7 @@ use  Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Psr\Log\LoggerInterface;
 
 
 class UserController extends FOSRestController
@@ -125,6 +126,37 @@ class UserController extends FOSRestController
     {
 
         $em = $this->getDoctrine()->getManager();
+        $array = $em->getRepository("AppBundle:User")->findAll();
+        return $this->json($array);
+    }
+
+
+    /**
+     * @Rest\Get("/auth/members/delete/{memberList}")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Récupérer la liste des membres ",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  }
+     * )
+     */
+    public function deleteMembersAction(Request $request)
+    {
+        $logger = $this->get('logger');
+        $em = $this->getDoctrine()->getManager();
+
+        $membersToDelete = explode(",", $request->get('memberList'));
+        $logger->critical("Members to delete: ".print_r($membersToDelete, TRUE));
+
+        foreach ($membersToDelete as $memberId) {
+            $user = $em->getRepository('AppBundle:User')
+                ->findOneBy(['id'=>$memberId]);
+            $em->remove($user);
+            $em->flush();
+        }
+
         $array = $em->getRepository("AppBundle:User")->findAll();
         return $this->json($array);
     }
