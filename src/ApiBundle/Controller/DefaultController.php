@@ -69,23 +69,31 @@ class DefaultController extends FOSRestController
     // Fonction pour confirme l'adresse email
 
     /**
-     * @Rest\Get("/confirm-email")
+     * @Rest\Put("/confirm/email")
      * @return Response
      * @ApiDoc(
      *  resource=true,
-     *  description="Confirmation du  mail  d'un utilisateur ",
-     *  statusCodes={
-     *     200="Retourné quand tout est OK !"
+     *  description="Confirm l'adresse email  de l'utilisateur connecté ",
+     *  statusCodes = {
+     *      200 = "Updated (seems to be OK)",
+     *      400 = "Bad request (see messages)",
+     *      401 = "Unauthorized, you must login first",
+     *      404 = "Not found",
+     *  },
+     *  parameters={
+     *     {"name"="email", "dataType"="string", "required"=true, "description"="email  de l'utilisateur connecté"}
      *  }
      * )
      */
     public function ConfirmEmailAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getManager();
+
+       // return $this->json(["email"=>$request->get("email")],400);
         /** @var User $user */
-        $user = $em->getRepository("AppBundle:User")->findOneByemail($request->get("email"));
-        if(!$user)
+        $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$request->get("email")],["id"=>"DESC"]);
+        //return $this->json(["user"=>$user],400);
+        if(is_object($user))
         {
             $user->setIsEmailVerified(true);
             $em->flush();
@@ -166,6 +174,12 @@ class DefaultController extends FOSRestController
         $view = "ApiBundle:Mail:emailConfirm.html.twig";
         $code = $this->sendMail($to,$from,$view,$array,$objet);
 
+        $params =json_decode($val->get("params"),true) ;
+
+        $user->setEmailToken($params);
+        $em->flush();
+        $em->detach($user);
+
         /* @var $user User */
        /* $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
         $this->authenticateUser($user);
@@ -173,6 +187,57 @@ class DefaultController extends FOSRestController
         return $this->json($user);
 
     }
+
+
+
+    // Action pour  renvoyer  l'email  à  nouveau
+
+    /**
+     * @Rest\Get("/auth/verify/email")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Envoi  a nouveau un email  a l'utilisateur connecté ",
+     *  statusCodes = {
+     *      200 = "Updated (seems to be OK)",
+     *      400 = "Bad request (see messages)",
+     *      401 = "Unauthorized, you must login first",
+     *      404 = "Not found",
+     *  },
+     *  parameters={
+     *     {"name"="email", "dataType"="string", "required"=true, "description"="email  de l'utilisateur connecté"}
+     *  }
+     * )
+     */
+    public function VerifyEmailAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var User $user */
+        $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$request->get("email")],["id"=>"DESC"]);
+
+
+        ///email
+        $params =$user->getEmailToken();
+        $to  = $user->getEmail();
+        $objet  = $message_body = $this->get('translator')->trans('form.help.emailConfirm.objet',[],'register');
+        $url  = $params->url;
+        $urlPassword = $params->urlPassword;
+        $name  = $params->name;
+        $password  = $params->password;
+        $logo  = $params->logo;
+        $confirm  = $params->confirm;
+        $locale  = $params->locale;
+
+        $from = $this->getParameter('mailer_user');
+        $array = ["confirm"=>$confirm,"_locale"=>$locale,"email"=>$to, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$to)];
+        $view = "ApiBundle:Mail:emailConfirm.html.twig";
+        $code = $this->sendMail($to,$from,$view,$array,$objet);
+
+        return $this->json($user);
+    }
+
+
 
 
     public  function sendMail($to, $from, $routeview, $parm,$subjet)

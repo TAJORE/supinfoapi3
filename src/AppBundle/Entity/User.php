@@ -156,6 +156,15 @@ class User extends  BaseUser
 
 
 
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="emailToken", type="array",nullable=true)
+     */
+    private $emailToken;
+
+
     /**
      * Get id
      *
@@ -565,5 +574,29 @@ class User extends  BaseUser
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * Set emailToken
+     *
+     * @param array $emailToken
+     *
+     * @return User
+     */
+    public function setEmailToken($emailToken)
+    {
+        $this->emailToken = $emailToken;
+
+        return $this;
+    }
+
+    /**
+     * Get emailToken
+     *
+     * @return array
+     */
+    public function getEmailToken()
+    {
+        return $this->emailToken;
     }
 }
