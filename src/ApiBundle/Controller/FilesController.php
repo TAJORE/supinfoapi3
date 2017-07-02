@@ -60,8 +60,8 @@ class FilesController extends FOSRestController
         $file = new Files();
 
         /** @var UploadedFile $uploadedFile */
-        $uploadedFile = $request->files->all()["file"];
-        $id = $request->get("id");
+        $uploadedFile = $request->files->get("file");
+        $id = $this->getUser()->getId();
         $errors = null;
         if($uploadedFile!=null)
         {
