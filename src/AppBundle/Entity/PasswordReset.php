@@ -129,4 +129,3 @@ class PasswordReset
         return $this->createdAt;
     }
 }
-

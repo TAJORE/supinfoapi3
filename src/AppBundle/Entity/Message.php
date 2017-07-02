@@ -41,10 +41,10 @@ class Message
     private $sender;
 
     /**
-     *@ORM\OneToMany(targetEntity="AppBundle\Entity\UserPhoto", mappedBy="message", cascade={"persist"})
+     *@ORM\OneToMany(targetEntity="AppBundle\Entity\File", mappedBy="message", cascade={"persist"})
      *@ORM\JoinColumn(nullable=true)
      */
-    private $photos;
+    private $files;
 
 
 
@@ -241,6 +241,21 @@ class Message
     {
         return $this->sender;
     }
+
+    /**
+     * Set sender
+     *
+     * @param \AppBundle\Entity\User $sender
+     *
+     * @return Message
+     */
+    public function setSender(\AppBundle\Entity\User $sender)
+    {
+        $this->sender = $sender;
+
+        return $this;
+    }
+
 
     /**
      * Add file

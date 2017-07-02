@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Web\EntityBundle\Entity\Files;
 
 /**
  * UserPhoto
@@ -22,25 +23,24 @@ class UserPhoto
     private $id;
 
 
+    public function path($id){
+        $file = new Files();
+        return $this->hashname==null? null: $file->initialpath."photo/user".$id."/".$this->hashname;
+    }
+
+
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Message", inversedBy="photos", cascade={"persist"})
+     * @var User
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"persist"})
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $message;
+    protected $user;
 
 
     /**
      * @var string
      *
-     * @ORM\Column(name="userId", type="string", length=50)
-     */
-    private $userId;
-
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="name", type="integer", length=50)
+     * @ORM\Column(name="name", type="string", length=50)
      */
     private $name;
 
@@ -82,7 +82,7 @@ class UserPhoto
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updateDate", type="datetime")
+     * @ORM\Column(name="updateDate", type="datetime",nullable=true)
      */
     private $updateDate;
 
@@ -101,29 +101,7 @@ class UserPhoto
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
 
-    /**
-     * @return string
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param string $userId
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-    }
 
     /**
      * @return int
@@ -253,4 +231,28 @@ class UserPhoto
         $this->createDate = $createDate;
     }
 
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return UserPhoto
+     */
+    public function setUser(\AppBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

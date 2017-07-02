@@ -126,5 +126,38 @@ class UserMessage
     }
 
 
-}
 
+    /**
+     * Get isLocked
+     *
+     * @return boolean
+     */
+    public function getIsLocked()
+    {
+        return $this->isLocked;
+    }
+
+    /**
+     * Set receiver
+     *
+     * @param \AppBundle\Entity\User $receiver
+     *
+     * @return UserMessage
+     */
+    public function setReceiver(\AppBundle\Entity\User $receiver)
+    {
+        $this->receiver = $receiver;
+
+        return $this;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
+    }
+}
