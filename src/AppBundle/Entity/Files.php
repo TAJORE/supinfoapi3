@@ -1,6 +1,6 @@
 <?php
 
-namespace Web\EntityBundle\Entity;
+namespace AppBundle\Entity;
 
 
 

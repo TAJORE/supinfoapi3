@@ -5,6 +5,7 @@ namespace ApiBundle\Controller;
 
 use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\Credentials;
+use AppBundle\Entity\Files;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserPhoto;
 use AppBundle\Tools\HelpersController;
@@ -25,8 +26,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Web\EntityBundle\Entity\Files;
-define('FILE_SIZE_MAX', 2*1024*1024);
+define('FILE_SIZE_MAX', 5*1024*1024);
 
 class FilesController extends FOSRestController
 {
@@ -44,10 +44,6 @@ class FilesController extends FOSRestController
      *     401= "The connection is required",
      *     403= "Access Denied"
      *
-     *  },
-     *  parameters={
-     *     {"name"="file", "dataType"="file", "required"=true, "description"="Fichier a télécharger"},
-     *     {"name"="id", "dataType"="integer", "required"=true, "description"="L'identifiant  de l'utilisateur connecté"}
      *  }
      * )
      */
@@ -56,31 +52,57 @@ class FilesController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
+        //$files = $request->files->get('file');
 
-        $file = new Files();
+        $files = $request->files->all()['file'];
+        return $this->json(["success"=>$files]);
 
-        /** @var UploadedFile $uploadedFile */
-        $uploadedFile = $request->files->get("file");
-        $id = $this->getUser()->getId();
         $errors = null;
-        if($uploadedFile!=null)
+        if (sizeof($files) > 0) {
+            /** @var UploadedFile $uploadedFile */
+            foreach ($files as $uploadedFile) {
+                if ($uploadedFile != null) {
+                    if ($uploadedFile->getClientSize() > FILE_SIZE_MAX) {
+                        $errors = 'file too  big ('.$uploadedFile->getClientSize().')';
+                        break;
+                    }
+                    $tab = explode('.', $uploadedFile->getClientOriginalName());
+                    $ext = $tab[count($tab) - 1];
+                    if (!preg_match("#pdf|docx|doc|png|jpg|gif|jpeg|bnp#", strtolower($ext))) {
+                        $errors = 'Extension   ('.$ext.') not  allow';;
+                        break;
+                    }
+                }
+                else
+                {
+                    $errors ="File not  found";
+                    break;
+                }
+            }
+        }
+        else
         {
-            if($uploadedFile->getClientSize() < FILE_SIZE_MAX)
-            {
+            $errors ="File not  found";
+        }
+
+        if($errors==null)
+        {
+            $id = $this->getUser()->getId();
+            /** @var User $user */
+            $user = $em->getRepository("AppBundle:User")->find($id);
+
+            $result=null;
+            /** @var UploadedFile $uploadedFile */
+            foreach ($files as $uploadedFile) {
                 $tab = explode('.', $uploadedFile->getClientOriginalName());
                 $ext = $tab[count($tab) - 1];
-                if (preg_match("#pdf|docx|doc|png|jpg|gif|jpeg|bnp#", strtolower($ext))) {
-                    $file->file = $uploadedFile;
-
-                    /** @var User $user */
-                    $user = $em->getRepository("AppBundle:User")->find($id);
-
+                $file = new Files();
+                $file->file = $uploadedFile;
                     $fileExtension = $ext;
                     $fileName = uniqid() .'.' .$fileExtension;
                     $fileSize = $uploadedFile->getClientSize();
                     $directory = "photo/user".$id;
                     $file->add($file->initialpath . $directory, $fileName);
-
                     $photo = new UserPhoto();
                     $photo->setCreateDate(new \DateTime());
                     $photo->setHashname($fileName);
@@ -94,22 +116,12 @@ class FilesController extends FOSRestController
                     $em->persist($photo);
                     $em->flush();
                     $em->detach($photo);
-                    return json_encode(["name" => $fileName,"size" => $fileSize, "src"=> $src]);
-                }
-                else
-                {
-                    $errors = 'Extension   ('.$ext.') not  allow';
-                }
+                   $result[] = ["name" => $fileName,"size" => $fileSize, "src"=> $src];
             }
-            else
-            {
-                $errors = 'file too  big ('.$uploadedFile->getClientSize().')';
-            }
-        }
-        else{
-            $errors ="File not  found";
-        }
 
+            return $this->json($request);
+
+        }
         return \FOS\RestBundle\View\View::create(['message' => $errors], Response::HTTP_NOT_FOUND);
     }
 
