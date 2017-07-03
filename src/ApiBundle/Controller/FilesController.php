@@ -117,7 +117,7 @@ class FilesController extends FOSRestController
                 $em->persist($photo);
                 $em->flush();
                 $em->detach($photo);
-                $result = ["name" => $fileName,"size" => $fileSize, "src"=> $src];
+                $result = ["name" => $photo->getName(),"size" => $fileSize, "src"=> $src];
                 return $this->json($result);
             }
             catch (Exception $ex)
