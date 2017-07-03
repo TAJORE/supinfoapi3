@@ -52,32 +52,33 @@ class FilesController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
+        $id = $request->request->get("id");
+        /** @var User $user */
+        $user = $em->getRepository("AppBundle:User")->find($id);
+
+
+
         //$files = $request->files->get('file');
 
-        $files = $request->files->all()['file'];
-        return $this->json(["success"=>$files]);
+        //$files = $request->files->all()['file'];
+        $files = $request->files->all();
+
+
+        /** @var UploadedFile $uploadedFile */
+        $uploadedFile = $files['file'];
+
+
 
         $errors = null;
-        if (sizeof($files) > 0) {
-            /** @var UploadedFile $uploadedFile */
-            foreach ($files as $uploadedFile) {
-                if ($uploadedFile != null) {
-                    if ($uploadedFile->getClientSize() > FILE_SIZE_MAX) {
-                        $errors = 'file too  big ('.$uploadedFile->getClientSize().')';
-                        break;
-                    }
-                    $tab = explode('.', $uploadedFile->getClientOriginalName());
-                    $ext = $tab[count($tab) - 1];
-                    if (!preg_match("#pdf|docx|doc|png|jpg|gif|jpeg|bnp#", strtolower($ext))) {
-                        $errors = 'Extension   ('.$ext.') not  allow';;
-                        break;
-                    }
-                }
-                else
-                {
-                    $errors ="File not  found";
-                    break;
-                }
+
+        if ($uploadedFile != null) {
+            if ($uploadedFile->getClientSize() > FILE_SIZE_MAX) {
+                $errors = 'file too  big ('.$uploadedFile->getClientSize().')';
+            }
+            $tab = explode('.', $uploadedFile->getClientOriginalName());
+            $ext = $tab[count($tab) - 1];
+            if (!preg_match("#pdf|docx|doc|png|jpg|gif|jpeg|bnp#", strtolower($ext))) {
+                $errors = 'Extension   ('.$ext.') not  allow';;
             }
         }
         else
@@ -85,44 +86,47 @@ class FilesController extends FOSRestController
             $errors ="File not  found";
         }
 
+
+
+
         if($errors==null)
         {
-            $id = $this->getUser()->getId();
-            /** @var User $user */
-            $user = $em->getRepository("AppBundle:User")->find($id);
+            try{
 
-            $result=null;
-            /** @var UploadedFile $uploadedFile */
-            foreach ($files as $uploadedFile) {
+                //return $this->json(["resultat"=>$tab],400);
                 $tab = explode('.', $uploadedFile->getClientOriginalName());
                 $ext = $tab[count($tab) - 1];
                 $file = new Files();
                 $file->file = $uploadedFile;
-                    $fileExtension = $ext;
-                    $fileName = uniqid() .'.' .$fileExtension;
-                    $fileSize = $uploadedFile->getClientSize();
-                    $directory = "photo/user".$id;
-                    $file->add($file->initialpath . $directory, $fileName);
-                    $photo = new UserPhoto();
-                    $photo->setCreateDate(new \DateTime());
-                    $photo->setHashname($fileName);
-                    $photo->setIsValid(true);
-                    $photo->setMimeType($fileExtension);
-                    $photo->setSize($fileSize);
-                    $photo->setName($uploadedFile->getClientOriginalName());
-                    $photo->setVisibility("private");
-                    $photo->setUser($user);
-                    $src = $photo->path($id);
-                    $em->persist($photo);
-                    $em->flush();
-                    $em->detach($photo);
-                   $result[] = ["name" => $fileName,"size" => $fileSize, "src"=> $src];
+                $fileExtension = $ext;
+                $fileName = uniqid() .'.' .$fileExtension;
+                $fileSize = $uploadedFile->getClientSize();
+                $directory = "photo/user".$id;
+                //$directory = "photo";
+                $file->add($file->initialpath . $directory, $fileName);
+                $photo = new UserPhoto();
+                $photo->setCreateDate(new \DateTime());
+                $photo->setHashname($fileName);
+                $photo->setIsValid(true);
+                $photo->setMimeType($fileExtension);
+                $photo->setSize($fileSize);
+                $photo->setName($uploadedFile->getClientOriginalName());
+                $photo->setVisibility("private");
+                $photo->setUser($user);
+                $src = $photo->path($id);
+                $em->persist($photo);
+                $em->flush();
+                $em->detach($photo);
+                $result = ["name" => $fileName,"size" => $fileSize, "src"=> $src];
+                return $this->json($result);
+            }
+            catch (Exception $ex)
+            {
+                return $this->json(["error"=>$ex->getMessage()],400);
             }
 
-            return $this->json($request);
-
         }
-        return \FOS\RestBundle\View\View::create(['message' => $errors], Response::HTTP_NOT_FOUND);
+         return $this->json(["error"=>$errors],400);
     }
 
 

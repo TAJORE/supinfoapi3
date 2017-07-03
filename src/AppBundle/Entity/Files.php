@@ -14,11 +14,19 @@ class Files
 
     public  function  getAbsolutPath($path)
     {
-        return __DIR__.'/../../../../web/'.$this->getCurrentDirectory($path);
+        $replace = "src\\AppBundle\\Entity";
+        $string = __DIR__;
+        $string = str_replace($replace,"web/",$string);
+        return $string.$this->getCurrentDirectory($path);
+        //return __DIR__.'/../../../../web/'.$this->getCurrentDirectory($path);
     }
     public  function  getAbsolutPath_other($path)
     {
-        return __DIR__.'/../../../../web/'.$path;
+        $replace = "src\\AppBundle\\Entity";
+        $string = __DIR__;
+        $string = str_replace($replace,"web/",$string);
+        return $string.$path;
+       // return __DIR__.'/../../../../web/'.$path;
     }
     public  function move($filesource,$path)
     {
@@ -36,6 +44,7 @@ class Files
     function add($directory,$path){
         //var_dump($this->file);
         $this->file->move($this->getAbsolutPath($directory),$path);
+        return $this->getAbsolutPath($directory).$path;
     }
 
     public $initialpath = "upload/";
