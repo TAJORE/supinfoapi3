@@ -10,4 +10,33 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function  getVips($data, $limit=10000, $page=1, $count=false )
+    {
+        $query = $this->createQueryBuilder('a');
+        if($count)
+        {
+            $query->select('count(a.id)');
+            return $query->getQuery()->getSingleScalarResult();
+        }
+
+
+
+        if($data!=null)
+        {
+            $parameters['vip']=$data['vip'];
+
+            $query->Where('a.isVip =:vip OR  a.isVip IS NULL');
+            $query->setParameters($parameters);
+            $query->addOrderBy('a.joinDate','desc');
+            if($limit)
+            {
+                $page=$page<1?1:$page;
+                $query->setFirstResult(($page-1)*$limit)->setMaxResults($limit);
+            }
+        }
+
+        return $query->getQuery()->getResult();
+
+    }
 }

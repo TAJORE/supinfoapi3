@@ -44,6 +44,10 @@ class FilesController extends FOSRestController
      *     401= "The connection is required",
      *     403= "Access Denied"
      *
+     *  },
+     *  parameters={
+     *     {"name"="id", "dataType"="integer", "required"=true, "description"="L'identifiant de l'utilisateur connecté "},
+     *     {"name"="file", "dataType"="file", "required"=true, "description"="La photo"}
      *  }
      * )
      */

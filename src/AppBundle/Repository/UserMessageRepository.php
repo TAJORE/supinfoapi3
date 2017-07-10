@@ -10,4 +10,37 @@ namespace AppBundle\Repository;
  */
 class UserMessageRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function  getSendMessage($data, $limit=10000, $page=1, $count=false )
+    {
+        $query = $this->createQueryBuilder('a');
+        if($count)
+        {
+            $query->select('count(a.id)');
+            return $query->getQuery()->getSingleScalarResult();
+        }
+
+        $query->select(['a','m','s'])
+            ->leftJoin('a.message','m')
+            ->leftJoin('m.sender','s');
+
+
+        if($data!=null)
+        {
+            $parameters['sender']=$data['sender_id'];
+
+            $query->Where('s.id =:sender_id OR  s.id IS NULL');
+            $query->setParameters($parameters);
+            $query->addOrderBy('a.createDate','desc');
+            if($limit)
+            {
+                $page=$page<1?1:$page;
+                $query->setFirstResult(($page-1)*$limit)->setMaxResults($limit);
+            }
+        }
+
+        return $query->getQuery()->getResult();
+
+    }
+
 }

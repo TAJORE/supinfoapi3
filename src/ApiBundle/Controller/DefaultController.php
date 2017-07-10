@@ -152,9 +152,6 @@ class DefaultController extends FOSRestController
         $user->setConfirmPassword(md5($user->getPassword()));
         $user->setPassword($password);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
-        $em->detach($user);
 
 
         ///email
@@ -168,17 +165,20 @@ class DefaultController extends FOSRestController
         $logo  = $params->logo;
         $confirm  = $params->confirm;
         $locale  = $params->locale;
+        $array = ["confirm"=>$confirm,"_locale"=>$locale,"email"=>$to, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$to)];
+        $user->setEmailToken($array);
 
         $from = $this->getParameter('mailer_user');
-        $array = ["confirm"=>$confirm,"_locale"=>$locale,"email"=>$to, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$to)];
         $view = "ApiBundle:Mail:emailConfirm.html.twig";
-        $code = $this->sendMail($to,$from,$view,$array,$objet);
 
-        $params =json_decode($val->get("params"),true) ;
 
-        $user->setEmailToken($params);
+        //enregistrement  du  user
+        $em->persist($user);
         $em->flush();
         $em->detach($user);
+
+        //envoi  du  mail
+        $code = $this->sendMail($to,$from,$view,$array,$objet);
 
         /* @var $user User */
        /* $user =$em->getRepository('AppBundle:User')->findOneByemail($user->getEmail());
@@ -193,7 +193,7 @@ class DefaultController extends FOSRestController
     // Action pour  renvoyer  l'email  à  nouveau
 
     /**
-     * @Rest\Get("/auth/verify/email")
+     * @Rest\Put("/auth/verify/email")
      * @return Response
      * @ApiDoc(
      *  resource=true,
@@ -216,18 +216,17 @@ class DefaultController extends FOSRestController
         /** @var User $user */
         $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=>$request->get("email")],["id"=>"DESC"]);
 
-
         ///email
         $params =$user->getEmailToken();
         $to  = $user->getEmail();
         $objet  = $message_body = $this->get('translator')->trans('form.help.emailConfirm.objet',[],'register');
-        $url  = $params->url;
-        $urlPassword = $params->urlPassword;
-        $name  = $params->name;
-        $password  = $params->password;
-        $logo  = $params->logo;
-        $confirm  = $params->confirm;
-        $locale  = $params->locale;
+        $url  = $params["url"];
+        $urlPassword = $params["urlPassword"];
+        $name  = $params["name"];
+        $password  = $params["password"];
+        $logo  = $params["logo"];
+        $confirm  = $params["confirm"];
+        $locale  = $params["_locale"];
 
         $from = $this->getParameter('mailer_user');
         $array = ["confirm"=>$confirm,"_locale"=>$locale,"email"=>$to, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$to)];
