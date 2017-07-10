@@ -68,5 +68,124 @@ class Request
     }
 
 
-}
 
+    /**
+     * Set message
+     *
+     * @param string $message
+     *
+     * @return Request
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     *
+     * @return Request
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    /**
+     * Set state
+     *
+     * @param boolean $state
+     *
+     * @return Request
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return boolean
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set receiver
+     *
+     * @param \AppBundle\Entity\User $receiver
+     *
+     * @return Request
+     */
+    public function setReceiver(\AppBundle\Entity\User $receiver)
+    {
+        $this->receiver = $receiver;
+
+        return $this;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
+    }
+
+    /**
+     * Set applicant
+     *
+     * @param \AppBundle\Entity\User $applicant
+     *
+     * @return Request
+     */
+    public function setApplicant(\AppBundle\Entity\User $applicant)
+    {
+        $this->applicant = $applicant;
+
+        return $this;
+    }
+
+    /**
+     * Get applicant
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getApplicant()
+    {
+        return $this->applicant;
+    }
+}

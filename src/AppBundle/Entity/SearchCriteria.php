@@ -84,5 +84,230 @@ class SearchCriteria
      */
     private $createDate;
 
-}
 
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set matchMinAge
+     *
+     * @param integer $matchMinAge
+     *
+     * @return SearchCriteria
+     */
+    public function setMatchMinAge($matchMinAge)
+    {
+        $this->matchMinAge = $matchMinAge;
+
+        return $this;
+    }
+
+    /**
+     * Get matchMinAge
+     *
+     * @return integer
+     */
+    public function getMatchMinAge()
+    {
+        return $this->matchMinAge;
+    }
+
+    /**
+     * Set matchMaxAge
+     *
+     * @param integer $matchMaxAge
+     *
+     * @return SearchCriteria
+     */
+    public function setMatchMaxAge($matchMaxAge)
+    {
+        $this->matchMaxAge = $matchMaxAge;
+
+        return $this;
+    }
+
+    /**
+     * Get matchMaxAge
+     *
+     * @return integer
+     */
+    public function getMatchMaxAge()
+    {
+        return $this->matchMaxAge;
+    }
+
+    /**
+     * Set matchSex
+     *
+     * @param string $matchSex
+     *
+     * @return SearchCriteria
+     */
+    public function setMatchSex($matchSex)
+    {
+        $this->matchSex = $matchSex;
+
+        return $this;
+    }
+
+    /**
+     * Get matchSex
+     *
+     * @return string
+     */
+    public function getMatchSex()
+    {
+        return $this->matchSex;
+    }
+
+    /**
+     * Set professions
+     *
+     * @param array $professions
+     *
+     * @return SearchCriteria
+     */
+    public function setProfessions($professions)
+    {
+        $this->professions = $professions;
+
+        return $this;
+    }
+
+    /**
+     * Get professions
+     *
+     * @return array
+     */
+    public function getProfessions()
+    {
+        return $this->professions;
+    }
+
+    /**
+     * Set matchDistanceMin
+     *
+     * @param float $matchDistanceMin
+     *
+     * @return SearchCriteria
+     */
+    public function setMatchDistanceMin($matchDistanceMin)
+    {
+        $this->matchDistanceMin = $matchDistanceMin;
+
+        return $this;
+    }
+
+    /**
+     * Get matchDistanceMin
+     *
+     * @return float
+     */
+    public function getMatchDistanceMin()
+    {
+        return $this->matchDistanceMin;
+    }
+
+    /**
+     * Set matchDistanceMax
+     *
+     * @param float $matchDistanceMax
+     *
+     * @return SearchCriteria
+     */
+    public function setMatchDistanceMax($matchDistanceMax)
+    {
+        $this->matchDistanceMax = $matchDistanceMax;
+
+        return $this;
+    }
+
+    /**
+     * Get matchDistanceMax
+     *
+     * @return float
+     */
+    public function getMatchDistanceMax()
+    {
+        return $this->matchDistanceMax;
+    }
+
+    /**
+     * Set matchCities
+     *
+     * @param array $matchCities
+     *
+     * @return SearchCriteria
+     */
+    public function setMatchCities($matchCities)
+    {
+        $this->matchCities = $matchCities;
+
+        return $this;
+    }
+
+    /**
+     * Get matchCities
+     *
+     * @return array
+     */
+    public function getMatchCities()
+    {
+        return $this->matchCities;
+    }
+
+    /**
+     * Set matchCountries
+     *
+     * @param array $matchCountries
+     *
+     * @return SearchCriteria
+     */
+    public function setMatchCountries($matchCountries)
+    {
+        $this->matchCountries = $matchCountries;
+
+        return $this;
+    }
+
+    /**
+     * Get matchCountries
+     *
+     * @return array
+     */
+    public function getMatchCountries()
+    {
+        return $this->matchCountries;
+    }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     *
+     * @return SearchCriteria
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+}
