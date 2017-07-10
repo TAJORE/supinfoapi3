@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 
 class UserController extends FOSRestController
@@ -161,6 +162,66 @@ class UserController extends FOSRestController
         return $this->json($array);
     }
 
+    /**
+     * @Rest\Get("/auth/members/{id}")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Récupérer un membre ",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  }
+     * )
+     */
+    public function findMembersAction(Request $request, $id)
+    {
+        $em =$this->getDoctrine()->getManager();
+        $user = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
+
+        if(!is_object($user)){
+            throw new NotFoundResourceException("Member not found in our database !");
+        }
+        return $this->json($user);
+    }
+
+    /**
+     * @Rest\Put("/auth/member/{id}/role")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Update member role ",
+     *  statusCodes = {
+     *      200 = "Updated (seems to be OK)",
+     *      400 = "Bad request (see messages)",
+     *      401 = "Unauthorized, you must login first",
+     *      404 = "Not found",
+     *  },
+     *  parameters={
+     *     {"name"="role", "dataType"="string", "required"=true, "description"="The new role of the user"}
+     *  }
+     * )
+     */
+    public function updateMemberRoleAction(Request $request, $id)
+    {
+        //you  can continious if you have a good privileges
+        //$this->isgrantUser("ROLE_ADMIN");
+
+        $em =$this->getDoctrine()->getManager();
+
+        /** @var User $user */
+        $user =$em->getRepository('AppBundle:User')->find($id); // L'identifiant en tant que paramètre n'est plus nécessaire
+
+
+        if (empty($user)) {
+            return new Response("Member not found !", 404);
+        }
+
+        $user->setRoles([$request->get('role')]);
+        $em->flush();
+        $em->detach($user);
+
+        return $this->json($user);
+    }
 
 
     // action for lagout
