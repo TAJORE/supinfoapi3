@@ -30,4 +30,26 @@ class FunglobeUtils
 
         return $password;
     }
+
+    /**
+     * @param mixed $mailer
+     * @param array $receivers
+     * @param string $sender
+     * @param string $view
+     * @param string $subject
+     *
+     * @return bool
+     */
+    public static function sendMail($mailer, $receivers, $sender, $view, $subject)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($sender)
+            ->setTo($receivers)
+            ->setBody($view)
+            ->setContentType('text/html');
+
+        return $mailer->send($message);
+
+    }
 }
