@@ -55,25 +55,13 @@
 </head>
 <body>
 <div id="body" valign="center">
-    <table>
-        <tr>
-            <td>
-                <div id="from">Funglobe <<a href="#">contact@funglobe.com</a>></div>
-            </td>
-            <td>
-                <div id="date" >{{ ''|date() }}</div>
-            </td>
-        </tr>
-    </table>
-    <hr>
-
     <div id="title">
-        {% trans from "register" %} form.help.emailConfirm.title {% endtrans %}
+        {{ title }}
     </div>
 
     <div id="message">
         <p>
-            YHo
+            {{ message|raw }}
         </p>
     </div>
 
