@@ -3,6 +3,7 @@ namespace ApiBundle\Controller;
 
 use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\User;
+use AppBundle\Tools\FunglobeUtils;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -53,8 +54,42 @@ class MailController extends FOSRestController
         $confirm ="confirm.com";
 
         $array = ["confirm"=>$confirm,"email"=>$email, "name"=>$name, "password"=>$password,"urlPassword"=>$urlPassword, "url"=>$url,"logo"=>$logo, "key"=>md5($password.$email)];
-        return $this->render('ApiBundle:Mail:emailConfirm.html.twig',$array);
+        return $this->render('ApiBundle:Mail:emailSend.html.twig',$array);
     }
 
 
+    /**
+     * @Rest\Post("/auth/send-email")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Envoie un email à une liste d'utilisateurs ",
+     *  statusCodes = {
+     *      200 = "Updated (seems to be OK)",
+     *      400 = "Bad request (see messages)"
+     *  },
+     *  parameters={
+     *     {"name"="recipients", "dataType"="array", "required"=true, "description"="Tableau d'adresse email des utilisateurs"},
+     *     {"name"="title", "dataType"="string", "required"=true, "description"="Titre du mail"},
+     *     {"name"="message", "dataType"="string", "required"=true, "description"="Contenu du mail"}
+     *  }
+     * )
+     */
+    public function sendEmailAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $params = json_decode($request->getContent());
+
+        $recipients = explode(',', $params->recipients);
+        $from = $this->getParameter('mailer_user');
+        $template = "ApiBundle:Mail:emailSend.html.twig";
+        $data = ['message' => $params->message];
+
+        $view = $this->renderView($template, $data);
+
+        $code = FunglobeUtils::sendMail($this->get('mailer'), $recipients, $from, $view, $params->title);
+
+        return $this->json(['code' => $code, 'message' => 'Email sent successfully !']);
+    }
 }
