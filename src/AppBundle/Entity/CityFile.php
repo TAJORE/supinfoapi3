@@ -211,7 +211,7 @@ class CityFile
    public function fill($file_directory,$file_name)
     {
         $file = new Files();
-        $file_name  =$file->getAbsolutPath($file_directory,$file_name);
+        $file_name  =$file->getAbsolutPath($file_directory).$file_name;
         $fileopen = fopen($file_name, "r+");
 
         while ($row = fgets($fileopen)) {
@@ -234,7 +234,7 @@ class CityFile
     {
         if($this->list==null)
         {
-            if($country!=null)
+            if($country!=null && $country!="")
             {
                 $list = [];
                 /** @var CityFile $cityfile */

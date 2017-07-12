@@ -71,6 +71,14 @@ class UserPhoto
      */
     private $isValid;
 
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isProfile", type="boolean")
+     */
+    private $isProfile;
+
     /**
      * @var string
      *

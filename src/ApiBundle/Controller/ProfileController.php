@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 
 use AppBundle\Entity\AuthToken;
+use AppBundle\Entity\CityFile;
 use AppBundle\Entity\Credentials;
 use AppBundle\Entity\Files;
 use AppBundle\Entity\User;
@@ -32,12 +33,12 @@ class ProfileController extends FOSRestController
 
 
     /**
-     * @Rest\Post("/auth/user/matches")
+     * @Rest\Get("/auth/user/base")
      * @return Response
      *
      * @ApiDoc(
      *  resource=true,
-     *  description="Upload les photos de l'utilisateur",
+     *  description="Retourne toutes les éléments de bases pour la partie user",
      *  statusCodes={
      *     200="the query is ok",
      *     401= "The connection is required",
@@ -49,50 +50,108 @@ class ProfileController extends FOSRestController
      *  }
      * )
      */
-    public function matchesAction(Request $request)
+    public function baseprofileAction(Request $request)
     {
 
+        $id = $request->get("id");
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var User $user */
+        $user = $em->getRepository("AppBundle:User")->find($id);
+        $array=["vips"=>$this->getVips($em),
+                "applicants"=>$this->getApplicant($user,$em),
+                "recievers"=>$this->getReceiver($user,$em),
+                "recieveMessages"=>$this->getRecievedMessage($user,$em),
+                "sendMessages"=>$this->getSendMessage($user,$em),
+                "photos"=>$this->getPhotos($user,$em),
+                "profilePhotos"=>$this->getProfilePhotos($user,$em),
+                "config"=>$this->getConfig($user,$em),
+               ];
+        return $this->json($array);
+    }
+
+
+    /**
+     * @Rest\Get("/auth/user/city")
+     * @return Response
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Retourne la liste des villes d'un pays",
+     *  statusCodes={
+     *     200="the query is ok",
+     *     401= "The connection is required",
+     *     403= "Access Denied"
+     *
+     *  },
+     *  parameters={
+     *     {"name"="country", "dataType"="string", "required"=true, "description"="Le pays à filtrer"},
+     *  }
+     * )
+     */
+    public function matchCityAction(Request $request)
+    {
+
+        $country = $request->get("country");
+        $em = $this->getDoctrine()->getManager();
+
+        $cityFile =new CityFile();
+        $cityFile->fill("dist","worldcitiespop.txt");
+        return $this->json($cityFile->getCityByCountry($country));
     }
 
 
     // retourne la liste des utilisateur vip
-    public function getVips(){
-        $em = $this->getDoctrine()->getManager();
+    public function getVips(\Doctrine\Common\Persistence\ObjectManager $em){
         $data = ["vip"=>true];
         $list = $em->getRepository("AppBundle:User")->getVips($data);
         return $list;
     }
 
     // retourne la liste des demandes d'amitier
-    public function getApplicant(User $user){
-        $em = $this->getDoctrine()->getManager();
+    public function getApplicant(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
         $list = $em->getRepository("AppBundle:Request")->findBy(["applicant"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
 
     // retourne la liste des invitations
-    public function getReceiver(User $user){
-        $em = $this->getDoctrine()->getManager();
+    public function getReceiver(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
         $list = $em->getRepository("AppBundle:Request")->findBy(["receiver"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
 
 
     // retourne la liste des messages recues du  user connecté
-    public function getRecievedMessage(User $user){
-        $em = $this->getDoctrine()->getManager();
+    public function getRecievedMessage(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
         $list = $em->getRepository("AppBundle:UserMessage")->findBy(["receiver"=>$user],["readDate"=>"DESC"]);
         return $list;
     }
 
 
     // retourne la liste des messages envoyées du  user connecté
-    public function getSendMessage(User $user){
-        $em = $this->getDoctrine()->getManager();
+    public function getSendMessage(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
         $data = ["sender_id"=>$user->getId()];
         $list = $em->getRepository("AppBundle:UserMessage")->getSendMessage($data);
         return $list;
     }
 
+
+    // retourne la liste des photos du user connecté
+    public function getPhotos(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
+        $list = $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["createDate"=>"DESC"]);
+        return $list;
+    }
+
+    // retourne la liste des photos de profile du user connecté
+    public function getProfilePhotos(User $user, \Doctrine\Common\Persistence\ObjectManager $em){
+        $list = $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user,"isProfile"=>true],["updateDate"=>"DESC"]);
+        return $list;
+    }
+
+    // retourne les paraemtres de recherches du  user connecté
+    public function getConfig(User $user, \Doctrine\Common\Persistence\ObjectManager $em){
+        $list = $em->getRepository("AppBundle:SearchCriteria")->findOneBy(["user"=>$user],["createDate"=>"DESC"]);
+        return $list;
+    }
 
 }
