@@ -232,17 +232,25 @@ class CityFile
     // retourne la liste des payer correspondants a une recherche specifique
     public function getCityByCountry($country)
     {
-        $list = [];
-        /** @var CityFile $cityfile */
-        foreach($this->list as $cityfile)
+        if($this->list==null)
         {
-            if(strtoupper($cityfile->getCountry())==$country)
+            if($country!=null)
             {
-                $list[] = $cityfile;
+                $list = [];
+                /** @var CityFile $cityfile */
+                foreach($this->list as $cityfile)
+                {
+                    if(strtoupper($cityfile->getCountry())==$country)
+                    {
+                        $list[] = $cityfile;
+                    }
+                }
+
+                return  $list;
             }
         }
+        return $this->list;
 
-        return  $list;
     }
 
 }
