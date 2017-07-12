@@ -58,7 +58,7 @@ class ProfileController extends FOSRestController
 
         /** @var User $user */
         $user = $em->getRepository("AppBundle:User")->find($id);
-        $array=["vips"=>$this->getVips($em),
+        $array=[
                 "applicants"=>$this->getApplicant($user,$em),
                 "recievers"=>$this->getReceiver($user,$em),
                 "recieveMessages"=>$this->getRecievedMessage($user,$em),
@@ -66,6 +66,8 @@ class ProfileController extends FOSRestController
                 "photos"=>$this->getPhotos($user,$em),
                 "profilePhotos"=>$this->getProfilePhotos($user,$em),
                 "config"=>$this->getConfig($user,$em),
+                "users"=>$this->getCompleteProfile($em),
+                "vips"=>$this->getCompleteProfileVips($em),
                ];
         return $this->json($array);
     }
@@ -151,6 +153,49 @@ class ProfileController extends FOSRestController
     // retourne les paraemtres de recherches du  user connecté
     public function getConfig(User $user, \Doctrine\Common\Persistence\ObjectManager $em){
         $list = $em->getRepository("AppBundle:SearchCriteria")->findOneBy(["user"=>$user],["createDate"=>"DESC"]);
+        return $list;
+    }
+
+    // retourne le profile  du  user connecté
+    public function getProfile(User $user, \Doctrine\Common\Persistence\ObjectManager $em){
+        $list = $em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$user],["createDate"=>"DESC"]);
+        return $list;
+    }
+
+
+    // retourne la liste des utilisateurs
+    public function getUsers(\Doctrine\Common\Persistence\ObjectManager $em){
+        $list = $em->getRepository("AppBundle:Profile")->findBy(["createDate"=>"DESC"]);
+        return $list;
+    }
+
+    // retourne la liste des users avec leur profile et  leurs photos
+    public function getCompleteProfile(\Doctrine\Common\Persistence\ObjectManager $em){
+
+        $list =[];
+        $users = $this->getUsers($em);
+
+        /** @var User $user */
+        foreach($users as $user)
+        {
+            $array = ["user"=>$user, "profile"=>$this->getProfile($user,$em), "photos"=>$this->getPhotos($user,$em)];
+            $list[] = $array;
+        }
+        return $list;
+    }
+
+    // retourne la liste des users vips avec leur profile et  leurs photos
+    public function getCompleteProfileVips(\Doctrine\Common\Persistence\ObjectManager $em){
+
+        $list =[];
+        $users = $this->getVips($em);
+
+        /** @var User $user */
+        foreach($users as $user)
+        {
+            $array = ["user"=>$user, "profile"=>$this->getProfile($user,$em), "photos"=>$this->getPhotos($user,$em)];
+            $list[] = $array;
+        }
         return $list;
     }
 
