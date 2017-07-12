@@ -77,19 +77,19 @@ class MailController extends FOSRestController
      */
     public function sendEmailAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $title = $request->get('title');
+        $message = $request->get('message');
+        $recipients = $request->get('recipients');
 
-        $params = json_decode($request->getContent());
-
-        $recipients = explode(',', $params->recipients);
+        $recipients = explode(',', $recipients);
         $from = $this->getParameter('mailer_user');
         $template = "ApiBundle:Mail:emailSend.html.twig";
-        $data = ['message' => $params->message];
+        $data = ['title' => $title, 'message' => $message];
 
         $view = $this->renderView($template, $data);
 
-        $code = FunglobeUtils::sendMail($this->get('mailer'), $recipients, $from, $view, $params->title);
+        $code = FunglobeUtils::sendMail($this->get('mailer'), $recipients, $from, $view, $title);
 
-        return $this->json(['code' => $code, 'message' => 'Email sent successfully !']);
+        return $this->json(['code' => '122', 'message' => 'Email sent successfully !']);
     }
 }

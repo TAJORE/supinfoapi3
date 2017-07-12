@@ -223,6 +223,34 @@ class UserController extends FOSRestController
         return $this->json($user);
     }
 
+    /**
+     * @Rest\Put("/auth/members/lock")
+     * @return Response
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Récupérer la liste des membres ",
+     *  statusCodes={
+     *     200="Retourné quand tout est OK !"
+     *  }
+     * )
+     */
+    public function lockMembersAction(Request $request)
+    {
+        $logger = $this->get('logger');
+        $em = $this->getDoctrine()->getManager();
+
+        $membersToLock = explode(",", $request->get('members'));
+
+        foreach ($membersToLock as $memberId) {
+            /** @var User $user */
+            $user = $em->getRepository('AppBundle:User')->findOneBy(['id'=>$memberId]);
+            $user->setEnabled(false);
+            $em->flush();
+        }
+
+        $array = $em->getRepository("AppBundle:User")->findAll();
+        return $this->json($array);
+    }
 
     // action for lagout
     /**
