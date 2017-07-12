@@ -31,7 +31,7 @@ class UserMessageRepository extends \Doctrine\ORM\EntityRepository
 
             $query->Where('s.id =:sender_id OR  s.id IS NULL');
             $query->setParameters($parameters);
-            $query->addOrderBy('a.createDate','desc');
+            $query->addOrderBy('a.readDate','desc');
             if($limit)
             {
                 $page=$page<1?1:$page;

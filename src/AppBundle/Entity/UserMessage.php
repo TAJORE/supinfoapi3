@@ -26,9 +26,9 @@ class UserMessage
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="realDate", type="datetime")
+     * @ORM\Column(name="readDate", type="datetime")
      */
-    private $realDate;
+    private $readDate;
 
 
 
@@ -75,21 +75,6 @@ class UserMessage
         $this->id = $id;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getRealDate()
-    {
-        return $this->realDate;
-    }
-
-    /**
-     * @param \DateTime $realDate
-     */
-    public function setRealDate($realDate)
-    {
-        $this->realDate = $realDate;
-    }
 
     /**
      * @return boolean
@@ -159,5 +144,29 @@ class UserMessage
     public function getReceiver()
     {
         return $this->receiver;
+    }
+
+    /**
+     * Set readDate
+     *
+     * @param \DateTime $readDate
+     *
+     * @return UserMessage
+     */
+    public function setReadDate($readDate)
+    {
+        $this->readDate = $readDate;
+
+        return $this;
+    }
+
+    /**
+     * Get readDate
+     *
+     * @return \DateTime
+     */
+    public function getReadDate()
+    {
+        return $this->readDate;
     }
 }

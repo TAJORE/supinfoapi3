@@ -262,4 +262,28 @@ class UserPhoto
     {
         return $this->user;
     }
+
+    /**
+     * Set isProfile
+     *
+     * @param boolean $isProfile
+     *
+     * @return UserPhoto
+     */
+    public function setIsProfile($isProfile)
+    {
+        $this->isProfile = $isProfile;
+
+        return $this;
+    }
+
+    /**
+     * Get isProfile
+     *
+     * @return boolean
+     */
+    public function getIsProfile()
+    {
+        return $this->isProfile;
+    }
 }
