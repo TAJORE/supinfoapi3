@@ -54,6 +54,8 @@ class ProfileController extends FOSRestController
     {
 
         $id = $request->get("id");
+
+        return $this->json(["id"=>$id]);
         $em = $this->getDoctrine()->getManager();
 
         /** @var User $user */

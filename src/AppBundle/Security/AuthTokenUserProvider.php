@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Doctrine\ORM\EntityRepository;
 
-// Le fournisseur  charge un token en utilisant la valeur dans notre entête X-Auth-Token
+// Le fournisseur  charge un token en utilisant la valeur dans notre entete X-Auth-Token
 class AuthTokenUserProvider implements UserProviderInterface
 {
     protected $authTokenRepository;
@@ -40,7 +40,7 @@ class AuthTokenUserProvider implements UserProviderInterface
 
     public function refreshUser(UserInterface $user)
     {
-        // Le systéme d'authentification est stateless, on ne doit donc jamais appeler la méthode refreshUser
+        // Le systï¿½me d'authentification est stateless, on ne doit donc jamais appeler la mï¿½thode refreshUser
         throw new UnsupportedUserException();
     }
 

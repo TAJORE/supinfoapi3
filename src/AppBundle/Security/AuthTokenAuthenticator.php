@@ -19,13 +19,13 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-// Cette classe permettra de récupérer les utilisateurs en se basant sur le token d’authentification fourni.
+// Cette classe permettra de recuperer les utilisateurs en se basant sur le token d'authentification fourni.
 class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
     /**
-     * Durée de validité du token en secondes, 12 heures
+     * DurÃ©e de validitÃ© du token en secondes, 365 jours
      */
-    const TOKEN_VALIDITY_DURATION = 43200;
+    const TOKEN_VALIDITY_DURATION = 31536000;
 
     protected $httpUtils;
 
@@ -38,7 +38,7 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
     {
 
         $targetUrl = '/login';
-        // Si la requête est une création de token, aucune vérification n'est effectuée
+        // Si la requÃ¨te est une crÃ©ation de token, aucune vÃ©rification n'est effectuÃ©e
         if ($request->getMethod() === "POST" && $this->httpUtils->checkRequestPath($request, $targetUrl)) {
             return;
         }
@@ -96,7 +96,7 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
     }
 
     /**
-     * Vérifie la validité du token
+     * VÃ©rifie la validitÃ© du token
      */
     private function isTokenValid($authToken)
     {
@@ -105,7 +105,7 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        // Si les données d'identification ne sont pas correctes, une exception est levée
+        // Si les donnÃ©es d'identification ne sont pas correctes, une exception est levÃ©e
         throw $exception;
     }
 }
