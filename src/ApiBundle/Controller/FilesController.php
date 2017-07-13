@@ -165,7 +165,7 @@ class FilesController extends FOSRestController
         /** @var User $user */
         $user = $em->getRepository("AppBundle:User")->find($id);
 
-        $contents = $request->request->get("id");
+        $contents = $request->request->get("file");
             try{
 
                 $fileName = uniqid()."png";
@@ -178,14 +178,8 @@ class FilesController extends FOSRestController
                 fwrite($fp, $decodedData);
                 fclose($fp);
 
-                //return $this->json(["resultat"=>$tab],400);
-                $tab = explode('.', $uploadedFile->getClientOriginalName());
-                $ext = $tab[count($tab) - 1];
-                $file = new Files();
-                $file->file = $uploadedFile;
-                $fileExtension = $ext;
-                $fileName = uniqid() .'.' .$fileExtension;
-                $fileSize = $uploadedFile->getClientSize();
+                $fileExtension = '.png';
+                $fileSize = filesize($fileName);
                 $directory = "photo/user".$id;
                 //$directory = "photo";
                 $file->add($file->initialpath . $directory, $fileName);
@@ -195,7 +189,7 @@ class FilesController extends FOSRestController
                 $photo->setIsValid(true);
                 $photo->setMimeType($fileExtension);
                 $photo->setSize($fileSize);
-                $photo->setName($uploadedFile->getClientOriginalName());
+                $photo->setName($fileName);
                 $photo->setVisibility("private");
                 $photo->setUser($user);
                 $src = $photo->path($id);
