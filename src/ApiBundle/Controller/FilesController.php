@@ -134,4 +134,82 @@ class FilesController extends FOSRestController
     }
 
 
+
+
+
+    /**
+     * @Rest\Post("/auth/webcam")
+     * @return Response
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Upload les photos de l'utilisateur en utilisant la webcam",
+     *  statusCodes={
+     *     200="the query is ok",
+     *     401= "The connection is required",
+     *     403= "Access Denied"
+     *
+     *  },
+     *  parameters={
+     *     {"name"="id", "dataType"="integer", "required"=true, "description"="L'identifiant de l'utilisateur connecté "},
+     *     {"name"="file", "dataType"="text", "required"=true, "description"="La photo"}
+     *  }
+     * )
+     */
+    public function webcamAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $request->request->get("id");
+        /** @var User $user */
+        $user = $em->getRepository("AppBundle:User")->find($id);
+
+        $contents = $request->request->get("id");
+            try{
+
+                $fileName = uniqid()."png";
+                $file = new Files();
+                $directory = "photo/user".$id;
+                $path = $file->getAbsolutPath($file->initialpath.$directory).$fileName;
+                $encodedData = str_replace(' ','+',$contents);
+                $decodedData = base64_decode($encodedData);
+                $fp = fopen($path, 'w');
+                fwrite($fp, $decodedData);
+                fclose($fp);
+
+                //return $this->json(["resultat"=>$tab],400);
+                $tab = explode('.', $uploadedFile->getClientOriginalName());
+                $ext = $tab[count($tab) - 1];
+                $file = new Files();
+                $file->file = $uploadedFile;
+                $fileExtension = $ext;
+                $fileName = uniqid() .'.' .$fileExtension;
+                $fileSize = $uploadedFile->getClientSize();
+                $directory = "photo/user".$id;
+                //$directory = "photo";
+                $file->add($file->initialpath . $directory, $fileName);
+                $photo = new UserPhoto();
+                $photo->setCreateDate(new \DateTime());
+                $photo->setHashname($fileName);
+                $photo->setIsValid(true);
+                $photo->setMimeType($fileExtension);
+                $photo->setSize($fileSize);
+                $photo->setName($uploadedFile->getClientOriginalName());
+                $photo->setVisibility("private");
+                $photo->setUser($user);
+                $src = $photo->path($id);
+                $em->persist($photo);
+                $em->flush();
+                $em->detach($photo);
+                $result = ["name" => $photo->getName(),"size" => $fileSize, "src"=> $src];
+                return $this->json($result);
+            }
+            catch (Exception $ex)
+            {
+                return $this->json(["error"=>$ex->getMessage()],400);
+            }
+    }
+
+
 }

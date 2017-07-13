@@ -217,12 +217,12 @@ class CityFile
         while ($row = fgets($fileopen)) {
             $cityFile =new CityFile();
             $tab = explode(",",$row);
-            $cityFile->setCountry($tab[0]);
-            $cityFile->setCity($tab[1]);
-            $cityFile->setAccentCity($tab[2]);
-            $cityFile->setRegion($tab[3]);
-            $cityFile->setLart($tab[5]);
-            $cityFile->setLong($tab[6]);
+            $cityFile->setCountry($tab[1]);
+            $cityFile->setRegion($tab[2]);
+            $cityFile->setCity($tab[3]);
+            $cityFile->setAccentCity($tab[3]);
+            $cityFile->setLart($tab[4]);
+            $cityFile->setLong($tab[5]);
             $this->addList($cityFile);
         }
         fclose($fileopen);

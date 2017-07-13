@@ -99,7 +99,7 @@ class ProfileController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $cityFile =new CityFile();
-        $cityFile->fill("dist","worldcitiespop.txt");
+        $cityFile->fill("dist","city.csv");
         return $this->json($cityFile->getCityByCountry($country));
     }
 
