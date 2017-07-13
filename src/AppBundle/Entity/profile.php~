@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * profile
  *
  * @ORM\Table(name="profile")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ProfileRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\profileRepository")
  */
-class Profile
+class profile
 {
     /**
      * @var int
@@ -25,7 +25,7 @@ class Profile
     /**
      * @var array
      *
-     * @ORM\Column(name="gps", type="array",nullable=false)
+     * @ORM\Column(name="gps", type="array",nullable=true)
      */
     private $gps;
 
@@ -53,7 +53,7 @@ class Profile
      *
      * @param array $gps
      *
-     * @return Profile
+     * @return profile
      */
     public function setGps($gps)
     {
