@@ -37,6 +37,13 @@ class Profile
      */
     protected $user;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createDate", type="datetime")
+     */
+    private $createDate;
+
 
     /**
      * Get id
@@ -94,5 +101,29 @@ class Profile
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     *
+     * @return Profile
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
     }
 }
