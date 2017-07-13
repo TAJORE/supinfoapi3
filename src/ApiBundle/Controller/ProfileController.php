@@ -60,16 +60,20 @@ class ProfileController extends FOSRestController
         /** @var User $user */
         $user = $em->getRepository("AppBundle:User")->find($id);
         $array=[
-                "applicants"=>$this->getApplicant($user,$em),
-                "recievers"=>$this->getReceiver($user,$em),
+                "applicants"=>$this->getApplicant($user)
+
+               ];
+        /*
+         "recievers"=>$this->getReceiver($user,$em),
                 "recieveMessages"=>$this->getRecievedMessage($user,$em),
                 "sendMessages"=>$this->getSendMessage($user,$em),
                 "photos"=>$this->getPhotos($user,$em),
                 "profilePhotos"=>$this->getProfilePhotos($user,$em),
-                "config"=>$this->getConfig($user,$em),
+                "config"=>$this->getConfig($user,$em)
+         ,
                 "users"=>$this->getCompleteProfile($em),
                 "vips"=>$this->getCompleteProfileVips($em),
-               ];
+         */
         return $this->json($array);
     }
 
@@ -112,7 +116,8 @@ class ProfileController extends FOSRestController
     }
 
     // retourne la liste des demandes d'amitier
-    public function getApplicant(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getApplicant(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:Request")->findBy(["applicant"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
@@ -166,7 +171,7 @@ class ProfileController extends FOSRestController
 
     // retourne la liste des utilisateurs
     public function getUsers(\Doctrine\Common\Persistence\ObjectManager $em){
-        $list = $em->getRepository("AppBundle:Profile")->findBy(["createDate"=>"DESC"]);
+        $list = $em->getRepository("AppBundle:User")->findBy(["createDate"=>"DESC"]);
         return $list;
     }
 
@@ -174,12 +179,14 @@ class ProfileController extends FOSRestController
     public function getCompleteProfile(\Doctrine\Common\Persistence\ObjectManager $em){
 
         $list =[];
-        $users = $this->getUsers($em);
+        $users = $em->getRepository("AppBundle:User")->findBy(["joinDate"=>"DESC"]);
 
         /** @var User $user */
         foreach($users as $user)
         {
-            $array = ["user"=>$user, "profile"=>$this->getProfile($user,$em), "photos"=>$this->getPhotos($user,$em)];
+            $array = ["user"=>$user,
+                "profile"=>$em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$user],["createDate"=>"DESC"]),
+                "photos"=>$em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["createDate"=>"DESC"])];
             $list[] = $array;
         }
         return $list;
@@ -189,12 +196,15 @@ class ProfileController extends FOSRestController
     public function getCompleteProfileVips(\Doctrine\Common\Persistence\ObjectManager $em){
 
         $list =[];
-        $users = $this->getVips($em);
+        $data = ["vip"=>true];
+        $users = $em->getRepository("AppBundle:User")->getVips($data);
 
         /** @var User $user */
         foreach($users as $user)
         {
-            $array = ["user"=>$user, "profile"=>$this->getProfile($user,$em), "photos"=>$this->getPhotos($user,$em)];
+            $array = ["user"=>$user,
+                "profile"=>$em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$user],["createDate"=>"DESC"]),
+                "photos"=>$em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["createDate"=>"DESC"])];
             $list[] = $array;
         }
         return $list;
