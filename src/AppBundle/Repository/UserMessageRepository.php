@@ -27,7 +27,7 @@ class UserMessageRepository extends \Doctrine\ORM\EntityRepository
 
         if($data!=null)
         {
-            $parameters['sender']=$data['sender_id'];
+            $parameters['sender_id']=$data['sender_id'];
 
             $query->Where('s.id =:sender_id OR  s.id IS NULL');
             $query->setParameters($parameters);
