@@ -85,6 +85,15 @@ class SearchCriteria
     private $createDate;
 
 
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    protected $user;
+
+
     /**
      * Get id
      *
