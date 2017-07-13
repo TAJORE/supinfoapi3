@@ -117,10 +117,12 @@ class FilesController extends FOSRestController
                 $photo->setName($uploadedFile->getClientOriginalName());
                 $photo->setVisibility("private");
                 $photo->setUser($user);
+                $photo->setIsProfile(true);
                 $src = $photo->path($id);
                 $em->persist($photo);
                 $em->flush();
                 $em->detach($photo);
+
                 $result = ["name" => $photo->getName(),"size" => $fileSize, "src"=> $src];
                 return $this->json($result);
             }
@@ -168,21 +170,27 @@ class FilesController extends FOSRestController
         $contents = $request->request->get("file");
             try{
 
-                $fileName = uniqid()."png";
+                $fileName = uniqid().".png";
                 $file = new Files();
                 $directory = "photo/user".$id;
-                $path = $file->getAbsolutPath($file->initialpath.$directory).$fileName;
+                $initialDirectory = str_replace("//","/", str_replace("\\","/",$file->getAbsolutPath($file->initialpath).$directory));
+                if(!is_dir($initialDirectory)){
+                    if (false === @mkdir($initialDirectory, 0777, true)) {
+                        throw new FileException(sprintf('Unable to create the "%s" directory', $directory));
+                    }
+                }
+
+                $path = str_replace("\\","/",$file->getAbsolutPath($file->initialpath.$directory)).$fileName;
+                $path = str_replace("//","/",$path);
                 $encodedData = str_replace(' ','+',$contents);
                 $decodedData = base64_decode($encodedData);
                 $fp = fopen($path, 'w');
                 fwrite($fp, $decodedData);
                 fclose($fp);
+                //"path"=>$path,
 
-                $fileExtension = '.png';
-                $fileSize = filesize($fileName);
-                $directory = "photo/user".$id;
-                //$directory = "photo";
-                $file->add($file->initialpath . $directory, $fileName);
+                $fileExtension = 'png';
+                $fileSize = filesize($path);
                 $photo = new UserPhoto();
                 $photo->setCreateDate(new \DateTime());
                 $photo->setHashname($fileName);
@@ -191,6 +199,7 @@ class FilesController extends FOSRestController
                 $photo->setSize($fileSize);
                 $photo->setName($fileName);
                 $photo->setVisibility("private");
+                $photo->setIsProfile(true);
                 $photo->setUser($user);
                 $src = $photo->path($id);
                 $em->persist($photo);
