@@ -17,15 +17,17 @@ class Files
         $replace = "src\\AppBundle\\Entity";
         $string = __DIR__;
         $string = str_replace($replace,"web/",$string);
-        return $string.$this->getCurrentDirectory($path);
+        //return $string.$this->getCurrentDirectory($path);
+        return $path;
         //return __DIR__.'/../../../../web/'.$this->getCurrentDirectory($path);
     }
     public  function  getAbsolutPath_other($path)
     {
         $replace = "src\\AppBundle\\Entity";
         $string = __DIR__;
-        $string = str_replace($replace,"web/",$string);
-        return $string.$path;
+       // $string = str_replace($replace,"web/",$string);
+        //return $string.$path;
+       return "/web/".$path;
        // return __DIR__.'/../../../../web/'.$path;
     }
     public  function move($filesource,$path)
