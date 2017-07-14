@@ -84,9 +84,9 @@ class User extends  BaseUser
     private $joinReason;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="joinDate", type="datetime", length=30, nullable=true)
+     * @ORM\Column(name="joinDate", type="datetime", nullable=true)
      */
     private $joinDate;
 
@@ -488,21 +488,6 @@ class User extends  BaseUser
         return $this->profileVisibility;
     }
 
-    /**
-     * @return string
-     */
-    public function getJoinDate()
-    {
-        return $this->joinDate;
-    }
-
-    /**
-     * @param string $joinDate
-     */
-    public function setJoinDate($joinDate)
-    {
-        $this->joinDate = $joinDate;
-    }
 
     /**
      * Set confirmPassword
@@ -598,5 +583,29 @@ class User extends  BaseUser
     public function getEmailToken()
     {
         return $this->emailToken;
+    }
+
+    /**
+     * Set joinDate
+     *
+     * @param \DateTime $joinDate
+     *
+     * @return User
+     */
+    public function setJoinDate($joinDate)
+    {
+        $this->joinDate = $joinDate;
+
+        return $this;
+    }
+
+    /**
+     * Get joinDate
+     *
+     * @return \DateTime
+     */
+    public function getJoinDate()
+    {
+        return $this->joinDate;
     }
 }

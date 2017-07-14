@@ -59,19 +59,82 @@ class ProfileController extends FOSRestController
 
         /** @var User $user */
         $user = $em->getRepository("AppBundle:User")->find($id);
-        $array =[];
-       /* $array=[
-                "applicants"=>$this->getApplicant($user,$em),
+
+
+      /*  $array =[
+            //liste des demandes d'amitiers pour le users connecte
+            "applicants"=>$em->getRepository("AppBundle:Request")->findBy(["applicant"=>$user],["createDate"=>"DESC"]),
+            // liste des invitations pour le users connecte
+            "recievers"=> $em->getRepository("AppBundle:Request")->findBy(["receiver"=>$user],["createDate"=>"DESC"]),
+            //liste des messages recue pour le users connecte
+            "recieveMessages"=>  $em->getRepository("AppBundle:UserMessage")->findBy(["receiver"=>$user],["readDate"=>"DESC"]),
+            //liste des messages envoyés pour le users connecte
+            "sendMessages"=>$em->getRepository("AppBundle:UserMessage")->getSendMessage(["sender_id"=>$user->getId()]),
+            //liste des photos des utilisatdeurs
+            "photos"=> $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["createDate"=>"DESC"]),
+            //liste des photos de profiles  du  user en connecte
+            "profilePhotos"=> $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user,"isProfile"=>true],["updateDate"=>"DESC"]),
+            // parametres de configurations
+            "config"=>$em->getRepository("AppBundle:SearchCriteria")->findOneBy(["user"=>$user],["createDate"=>"DESC"])
+        ];
+*/
+        $users =[];
+        $list = $em->getRepository("AppBundle:User")->findBy([],["joinDate"=>"DESC"]);
+
+        /** @var User $member */
+        foreach($list as $member)
+        {
+            $array = ["user"=>$member,
+                "profile"=>$em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$member],["createDate"=>"DESC"]),
+                "photos"=>$em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$member],["createDate"=>"DESC"])];
+            $users[] = $array;
+        }
+
+        $vips =[];
+        $list = $em->getRepository("AppBundle:User")->findBy(["isVip"=>true],["joinDate"=>"DESC"]);
+        /** @var User $member */
+        foreach($list as $member)
+        {
+            $array = ["user"=>$member,
+                "profile"=>$em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$member],["createDate"=>"DESC"]),
+                "photos"=>$em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$member],["createDate"=>"DESC"])];
+            $vips[] = $array;
+        }
+
+
+        $array =[
+            //liste des demandes d'amitiers pour le users connecte
+            "applicants"=>$em->getRepository("AppBundle:Request")->findBy(["applicant"=>$user],["createDate"=>"DESC"]),
+            // liste des invitations pour le users connecte
+            "recievers"=> $em->getRepository("AppBundle:Request")->findBy(["receiver"=>$user],["createDate"=>"DESC"]),
+            //liste des messages recue pour le users connecte
+            "recieveMessages"=>  $em->getRepository("AppBundle:UserMessage")->findBy(["receiver"=>$user],["readDate"=>"DESC"]),
+            //liste des messages envoyés pour le users connecte
+            "sendMessages"=>$em->getRepository("AppBundle:UserMessage")->getSendMessage(["sender_id"=>$user->getId()]),
+            //liste des photos des utilisatdeurs
+            "photos"=> $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["createDate"=>"DESC"]),
+            //liste des photos de profiles  du  user en connecte
+            "profilePhotos"=> $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user,"isProfile"=>true],["updateDate"=>"DESC"]),
+            // parametres de configurations
+             "config"=>$em->getRepository("AppBundle:SearchCriteria")->findOneBy(["user"=>$user],["createDate"=>"DESC"]),
+             // liste des utilisateurs complete avec photo et profile
+            "users"=>$users,
+            // liste des utilisateurs complete vips avec photo et profile
+             "vips"=>$vips
+        ];
+
+        /*$array=[
+                "applicants"=>$this->getApplicant($user),
                 "recievers"=>$this->getReceiver($user,$em),
-                "recieveMessages"=>$this->getRecievedMessage($user,$em),
-                "sendMessages"=>$this->getSendMessage($user,$em),
-                "photos"=>$this->getPhotos($user,$em),
-                "profilePhotos"=>$this->getProfilePhotos($user,$em),
-                "config"=>$this->getConfig($user,$em),
-                "users"=>$this->getCompleteProfile($em),
-                "vips"=>$this->getCompleteProfileVips($em),
+                "recieveMessages"=>$this->getRecievedMessage($user),
+                "sendMessages"=>$this->getSendMessage($user),
+                "photos"=>$this->getPhotos($user),
+                "profilePhotos"=>$this->getProfilePhotos($user),
+                "config"=>$this->getConfig($user),
+                "users"=>$this->getCompleteProfile(),
+                "vips"=>$this->getCompleteProfileVips(),
                ];
-       */
+        */
         return $this->json($array);
     }
 
@@ -97,7 +160,7 @@ class ProfileController extends FOSRestController
     public function matchCityAction(Request $request)
     {
 
-        return $this->json(["test"=>"un text"]);
+        //return $this->json(["test"=>"un text"]);
         $country = $request->get("country");
         $em = $this->getDoctrine()->getManager();
 
@@ -108,34 +171,39 @@ class ProfileController extends FOSRestController
 
 
     // retourne la liste des utilisateur vip
-    public function getVips(\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getVips(){
         $data = ["vip"=>true];
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:User")->getVips($data);
         return $list;
     }
 
     // retourne la liste des demandes d'amitier
-    public function getApplicant(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getApplicant(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:Request")->findBy(["applicant"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
 
     // retourne la liste des invitations
-    public function getReceiver(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getReceiver(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:Request")->findBy(["receiver"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
 
 
     // retourne la liste des messages recues du  user connecté
-    public function getRecievedMessage(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getRecievedMessage(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:UserMessage")->findBy(["receiver"=>$user],["readDate"=>"DESC"]);
         return $list;
     }
 
 
     // retourne la liste des messages envoyées du  user connecté
-    public function getSendMessage(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getSendMessage(User $user){
+        $em = $this->getDoctrine()->getManager();
         $data = ["sender_id"=>$user->getId()];
         $list = $em->getRepository("AppBundle:UserMessage")->getSendMessage($data);
         return $list;
@@ -143,39 +211,45 @@ class ProfileController extends FOSRestController
 
 
     // retourne la liste des photos du user connecté
-    public function getPhotos(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getPhotos(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
 
     // retourne la liste des photos de profile du user connecté
-    public function getProfilePhotos(User $user, \Doctrine\Common\Persistence\ObjectManager $em){
+    public function getProfilePhotos(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user,"isProfile"=>true],["updateDate"=>"DESC"]);
         return $list;
     }
 
     // retourne les paraemtres de recherches du  user connecté
-    public function getConfig(User $user, \Doctrine\Common\Persistence\ObjectManager $em){
+    public function getConfig(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:SearchCriteria")->findOneBy(["user"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
 
     // retourne le profile  du  user connecté
-    public function getProfile(User $user, \Doctrine\Common\Persistence\ObjectManager $em){
+    public function getProfile(User $user){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
 
 
     // retourne la liste des utilisateurs
-    public function getUsers(\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getUsers(){
+        $em = $this->getDoctrine()->getManager();
         $list = $em->getRepository("AppBundle:User")->findBy(["createDate"=>"DESC"]);
         return $list;
     }
 
     // retourne la liste des users avec leur profile et  leurs photos
-    public function getCompleteProfile(\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getCompleteProfile(){
 
+        $em = $this->getDoctrine()->getManager();
         $list =[];
         $users = $em->getRepository("AppBundle:User")->findBy(["joinDate"=>"DESC"]);
 
@@ -191,8 +265,9 @@ class ProfileController extends FOSRestController
     }
 
     // retourne la liste des users vips avec leur profile et  leurs photos
-    public function getCompleteProfileVips(\Doctrine\Common\Persistence\ObjectManager $em){
+    public function getCompleteProfileVips(){
 
+        $em = $this->getDoctrine()->getManager();
         $list =[];
         $data = ["vip"=>true];
         $users = $em->getRepository("AppBundle:User")->getVips($data);
