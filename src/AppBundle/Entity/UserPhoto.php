@@ -22,6 +22,23 @@ class UserPhoto
     private $id;
 
 
+    // est  une variable d'aide pour acceder aux images depuis le js (n'est pas present  dans la bd
+    private $path;
+
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        if($this->getUser()!=null)
+        {
+            $file = new Files();
+            $this->path = $this->hashname==null? null: $file->initialpath."photo/user".$this->getUser()->getId()."/".$this->hashname;
+        }
+        return $this->path;
+    }
+
     public function path($id){
         $file = new Files();
         return $this->hashname==null? null: $file->initialpath."photo/user".$id."/".$this->hashname;
