@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -186,8 +187,7 @@ class FilesController extends FOSRestController
                     }
                 }
 
-                $path = str_replace("\\","/",$file->getAbsolutPath($file->initialpath.$directory)).$fileName;
-                $path = str_replace("//","/",$path);
+                $path = $initialDirectory."/".$fileName;
                 $encodedData = str_replace(' ','+',$contents);
                 $decodedData = base64_decode($encodedData);
                 $fp = fopen($path, 'w');
