@@ -412,7 +412,7 @@ class DefaultController extends FOSRestController
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setConfirmPassword(hash('sha256',$user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("Belgique");
+        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("CM");
         $user->setEnabled(true)->setIsEmailVerified(true)->setEmail("app@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_APP"])
             ->setFirstName("App")->setGender("M")->setIsOnline(false)->setIsVip(true)->setType("System")->setUsername("app")->setJoinDate(new \DateTime());
 

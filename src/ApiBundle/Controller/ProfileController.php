@@ -86,6 +86,7 @@ class ProfileController extends FOSRestController
         {
             $array = ["user"=>$member,
                 "profile"=>$em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$member],["createDate"=>"DESC"]),
+                "photoProfile"=>$em->getRepository("AppBundle:UserPhoto")->findOneBy(["user"=>$member,"isProfile"=>true],["updateDate"=>"DESC"]),
                 "photos"=>$em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$member],["createDate"=>"DESC"])];
             $users[] = $array;
         }
@@ -97,6 +98,7 @@ class ProfileController extends FOSRestController
         {
             $array = ["user"=>$member,
                 "profile"=>$em->getRepository("AppBundle:Profile")->findOneBy(["user"=>$member],["createDate"=>"DESC"]),
+                "photoProfile"=>$em->getRepository("AppBundle:UserPhoto")->findOneBy(["user"=>$member,"isProfile"=>true],["updateDate"=>"DESC"]),
                 "photos"=>$em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$member],["createDate"=>"DESC"])];
             $vips[] = $array;
         }

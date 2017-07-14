@@ -65,7 +65,7 @@ class DefaultController extends FOSRestController
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setConfirmPassword(hash('sha256',$user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("Tchad");
+        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("BE");
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("contact@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_ADMIN"])
             ->setFirstName("Admin")->setGender("M")->setIsOnline(false)->setIsVip(false)->setType("System")->setUsername("admin")->setJoinDate(new \DateTime());
 
@@ -84,7 +84,7 @@ class DefaultController extends FOSRestController
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setConfirmPassword(hash('sha256',$user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("Togo");
+        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("CA");
         $user->setEnabled(true)->setIsEmailVerified(false)->setEmail("info@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_MODERATOR"])->setUsername("moderator")
             ->setFirstName("Moderator")->setGender("F")->setIsOnline(false)->setIsVip(false)->setType("System")->setJoinDate(new \DateTime());
 
@@ -119,7 +119,7 @@ class DefaultController extends FOSRestController
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
         $user->setConfirmPassword(hash('sha256',$user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("Cameroun");
+        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("DE");
         $user->setEnabled(true)->setIsEmailVerified(true)->setEmail("app@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_APP"])
             ->setFirstName("App")->setGender("M")->setIsOnline(false)->setIsVip(true)->setType("System")->setUsername("app")->setJoinDate(new \DateTime());
 
