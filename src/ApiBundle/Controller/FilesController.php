@@ -117,8 +117,14 @@ class FilesController extends FOSRestController
                 $photo->setName($uploadedFile->getClientOriginalName());
                 $photo->setVisibility("private");
                 $photo->setUser($user);
-                $photo->setIsProfile(true);
+                $photo->setIsProfile(false);
                 $src = $photo->path($id);
+                $exitphoto = $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["id"=>"DESC"]);
+                if($exitphoto==null)
+                {
+                    $photo->setIsProfile(true);
+                    $photo->setUpdateDate(new \DateTime());
+                }
                 $em->persist($photo);
                 $em->flush();
                 $em->detach($photo);
@@ -199,9 +205,15 @@ class FilesController extends FOSRestController
                 $photo->setSize($fileSize);
                 $photo->setName($fileName);
                 $photo->setVisibility("private");
-                $photo->setIsProfile(true);
+                $photo->setIsProfile(false);
                 $photo->setUser($user);
                 $src = $photo->path($id);
+                $exitphoto = $em->getRepository("AppBundle:UserPhoto")->findBy(["user"=>$user],["id"=>"DESC"]);
+                if($exitphoto==null)
+                {
+                    $photo->setIsProfile(true);
+                    $photo->setUpdateDate(new \DateTime());
+                }
                 $em->persist($photo);
                 $em->flush();
                 $em->detach($photo);

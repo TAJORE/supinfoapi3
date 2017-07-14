@@ -147,7 +147,7 @@ class DefaultController extends FOSRestController
         $user = $this->fillUser($request, $user);
         $user->setPassword($val->get("password"));
         $password = $this->encodePassword(new User(), $user->getPassword(), $user->getSalt());
-        $user->setConfirmPassword(md5($user->getPassword()));
+        $user->setConfirmPassword(hash('sha256',$user->getPassword()));
         $user->setPassword($password);
         $em = $this->getDoctrine()->getManager();
 
@@ -282,10 +282,10 @@ class DefaultController extends FOSRestController
         $user = new User();
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
-        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=> $val->get("_username"),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
+        $user = $em->getRepository("AppBundle:User")->findOneBy(["username"=> $val->get("_username"),"confirmPassword"=>hash('sha256',$val->get("_password"))],["id"=>"DESC"]);
         if(!$user)
         {
-            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=> $val->get("_username"),"confirmPassword"=>md5($val->get("_password"))],["id"=>"DESC"]);
+            $user = $em->getRepository("AppBundle:User")->findOneBy(["email"=> $val->get("_username"),"confirmPassword"=>hash('sha256',$val->get("_password"))],["id"=>"DESC"]);
         }
 
         if(!$user){
@@ -410,9 +410,9 @@ class DefaultController extends FOSRestController
         $user = new User();
         $user->setPlainPassword("app");
         $password = $this->encodePassword(new User(), $user->getPlainPassword(), $user->getSalt());
-        $user->setConfirmPassword(md5($user->getPassword()));
+        $user->setConfirmPassword(hash('sha256',$user->getPassword()));
         $user->setPassword($password);
-        $user->setConfirmPassword(md5($user->getPlainPassword()))->setCountry("Belgique");
+        $user->setConfirmPassword(hash('sha256',$user->getPlainPassword()))->setCountry("Belgique");
         $user->setEnabled(true)->setIsEmailVerified(true)->setEmail("app@funglobe.com")->setBirthDate(new \DateTime())->setRoles(["ROLE_APP"])
             ->setFirstName("App")->setGender("M")->setIsOnline(false)->setIsVip(true)->setType("System")->setUsername("app")->setJoinDate(new \DateTime());
 

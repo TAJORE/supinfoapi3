@@ -168,7 +168,7 @@ class PasswordResetController extends FOSRestController
 
         if(is_object($user))
         {
-            $user->setConfirmPassword(md5($password));
+            $user->setConfirmPassword(hash('sha256',$password));
             $user->setPassword(FunglobeUtils::encodePassword($this->container, new User(), $password, $user->getSalt()));
             $em->flush();
         }

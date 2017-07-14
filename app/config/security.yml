@@ -1,6 +1,6 @@
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: md5
+        FOS\UserBundle\Model\UserInterface: sha256
     role_hierarchy:
         ROLE_MEMBER:           [ROLE_MEMBER]
         ROLE_MODERATOR:        [ROLE_MEMBER,ROLE_MODERATOR]
