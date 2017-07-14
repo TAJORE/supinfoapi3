@@ -29,8 +29,6 @@ class DefaultController extends FOSRestController
 
 
 
-
-
     // Fonction pour initialiser le user systeme et le token de base
 
     /**

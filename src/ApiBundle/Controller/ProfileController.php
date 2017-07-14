@@ -59,21 +59,19 @@ class ProfileController extends FOSRestController
 
         /** @var User $user */
         $user = $em->getRepository("AppBundle:User")->find($id);
-        $array=[
-                "applicants"=>$this->getApplicant($user)
-
-               ];
-        /*
-         "recievers"=>$this->getReceiver($user,$em),
+        $array =[];
+       /* $array=[
+                "applicants"=>$this->getApplicant($user,$em),
+                "recievers"=>$this->getReceiver($user,$em),
                 "recieveMessages"=>$this->getRecievedMessage($user,$em),
                 "sendMessages"=>$this->getSendMessage($user,$em),
                 "photos"=>$this->getPhotos($user,$em),
                 "profilePhotos"=>$this->getProfilePhotos($user,$em),
-                "config"=>$this->getConfig($user,$em)
-         ,
+                "config"=>$this->getConfig($user,$em),
                 "users"=>$this->getCompleteProfile($em),
                 "vips"=>$this->getCompleteProfileVips($em),
-         */
+               ];
+       */
         return $this->json($array);
     }
 
@@ -99,6 +97,7 @@ class ProfileController extends FOSRestController
     public function matchCityAction(Request $request)
     {
 
+        return $this->json(["test"=>"un text"]);
         $country = $request->get("country");
         $em = $this->getDoctrine()->getManager();
 
@@ -116,8 +115,7 @@ class ProfileController extends FOSRestController
     }
 
     // retourne la liste des demandes d'amitier
-    public function getApplicant(User $user){
-        $em = $this->getDoctrine()->getManager();
+    public function getApplicant(User $user,\Doctrine\Common\Persistence\ObjectManager $em){
         $list = $em->getRepository("AppBundle:Request")->findBy(["applicant"=>$user],["createDate"=>"DESC"]);
         return $list;
     }
