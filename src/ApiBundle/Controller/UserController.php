@@ -125,9 +125,18 @@ class UserController extends FOSRestController
      */
     public function membersAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getManager();
-        $array = $em->getRepository("AppBundle:User")->findAll();
+
+        $property = $request->get('property');
+        $order = $request->get('order');
+        $array = [];
+
+        if($property && $order){
+            $array = $em->getRepository('AppBundle:User')->findBy([], [$property => $order]);
+        }else{
+            $array = $em->getRepository("AppBundle:User")->findAll();
+        }
+
         return $this->json($array);
     }
 
