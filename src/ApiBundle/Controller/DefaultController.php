@@ -369,7 +369,10 @@ class DefaultController extends FOSRestController
 
         $val = $request->request;
         $username = $val->get("email");
-        $date = new \DateTime($val->get('birthDate'));
+        $bd = str_replace("/", "-", $val->get('birthDate'));
+
+        $date = new \DateTime($bd);
+        //$date = new \DateTime($val->get('birthDate'));
         // set  user with  application values
         $user->setEmail($val->get('email'))->setType($val->get('type'))
             ->setBirthDate($date)->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
