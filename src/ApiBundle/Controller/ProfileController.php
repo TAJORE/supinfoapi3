@@ -167,7 +167,11 @@ class ProfileController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $cityFile =new CityFile();
-        $cityFile->fill("dist","city.csv");
+
+        $file = new Files();
+        $directory = "dist";
+        $initialDirectory = str_replace("//","/", str_replace("\\","/",$file->getAbsolutPath($directory)));
+        $cityFile->fill($initialDirectory,"city.csv");
         return $this->json($cityFile->getCityByCountry($country));
     }
 

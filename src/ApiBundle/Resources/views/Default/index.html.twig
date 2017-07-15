@@ -1,1 +1,19 @@
-Hello World!
+<h1> Country  listt  and all  informations</h1>
+<table width="100%">
+    <tr>
+        <td>Country</td>
+        <td>Region</td>
+        <td>City</td>
+        <td>Postal Code</td>
+        <td>Lartitude</td>
+        <td>Longitude</td>
+    </tr>
+    {% for item in items  %}
+        <td>{{ item.country }}</td>
+        <td>{{ item.region }}</td>
+        <td>{{ item.city }}</td>
+        <td>{{ item.postalCode }}</td>
+        <td>{{ item.lartitude }}</td>
+        <td>{{ item.longitude }}</td>
+    {% endfor %}
+</table>

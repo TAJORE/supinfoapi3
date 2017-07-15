@@ -16,6 +16,7 @@
 /vendor/
 /web/bundles/
 /web/upload/
+/web/Geolite/
 /.idea/
 /composer.phar
 /composer.lock

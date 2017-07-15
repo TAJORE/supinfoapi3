@@ -16,9 +16,9 @@ class Files
     {
         $replace = "src\\AppBundle\\Entity";
         $string = __DIR__;
+        //127.0.0.1:800/web/
         $string = str_replace($replace,"web/",$string);
-        //return $string.$this->getCurrentDirectory($path);
-        return $path;
+        return $string.$this->getCurrentDirectory($path);
         //return __DIR__.'/../../../../web/'.$this->getCurrentDirectory($path);
     }
     public  function  getAbsolutPath_other($path)

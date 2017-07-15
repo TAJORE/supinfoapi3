@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class DefaultController extends FOSRestController
 {
@@ -368,12 +369,13 @@ class DefaultController extends FOSRestController
 
         $val = $request->request;
         $username = $val->get("email");
+        $date = new \DateTime($val->get('birthDate'));
         // set  user with  application values
         $user->setEmail($val->get('email'))->setType($val->get('type'))
-            ->setBirthDate($val->get('birthDate'))->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
+            ->setBirthDate($date)->setFirstName($val->get('firstname'))->setCountry($val->get('country'))
             ->setGender($val->get('profession'))->setUsernameCanonical($username)->setEmailCanonical($val->get('email'));
 
-        $user->setEnabled(true)->setIsEmailVerified(false)->setBirthDate(new \DateTime())->setRoles(["ROLE_MEMBER"])
+        $user->setEnabled(true)->setIsEmailVerified(false)->setRoles(["ROLE_MEMBER"])
             ->setUsername($username)->setIsOnline(true)->setIsVip(false)->setJoinDate(new \DateTime());
 
         $user->setGender($val->get('gender'));

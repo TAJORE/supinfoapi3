@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\AuthToken;
+use AppBundle\Entity\Files;
+use AppBundle\Entity\Geolite;
 use AppBundle\Entity\PasswordReset;
 use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -152,4 +154,50 @@ class DefaultController extends FOSRestController
 
         return $password;
     }
+
+
+    //Charge toutes les villes et pays contenu dans le fichier passe en parametre dans une liste
+    /**
+     * @Route("/init/location", name="geolitblock")
+     */
+    public function GeolitLocation()
+    {
+        $files = new Files();
+        $directory = "Geolite";
+        $initialDirectory = str_replace("//","/", str_replace("\\","/",$files->getAbsolutPath($directory)));
+        $file_name  =$initialDirectory."GeoLiteCity-Location.csv";
+        $file = fopen($file_name, "r+");
+        $em = $this->getDoctrine()->getManager();
+        //$countRow = substr_count( $file, "\n" );
+        $begin =1;
+        while ($row = fgets($file)) {
+            if($begin>2)
+            {
+                $geolite =new Geolite();
+                $tab = explode(",",$row);
+                $geolite->setCountry($tab[1]);
+                $geolite->setRegion($tab[2]);
+                $geolite->setCity($tab[3]);
+                $geolite->setPostalCode($tab[4]);
+                $geolite->setLartitude($tab[5]);
+                $geolite->setLongitude($tab[6]);
+                $exit = $em->getRepository("AppBundle:Geolite")->findOneBycity($geolite->getCity());
+                if(!is_object($exit))
+                {
+                    $em->persist($geolite);
+                    $em->flush();
+                }
+            }
+            //var_dump("city : ".$geolite->getCity()." | region :".$geolite->getRegion())
+            $begin++;
+        }
+        fclose($file);
+        $array =[];
+
+
+        $array['items'] = $em->getRepository("AppBundle:Geolite")->findAll();
+        return $this->render("AppBundle:Default:index.html.twig",$array);
+    }
+
+
 }

@@ -208,10 +208,9 @@ class CityFile
 
 
     //Charge toutes les villes et pays contenu dans le fichier passe en parametre dans une liste
-   public function fill($file_directory,$file_name)
+   public function fill($file_directory,$file)
     {
-        $file = new Files();
-        $file_name  =$file->getAbsolutPath($file_directory).$file_name;
+        $file_name  =$file_directory.$file;
         $fileopen = fopen($file_name, "r+");
 
         while ($row = fgets($fileopen)) {
